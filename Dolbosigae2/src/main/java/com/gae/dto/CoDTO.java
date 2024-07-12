@@ -2,7 +2,7 @@ package com.gae.dto;
 
 import org.apache.ibatis.type.Alias;
 
-@Alias("convenience")
+@Alias("co")
 public class CoDTO {
 
 }

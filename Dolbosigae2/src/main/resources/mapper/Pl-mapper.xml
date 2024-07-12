@@ -3,7 +3,18 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 	<mapper namespace="com.gae.mapper.PlMapper">
-		<resultMap type="com.gae.dto.PlDTO" id="play">
-
+		<resultMap type="com.gae.dto.PlDTO" id="pl">
+			<id column="pl_id" property="plId" />
+			<result column="pl_name" property="plName" />
+			<result column="pl_hour" property="plHour" />
+			<result column="pl_tel" property="plTel" />
+			<result column="pl_address" property="plAddress" />
+			<result column="pl_info" property="plInfo" />
+			<result column="pl_expense" property="plExpense" />
+			<result column="pl_img" property="plImg" />
+			<result column="pl_area" property=plArea />
+			<result column="pl_day" property="plDay" />
+			<result column="pl_city" property="plCity" />
 		</resultMap>
 	</mapper>
+	
