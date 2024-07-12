@@ -3,5 +3,31 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.gae.mapper.MemberMapper">
+	<!-- 회원 + 펫 정보 -->
+	<resultMap type="com.gae.dto.BoardMemberDTO" id="member">
+        <id column="MEMBER_ID" property="boardMemberId"/>
+	    <result column="MEMBER_PASSWORD" property="boardMemberPasswd"/>
+	    <result column="MEMBER_NAME" property="boardMemberName"/>
+	    <result column="MEMBER_REGION" property="boardMemberRegion"/>
+	    <result column="MEMBER_GRADE_NO" property="boardMemberGradeNo"/>
+	    <result column="MEMBER_GRADE_NAME" property="boardMemberGradeName"/>
+	    <result column="MEMBER_PETWITH" property="boardMemberPetWith" jdbcType="CHAR"/>
+	    <result column="PET_ID" property="petId"/>
+	    <result column="PET_NICKNAME" property="boardMemberNick"/>
+	    <result column="PET_BIRTH" property="petBirth"/>
+	    <result column="PET_GENDER" property="petGender" jdbcType="CHAR"/>
+	    <result column="PET_SIZE" property="petSize"/>
+	    <result column="PET_WEIGHT" property="petWeight"/>
+	    <result column="PET_WALKPROFILE" property="petWalkProfile" jdbcType="CHAR"/>
+	    <result column="PET_IMAGE_NO" property="petImageNo" jdbcType="CHAR"/>
+	    <result column="PET_IMAGE_PATH" property="petImagePath"/>
+	</resultMap>
 
+	<!-- 로그인 -->
+	<select id="login" resultMap="member">
+    	SELECT *
+    	FROM MEMBER_PET_VIEW
+    	WHERE MEMBER_ID = #{id}
+      	AND MEMBER_PASSWORD = STANDARD_HASH(#{pass}, 'SHA512')
+	</select>
 </mapper>
