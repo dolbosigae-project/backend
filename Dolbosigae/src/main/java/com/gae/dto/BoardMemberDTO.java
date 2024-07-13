@@ -6,10 +6,10 @@ import org.apache.ibatis.type.Alias;
 public class BoardMemberDTO {
 	private String boardMemberId;
 	private String boardMemberPasswd;
-	private String boardMemberNaMe;
+	private String boardMemberName;
 	private String boardMemberRegion;
 	private int boardMemberGradeNo;
-	private String boardMemberGradeNaMe;
+	private String boardMemberGradeName;
 	private boolean boardMemberPetWith;
 	private String petId;
 	private String boardMemberNick;
@@ -39,12 +39,12 @@ public class BoardMemberDTO {
 		this.boardMemberPasswd = boardMemberPasswd;
 	}
 
-	public String getBoardMemberNaMe() {
-		return boardMemberNaMe;
+	public String getBoardMemberName() {
+		return boardMemberName;
 	}
 
-	public void setBoardMemberNaMe(String boardMemberNaMe) {
-		this.boardMemberNaMe = boardMemberNaMe;
+	public void setBoardMemberName(String boardMemberName) {
+		this.boardMemberName = boardMemberName;
 	}
 
 	public String getBoardMemberRegion() {
@@ -63,12 +63,12 @@ public class BoardMemberDTO {
 		this.boardMemberGradeNo = boardMemberGradeNo;
 	}
 
-	public String getBoardMemberGradeNaMe() {
-		return boardMemberGradeNaMe;
+	public String getBoardMemberGradeName() {
+		return boardMemberGradeName;
 	}
 
-	public void setBoardMemberGradeNaMe(String boardMemberGradeNaMe) {
-		this.boardMemberGradeNaMe = boardMemberGradeNaMe;
+	public void setBoardMemberGradeName(String boardMemberGradeName) {
+		this.boardMemberGradeName = boardMemberGradeName;
 	}
 
 	public boolean isBoardMemberPetWith() {
@@ -154,8 +154,8 @@ public class BoardMemberDTO {
 	@Override
 	public String toString() {
 		return "BoardMemberDTO [boardMemberId=" + boardMemberId + ", boardMemberPasswd=" + boardMemberPasswd
-				+ ", boardMemberNaMe=" + boardMemberNaMe + ", boardMemberRegion=" + boardMemberRegion
-				+ ", boardMemberGradeNo=" + boardMemberGradeNo + ", boardMemberGradeNaMe=" + boardMemberGradeNaMe
+				+ ", boardMemberName=" + boardMemberName + ", boardMemberRegion=" + boardMemberRegion
+				+ ", boardMemberGradeNo=" + boardMemberGradeNo + ", boardMemberGradeName=" + boardMemberGradeName
 				+ ", boardMemberPetWith=" + boardMemberPetWith + ", petId=" + petId + ", boardMemberNick="
 				+ boardMemberNick + ", petBirth=" + petBirth + ", petGender=" + petGender + ", petSize=" + petSize
 				+ ", petWeight=" + petWeight + ", petWalkProfile=" + petWalkProfile + ", petImageNo=" + petImageNo

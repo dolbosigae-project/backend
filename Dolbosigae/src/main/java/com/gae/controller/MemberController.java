@@ -12,6 +12,7 @@ import com.gae.service.MemberService;
 import jakarta.servlet.http.HttpSession;
 import java.util.Map;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @Controller
 public class MemberController {
     private final MemberService memberService;
@@ -20,7 +21,6 @@ public class MemberController {
         this.memberService = memberService;
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/login")
     @ResponseBody
     public String login(@RequestBody Map<String, String> loginRequest, HttpSession session) {
