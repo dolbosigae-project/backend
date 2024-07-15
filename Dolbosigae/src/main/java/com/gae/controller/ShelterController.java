@@ -5,16 +5,17 @@ import java.util.List;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.gae.dto.ShelterDTO;
 import com.gae.service.ShelterService;
 import com.gae.vo.PageVo;
 
-@Controller
+@RestController
 public class ShelterController {
 
-    private ShelterService shelterService;
+    private final ShelterService shelterService;
 
     public ShelterController(ShelterService shelterService) {
         this.shelterService = shelterService;
@@ -23,7 +24,7 @@ public class ShelterController {
     @GetMapping("/shelter")
     public ModelAndView shelter(ModelAndView view,
                                 @RequestParam(defaultValue = "1") int pageNo,
-                                @RequestParam(defaultValue = "20") int pageContentEa) {
+                                @RequestParam(defaultValue = "10") int pageContentEa) {
         // 해당 페이지 게시글 목록 읽어옴
         List<ShelterDTO> shelterList = shelterService.selectShelterList(pageNo, pageContentEa);
 

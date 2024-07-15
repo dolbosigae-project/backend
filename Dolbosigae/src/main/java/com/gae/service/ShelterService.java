@@ -20,7 +20,7 @@ public class ShelterService {
 
     public List<ShelterDTO> selectShelterList(int pageNo, int pageContentEa) {
         Map<String, Object> map = new HashMap<>();
-        map.put("pageNo", pageNo);
+        map.put("pageNo", (pageNo - 1) * pageContentEa); 
         map.put("pageContentCount", pageContentEa);
         return mapper.selectShelterList(map);
     }
