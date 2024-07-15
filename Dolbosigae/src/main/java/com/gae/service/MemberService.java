@@ -1,10 +1,14 @@
 package com.gae.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.gae.dto.BoardMemberDTO;
 import com.gae.mapper.MemberMapper;
+import com.gae.vo.MemberPaggingVo;
+import com.gae.vo.MemberResponseVo;
 
 @Service
 public class MemberService {
@@ -24,4 +28,15 @@ public class MemberService {
             return null;
         }
     }
+
+	public MemberResponseVo getMemberList(int page) {
+		int pageOfContentCount = 10; // 페이지당 멤버 수
+		int totalCount = memberMapper.getTotalCount(); // 전체 멤버 수 가져오기
+		MemberPaggingVo paggingVo = new MemberPaggingVo(totalCount, page, pageOfContentCount);
+		
+		int startRow = (page - 1) * pageOfContentCount;
+		int endRow = startRow + pageOfContentCount;
+		List<BoardMemberDTO> members = memberMapper.getMemberList(startRow, endRow);
+		return new MemberResponseVo(members, paggingVo);
+	}
 }

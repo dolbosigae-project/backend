@@ -20,7 +20,16 @@ public class BoardMemberDTO {
 	private boolean petWalkProfile;
 	private int petImageNo;
 	private String petImagePath;
+	private String petInfo;
 	
+	public String getPetInfo() {
+		return petInfo;
+	}
+
+	public void setPetInfo(String petInfo) {
+		this.petInfo = petInfo;
+	}
+
 	public BoardMemberDTO() {	}
 
 	public String getBoardMemberId() {
@@ -159,7 +168,9 @@ public class BoardMemberDTO {
 				+ ", boardMemberPetWith=" + boardMemberPetWith + ", petId=" + petId + ", boardMemberNick="
 				+ boardMemberNick + ", petBirth=" + petBirth + ", petGender=" + petGender + ", petSize=" + petSize
 				+ ", petWeight=" + petWeight + ", petWalkProfile=" + petWalkProfile + ", petImageNo=" + petImageNo
-				+ ", petImagePath=" + petImagePath + "]";
+				+ ", petImagePath=" + petImagePath + ", petInfo=" + petInfo + "]";
 	}
+
+	
 	
 }
