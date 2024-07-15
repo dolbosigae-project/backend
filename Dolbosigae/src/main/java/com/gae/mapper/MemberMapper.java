@@ -15,4 +15,6 @@ public interface MemberMapper {
 	int getTotalCount();
 
 	List<BoardMemberDTO> getMemberList(@Param("startRow") int startRow, @Param("endRow") int endRow);
+
+	int deleteMember(String id);
 }

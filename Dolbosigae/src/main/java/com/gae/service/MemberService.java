@@ -39,4 +39,8 @@ public class MemberService {
 		List<BoardMemberDTO> members = memberMapper.getMemberList(startRow, endRow);
 		return new MemberResponseVo(members, paggingVo);
 	}
+
+	public int deleteMember(String id) {
+		return memberMapper.deleteMember(id);
+	}
 }
