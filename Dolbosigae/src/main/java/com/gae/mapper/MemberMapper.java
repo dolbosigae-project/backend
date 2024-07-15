@@ -11,10 +11,7 @@ import com.gae.dto.BoardMemberDTO;
 public interface MemberMapper {
 
 	BoardMemberDTO login(@Param("id") String id, @Param("pass") String pass);
-
 	int getTotalCount();
-
 	List<BoardMemberDTO> getMemberList(@Param("startRow") int startRow, @Param("endRow") int endRow);
-
-	int deleteMember(String id);
+	int deleteMember(@Param("id") String id);
 }

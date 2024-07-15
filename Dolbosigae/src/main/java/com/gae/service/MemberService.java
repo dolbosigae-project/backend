@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.gae.dto.BoardMemberDTO;
 import com.gae.mapper.MemberMapper;
@@ -12,7 +13,7 @@ import com.gae.vo.MemberResponseVo;
 
 @Service
 public class MemberService {
-	@Autowired
+    @Autowired
     private MemberMapper memberMapper;
 
     public MemberService(MemberMapper memberMapper) {
@@ -29,18 +30,23 @@ public class MemberService {
         }
     }
 
-	public MemberResponseVo getMemberList(int page) {
-		int pageOfContentCount = 10; // 페이지당 멤버 수
-		int totalCount = memberMapper.getTotalCount(); // 전체 멤버 수 가져오기
-		MemberPaggingVo paggingVo = new MemberPaggingVo(totalCount, page, pageOfContentCount);
-		
-		int startRow = (page - 1) * pageOfContentCount;
-		int endRow = startRow + pageOfContentCount;
-		List<BoardMemberDTO> members = memberMapper.getMemberList(startRow, endRow);
-		return new MemberResponseVo(members, paggingVo);
-	}
+    public MemberResponseVo getMemberList(int page) {
+        int pageOfContentCount = 10; // 페이지당 멤버 수
+        int totalCount = memberMapper.getTotalCount(); // 전체 멤버 수 가져오기
+        MemberPaggingVo paggingVo = new MemberPaggingVo(totalCount, page, pageOfContentCount);
 
-	public int deleteMember(String id) {
-		return memberMapper.deleteMember(id);
-	}
+        int startRow = (page - 1) * pageOfContentCount;
+        int endRow = startRow + pageOfContentCount;
+        List<BoardMemberDTO> members = memberMapper.getMemberList(startRow, endRow);
+        return new MemberResponseVo(members, paggingVo);
+    }
+
+    @Transactional
+    public int deleteMember(String id) {
+        int memberResult = memberMapper.deleteMember(id);
+        if (memberResult == 0) {
+            throw new RuntimeException("Failed to delete member");
+        }
+        return 1; // 성공적으로 삭제된 경우 1 반환
+    }
 }

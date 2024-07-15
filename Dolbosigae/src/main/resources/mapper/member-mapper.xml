@@ -59,14 +59,11 @@
     ]]>
   </select>
   
-  <!-- 멤버 및 펫 정보 삭제 -->
+  <!-- 회원 정보 삭제 -->
   <delete id="deleteMember">
     <![CDATA[
-      DELETE FROM PET
-      WHERE MEMBER_ID = #{memberId};
-
       DELETE FROM MEMBER
-      WHERE MEMBER_ID = #{memberId};
+      WHERE M_ID = #{id}
     ]]>
   </delete>
   
