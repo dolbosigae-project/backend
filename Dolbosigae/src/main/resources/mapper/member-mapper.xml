@@ -67,5 +67,59 @@
     ]]>
   </delete>
   
+  <!-- 회원 테이블 업데이트 -->
+  <update id="updateMember" parameterType="member">
+  <![CDATA[
+  	UPDATE "MEMBER" SET  
+	M_GRADE_NO = #{boardMemberGradeNo},
+	M_NAME = #{boardMemberName},
+	M_PW = #{boardMemberPasswd},
+	M_REGION = #{boardMemberRegion},
+	M_PETWITH = #{boardMemberPetWith}
+	WHERE M_ID LIKE #{boardMemberId}
+    ]]>
+  </update>
+  
+  <!-- 펫 테이블 업데이트 -->
+  <update id="updatePet" parameterType="member">
+  <![CDATA[
+  	UPDATE PET SET 
+	P_NICK = #{boardMemberNick},
+	P_BIRTH = #{petBirth},
+	P_GENDER = #{petGender},
+	P_SIZE = #{petSize},
+	P_WEIGHT = #{petWeight},
+	P_INFO = #{petInfo},
+	P_WALKPROFILE = #{petWalkProfile}
+	WHERE M_ID LIKE #{boardMemberId}
+    ]]>
+  </update>
+  
+   <!-- 회원 검색 박스 -->
+  <select id="searchByBoardMemberId" resultMap="member">
+    <![CDATA[
+      SELECT * FROM MEMBER_PET_VIEW WHERE MEMBER_ID LIKE '%' || #{term} || '%'
+    ]]>
+  </select>
+
+  <select id="searchByBoardMemberName" resultMap="member">
+    <![CDATA[
+      SELECT * FROM MEMBER_PET_VIEW WHERE MEMBER_NAME LIKE '%' || #{term} || '%'
+    ]]>
+  </select>
+
+  <select id="searchByBoardMemberRegion" resultMap="member">
+    <![CDATA[
+      SELECT * FROM MEMBER_PET_VIEW WHERE MEMBER_REGION LIKE '%' || #{term} || '%'
+    ]]>
+  </select>
+
+  <select id="searchByBoardMemberGradeName" resultMap="member">
+    <![CDATA[
+      SELECT * FROM MEMBER_PET_VIEW WHERE MEMBER_GRADE_NAME LIKE '%' || #{term} || '%'
+    ]]>
+  </select>
+  
+  
 
 </mapper>

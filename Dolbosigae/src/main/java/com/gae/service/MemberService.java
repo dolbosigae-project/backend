@@ -1,5 +1,6 @@
 package com.gae.service;
 
+import java.lang.reflect.Member;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,4 +50,33 @@ public class MemberService {
         }
         return 1; // 성공적으로 삭제된 경우 1 반환
     }
+
+    @Transactional
+	public int updateMember(BoardMemberDTO member) {
+    	int memberResult = memberMapper.updateMember(member);
+    	int petResult = memberMapper.updatePet(member);
+        if (memberResult == 0) {
+            throw new RuntimeException("Failed to delete member");
+        }
+        if(petResult == 0) {
+        	throw new RuntimeException("Failed to delete member");
+        }
+		return 0;
+	}
+
+    public List<Member> searchMembers(String category, String term) {
+        switch (category) {
+            case "회원ID":
+                return memberMapper.searchByBoardMemberId(term);
+            case "회원이름":
+                return memberMapper.searchByBoardMemberName(term);
+            case "지역":
+                return memberMapper.searchByBoardMemberRegion(term);
+            case "등급":
+                return memberMapper.searchByBoardMemberGradeName(term);
+            default:
+                throw new IllegalArgumentException("Invalid search category: " + category);
+        }
+    }
+    
 }
