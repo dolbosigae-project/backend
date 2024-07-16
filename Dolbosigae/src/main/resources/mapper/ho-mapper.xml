@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gae.mapper.HOMapper">
+
+    <!-- ResultMap -->
+    <resultMap type="com.gae.dto.HODTO" id="hospital">
+        <id column="HO_id" property="HO_ID" />
+        <result column="ho_name" property="HO_NAME" />
+        <!-- 나머지 필드도 추가 -->
+    </resultMap>
+
+    <select id="selectAllho" resultMap="hospital">
+        select * from HO
+    </select>
+
+    <select id="selectho" parameterType="int" resultMap="hospital">
+        select * from HO where ho_id = #{id}
+    </select>
+
+</mapper>

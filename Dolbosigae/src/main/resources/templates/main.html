@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>병원 정보 목록</title>
+    <style type="text/css">
+        #container {
+            width: 1200px;
+            margin: 0 auto;
+        }
+
+        #container table {
+            width: 600px;
+            border-collapse: collapse;
+            margin: 0 auto;
+        }
+
+        #container th {
+            width: 150px !important;
+            text-align: right;
+            padding: 5px;
+        }
+
+        #container td {
+            width: 500px;
+            padding: 5px;
+            height: 40px;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        .paging {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .paging a {
+            display: inline-block;
+            margin: 0 5px;
+            padding: 5px 10px;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            text-decoration: none;
+        }
+
+        .paging a:hover {
+            background-color: #e0e0e0;
+        }
+
+        .current {
+            font-weight: bold;
+            color: #333;
+            background-color: #ccc;
+        }
+    </style>
+</head>
+<body>
+<div id="container">
+    <h2>병원 정보 목록</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>병원 번호</th>
+            <th>병원 이름</th>
+            <th>지역</th>
+            <th>상세 주소</th>
+            <th>전화번호</th>
+            <th>우편번호</th>
+            <th>병원 설명</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- 리스트 출력 -->
+        <tr th:each="hospital : ${list}">
+            <td th:text="${hospital.HO_ID}"></td>
+            <td th:text="${hospital.HO_NAME}"></td>
+            <td th:text="${hospital.HO_REGION}"></td>
+            <td th:text="${hospital.HO_DIS}"></td>
+            <td th:text="${hospital.HO_TEL}"></td>
+            <td th:text="${hospital.HO_POST}"></td>
+            <td th:text="${hospital.HO_ADDRESS}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- 페이징 -->
+    <div class="paging">
+        <span th:each="i : ${#numbers.sequence(1, paging.totalPages)}">
+            <a th:href="@{/ho/main(pageNo=${i})}"
+               th:class="${i == paging.currentPage ? 'current' : ''}"
+               th:text="${i}"></a>
+        </span>
+    </div>
+</div>
+</body>
+</html>
