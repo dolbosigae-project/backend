@@ -72,6 +72,11 @@
 			<version>3.0.3</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+    		<groupId>org.json</groupId>
+    		<artifactId>json</artifactId>
+    		<version>20210307</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -86,6 +91,9 @@
 							<artifactId>lombok</artifactId>
 						</exclude>
 					</excludes>
+					<settings>
+        				<setting name="jdbcTypeForNull" value="NULL"/>
+    				</settings>
 				</configuration>
 			</plugin>
 		</plugins>
