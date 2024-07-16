@@ -4,11 +4,11 @@ import java.util.List;
 
 import com.gae.dto.PlDTO;
 
-public class ResponseVo {
+public class PlResponseVo {
     private List<PlDTO> contents;
-    private PageVo pagination;
+    private PlPageVo pagination;
 
-    public ResponseVo(List<PlDTO> contents, PageVo pagination) {
+    public PlResponseVo(List<PlDTO> contents, PlPageVo pagination) {
         this.contents = contents;
         this.pagination = pagination;
     }
@@ -17,7 +17,7 @@ public class ResponseVo {
         return contents;
     }
 
-    public PageVo getPagination() {
+    public PlPageVo getPagination() {
         return pagination;
     }
 }
