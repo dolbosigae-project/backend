@@ -25,4 +25,12 @@ public class PlService {
     public int getTotalCount() {
         return plMapper.getTotalCount();
     }
+    
+    public List<PlDTO> searchPlaygroundDetails(String plId, String plName, String plHour, String plTel, String plAddress) {
+        return plMapper.searchPlaygroundDetails(plId, plName, plHour, plTel, plAddress);
+    }
+
+    public List<PlDTO> searchCity(String plCity) {
+        return plMapper.searchCity(plCity);
+    }
 }

@@ -39,4 +39,19 @@
         ]]>
     </select>
 
+	 <select id="searchCity" parameterType="String" resultMap="pl">
+        SELECT * FROM PL WHERE PL_CITY = #{plCity}
+    </select>
+    
+    <select id="searchPlaygroundDetails" parameterType="map" resultMap="pl">
+        SELECT PL_ID AS plId, PL_NAME AS plName, PL_HOUR AS plHour, PL_TEL AS plTel, PL_ADDRESS AS plAddress
+        FROM PL
+        WHERE 
+            (#{plId} IS NULL OR PL_ID = #{plId}) AND
+            (#{plName} IS NULL OR PL_NAME = #{plName}) AND
+            (#{plHour} IS NULL OR PL_HOUR = #{plHour}) AND
+            (#{plTel} IS NULL OR PL_TEL = #{plTel}) AND
+            (#{plAddress} IS NULL OR PL_ADDRESS = #{plAddress})
+    </select>
+	
 </mapper>
