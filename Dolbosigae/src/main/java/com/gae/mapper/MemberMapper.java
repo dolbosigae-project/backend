@@ -21,4 +21,5 @@ public interface MemberMapper {
     List<Member> searchByBoardMemberName(@Param("term") String term);
     List<Member> searchByBoardMemberRegion(@Param("term") String term);
     List<Member> searchByBoardMemberGradeName(@Param("term") String term);
+    Integer checkDuplicate(String idValue);
 }

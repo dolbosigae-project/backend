@@ -99,6 +99,12 @@ public class MemberController {
         return ResponseEntity.ok(searchResults);
     }
     
+    @GetMapping("/member/duplicate")
+    @ResponseBody
+    public int isDuplicate(@RequestParam String idValue) {
+    	System.out.println(idValue);
+        return memberService.checkDuplicate(idValue);
+    }
     
     
     

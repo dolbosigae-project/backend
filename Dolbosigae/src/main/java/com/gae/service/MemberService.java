@@ -78,5 +78,11 @@ public class MemberService {
                 throw new IllegalArgumentException("Invalid search category: " + category);
         }
     }
+
+    public int checkDuplicate(String idValue) {
+        Integer result = memberMapper.checkDuplicate(idValue);
+        return result != null ? result : 0;
+    }
+    
     
 }

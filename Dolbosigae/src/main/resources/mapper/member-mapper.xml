@@ -120,6 +120,10 @@
     ]]>
   </select>
   
+  <select id="checkDuplicate" parameterType="String" resultType="int">
+        SELECT COUNT(*) FROM MEMBER_PET_VIEW WHERE MEMBER_ID = #{idValue}
+    </select>
+  
   
 
 </mapper>
