@@ -106,7 +106,11 @@ public class MemberController {
         return memberService.checkDuplicate(idValue);
     }
     
-    
+    @PostMapping("/member/register")
+    public String registerMember(@RequestBody BoardMemberDTO member) {
+        memberService.registerMember(member);
+        return "회원가입 성공";
+    }
     
     
     

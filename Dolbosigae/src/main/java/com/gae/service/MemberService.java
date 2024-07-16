@@ -83,6 +83,12 @@ public class MemberService {
         Integer result = memberMapper.checkDuplicate(idValue);
         return result != null ? result : 0;
     }
+
+    @Transactional
+	public void registerMember(BoardMemberDTO member) {
+		memberMapper.insertMember(member);
+		memberMapper.insertPet(member);
+	}
     
     
 }
