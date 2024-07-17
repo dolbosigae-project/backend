@@ -102,14 +102,14 @@ public class MemberController {
     @GetMapping("/member/duplicate")
     @ResponseBody
     public int isDuplicate(@RequestParam String idValue) {
-    	System.out.println(idValue);
         return memberService.checkDuplicate(idValue);
     }
     
     @PostMapping("/member/register")
-    public String registerMember(@RequestBody BoardMemberDTO member) {
+    public ResponseEntity<String> registerMember(@RequestBody BoardMemberDTO member) {
+        System.out.println(member);
         memberService.registerMember(member);
-        return "회원가입 성공";
+        return ResponseEntity.ok("회원가입 성공");
     }
     
     

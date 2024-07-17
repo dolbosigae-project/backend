@@ -24,4 +24,6 @@ public interface MemberMapper {
     Integer checkDuplicate(String idValue);
 	void insertMember(BoardMemberDTO member);
 	void insertPet(BoardMemberDTO member);
+	void insertDefaultPet(BoardMemberDTO defaultPet);
+	void insertPetImg(BoardMemberDTO member);
 }

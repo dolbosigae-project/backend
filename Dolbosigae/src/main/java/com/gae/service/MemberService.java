@@ -2,6 +2,7 @@ package com.gae.service;
 
 import java.lang.reflect.Member;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -85,10 +86,20 @@ public class MemberService {
     }
 
     @Transactional
-	public void registerMember(BoardMemberDTO member) {
-		memberMapper.insertMember(member);
-		memberMapper.insertPet(member);
-	}
+    public void registerMember(BoardMemberDTO member) {
+        memberMapper.insertMember(member);
+        if ("T".equals(String.valueOf(member.getBoardMemberPetWith()))) {
+            memberMapper.insertPet(member);
+            memberMapper.insertPetImg(member);
+        } else {
+            // 반려동물이 없는 경우 클라이언트 단의 닉네임 값을 사용하여 기본값으로 PET 테이블에 데이터를 삽입
+            BoardMemberDTO defaultPet = new BoardMemberDTO();
+            defaultPet.setBoardMemberId(member.getBoardMemberId());
+            defaultPet.setBoardMemberNick(member.getBoardMemberNick()); // 클라이언트 단에서 전달된 닉네임 값 사용
+            memberMapper.insertDefaultPet(defaultPet);
+        }
+    }
+    
     
     
 }
