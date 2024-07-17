@@ -4,8 +4,10 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.gae.dto.PlDTO;
+import com.gae.dto.PlSearchViewDTO;
 import com.gae.mapper.PlMapper;
+import com.gae.vo.PlPageVo;
+import com.gae.vo.PlResponseVo;
 
 @Service
 public class PlService {
@@ -16,21 +18,22 @@ public class PlService {
         this.plMapper = plMapper;
     }
 
-    public List<PlDTO> selectCity(int page, int limit) {
-        int startRow = (page - 1) * limit;
-        int endRow = startRow + limit;
-        return plMapper.selectCity(startRow, endRow);
-    }
+    //기본 리스트
 
-    public int getTotalCount() {
-        return plMapper.getTotalCount();
-    }
-    
-    public List<PlDTO> searchPlaygroundDetails(String plId, String plName, String plHour, String plTel, String plAddress) {
-        return plMapper.searchPlaygroundDetails(plId, plName, plHour, plTel, plAddress);
-    }
+	public PlResponseVo getCityList(int page) {
+		int pageOfContentCount = 5;
+		int totalCount = plMapper.getTotalCount();
+		PlPageVo pageVo = new PlPageVo(totalCount, page, pageOfContentCount);
+		
+		int startRow = (page - 1) * pageOfContentCount;
+		int endRow = startRow + pageOfContentCount;
+		List<PlSearchViewDTO> list = plMapper.getCityList(startRow, endRow);
+		return new PlResponseVo(list , pageVo);
+	}
 
-    public List<PlDTO> searchCity(String plCity) {
-        return plMapper.searchCity(plCity);
-    }
+	
+
+
+   
+   
 }

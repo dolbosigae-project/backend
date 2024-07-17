@@ -3,55 +3,14 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.gae.mapper.PlMapper">
-
-    <resultMap type="com.gae.dto.PlDTO" id="pl">
-        <id column="pl_id" property="plId" />
-        <result column="pl_name" property="plName" />
+    <resultMap type="com.gae.dto.PlSearchViewDTO" id="plSearch">
+    	<id column="pl_id" property="plId"/>
+    	<result column="pl_name" property="plName" />
         <result column="pl_hour" property="plHour" />
         <result column="pl_tel" property="plTel" />
         <result column="pl_address" property="plAddress" />
-        <result column="pl_info" property="plInfo" />
-        <result column="pl_expense" property="plExpense" />
-        <result column="pl_img" property="plImg" />
-        <result column="pl_area" property="plArea" />
-        <result column="pl_day" property="plDay" />
-        <result column="pl_city" property="plCity" />
     </resultMap>
 
-    <select id="selectCity" parameterType="map" resultMap="pl">
-        <![CDATA[
-            SELECT * FROM (
-                SELECT A.*, ROWNUM AS RNUM
-                FROM (
-                    SELECT *
-                    FROM PL
-                    ORDER BY PL_ID
-                ) A
-                WHERE ROWNUM <= #{endRow}
-            )
-            WHERE RNUM > #{startRow}
-        ]]>
-    </select>
-
-    <select id="getTotalCount" resultType="int">
-        <![CDATA[
-            SELECT COUNT(*) FROM PL
-        ]]>
-    </select>
-
-	 <select id="searchCity" parameterType="String" resultMap="pl">
-        SELECT * FROM PL WHERE PL_CITY = #{plCity}
-    </select>
     
-    <select id="searchPlaygroundDetails" parameterType="map" resultMap="pl">
-        SELECT PL_ID AS plId, PL_NAME AS plName, PL_HOUR AS plHour, PL_TEL AS plTel, PL_ADDRESS AS plAddress
-        FROM PL
-        WHERE 
-            (#{plId} IS NULL OR PL_ID = #{plId}) AND
-            (#{plName} IS NULL OR PL_NAME = #{plName}) AND
-            (#{plHour} IS NULL OR PL_HOUR = #{plHour}) AND
-            (#{plTel} IS NULL OR PL_TEL = #{plTel}) AND
-            (#{plAddress} IS NULL OR PL_ADDRESS = #{plAddress})
-    </select>
 	
 </mapper>
