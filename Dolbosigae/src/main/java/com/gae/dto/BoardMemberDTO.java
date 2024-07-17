@@ -22,9 +22,16 @@ public class BoardMemberDTO {
     private String petImagePath; 
     private String petInfo;
     private String pId; 
+    private String profileImg;
     
 	public String getpId() {
 		return pId;
+	}
+	public String getProfileImg() {
+		return profileImg;
+	}
+	public void setProfileImg(String profileImg) {
+		this.profileImg = profileImg;
 	}
 	public void setpId(String pId) {
 		this.pId = pId;
@@ -131,6 +138,7 @@ public class BoardMemberDTO {
 	public void setPetInfo(String petInfo) {
 		this.petInfo = petInfo;
 	}
+	
 	@Override
 	public String toString() {
 		return "BoardMemberDTO [boardMemberId=" + boardMemberId + ", boardMemberPasswd=" + boardMemberPasswd
@@ -139,11 +147,9 @@ public class BoardMemberDTO {
 				+ ", boardMemberPetWith=" + boardMemberPetWith + ", petId=" + petId + ", boardMemberNick="
 				+ boardMemberNick + ", petBirth=" + petBirth + ", petGender=" + petGender + ", petSize=" + petSize
 				+ ", petWeight=" + petWeight + ", petWalkProfile=" + petWalkProfile + ", petImageNo=" + petImageNo
-				+ ", petImagePath=" + petImagePath + ", petInfo=" + petInfo + ", pId=" + pId + "]";
+				+ ", petImagePath=" + petImagePath + ", petInfo=" + petInfo + ", pId=" + pId + ", profileImg="
+				+ profileImg + "]";
 	}
-	
-	
-	
 	
 	
 }

@@ -130,8 +130,8 @@
   </insert>
    
   	<insert id="insertPet" parameterType="com.gae.dto.BoardMemberDTO">
-    INSERT INTO PET (P_ID, M_ID, P_NICK, P_BIRTH, P_GENDER, P_SIZE, P_WEIGHT, P_INFO)
-    VALUES (PET_ID_SEQ.NEXTVAL, #{boardMemberId}, #{boardMemberNick}, #{petBirth}, #{petGender}, #{petSize}, #{petWeight}, #{petInfo})
+    INSERT INTO PET (P_ID, M_ID, P_NICK, P_BIRTH, P_GENDER, P_SIZE, P_WEIGHT, P_INFO, P_WALKPROFILE)
+    VALUES (PET_ID_SEQ.NEXTVAL, #{boardMemberId}, #{boardMemberNick}, #{petBirth}, #{petGender}, #{petSize}, #{petWeight}, #{petInfo}, #{petWalkProfile})
     <selectKey keyProperty="pId" resultType="String" order="AFTER">
         SELECT TO_CHAR(PET_ID_SEQ.CURRVAL) FROM DUAL
     </selectKey>
@@ -143,11 +143,21 @@
   </insert>
   
   	<insert id="insertPetImg" parameterType="com.gae.dto.BoardMemberDTO">
-    	INSERT INTO P_IMG (P_ID, P_IMG_NO, P_IMG_PATH)
-    	VALUES (#{pId}, P_IMG_NO_SEQ.NEXTVAL, #{petImagePath})
+    INSERT INTO P_IMG (P_ID, P_IMG_NO, P_IMG_PATH)
+    VALUES (
+        #{pId}, 
+        CASE 
+            WHEN #{petImagePath} IS NULL THEN 0 
+            ELSE P_IMG_NO_SEQ.NEXTVAL 
+        END, 
+        #{petImagePath}
+    )
 	</insert>
   
   
   
 
 </mapper>
+
+
+
