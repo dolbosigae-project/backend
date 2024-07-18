@@ -6,9 +6,9 @@ import com.gae.dto.PlSearchViewDTO;
 
 public class PlResponseVo {
     private List<PlSearchViewDTO> contents;
-    private PlPageVo pagination;
+    private PlPaggingVo pagination;
 
-    public PlResponseVo(List<PlSearchViewDTO> contents, PlPageVo pagination) {
+    public PlResponseVo(List<PlSearchViewDTO> contents, PlPaggingVo pagination) {
         this.contents = contents;
         this.pagination = pagination;
     }
@@ -17,7 +17,7 @@ public class PlResponseVo {
         return contents;
     }
 
-    public PlPageVo getPagination() {
+    public PlPaggingVo getPagination() {
         return pagination;
     }
 }
