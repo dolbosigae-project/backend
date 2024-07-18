@@ -1,17 +1,20 @@
 package com.gae.controller;
 
+import com.gae.vo.HOResponseVo;
+import com.gae.vo.PaggingVO;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.gae.dto.HODTO;
 import com.gae.service.HOService;
-import com.gae.vo.PageVo;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
-@Controller
+@RestController
+@CrossOrigin(origins = "http://localhost:3000", allowedHeaders = "*")
 public class HOController {
 
     private final HOService hoService;
@@ -20,29 +23,15 @@ public class HOController {
         this.hoService = hoService;
     }
 
-    @GetMapping("/ho/main")
-    public String main(Model model,
-                       @RequestParam(defaultValue = "1") int pageNo,
-                       @RequestParam(defaultValue = "20") int pageContentEa) {
-        // 해당 페이지 게시글 목록 읽어옴
-        List<HODTO> hoList = hoService.selectHoNewList(pageNo, pageContentEa);
-        // 전체 게시글 수
-        int totalCount = hoService.selectHoTotalCount();
-        // 페이징 정보 생성
-        PageVo vo = new PageVo(totalCount, pageNo, pageContentEa);
+    @GetMapping("/hospitals")
+    public ResponseEntity<HOResponseVo> getHospitals(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int limit) {
+        List<HODTO> hospitals = hoService.searchHo(page, limit);
+        int totalCount = hoService.selectTotalHoCount();
+        PaggingVO paggingVO = new PaggingVO(totalCount, page, limit);
 
-        // 데이터를 모델에 추가
-        model.addAttribute("list", hoList);
-        model.addAttribute("paging", vo);
-
-        return "main";
-    }
-
-    // 게시글 한 건 조회하는 메서드
-    @GetMapping("/ho/{hno}")
-    public String boardView(@PathVariable int hno, Model model) {
-        HODTO hospital = hoService.selectHo(hno);
-        model.addAttribute("hospital", hospital);
-        return "ho_view"; // ho_view.html의 이름
+        HOResponseVo responseVo = new HOResponseVo(hospitals, paggingVO);
+        return ResponseEntity.ok(responseVo);
     }
 }

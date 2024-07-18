@@ -1,22 +1,47 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.gae.mapper.HOMapper">
 
-    <!-- ResultMap -->
-    <resultMap type="com.gae.dto.HODTO" id="hospital">
-        <id column="HO_id" property="HO_ID" />
-        <result column="ho_name" property="HO_NAME" />
-        <!-- 나머지 필드도 추가 -->
+    <!-- HODTO에 해당하는 resultMap -->
+    <resultMap type="com.gae.dto.HODTO" id="ho">
+        <id column="HO_ID" property="hoId" />
+        <result column="HO_REGION" property="hoRegion"/>
+        <result column="HO_ADDRESS" property="hoAddress"/>
+        <result column="HO_NAME" property="hoName"/>
+        <result column="HO_TEL" property="hoTel"/>
+        <result column="HO_POST" property="hoPost"/>
     </resultMap>
 
-    <select id="selectAllho" resultMap="hospital">
-        select * from HO
+    <select id="selectHo" resultMap="ho">
+        SELECT * FROM HO
     </select>
 
-    <select id="selectho" parameterType="int" resultMap="hospital">
-        select * from HO where ho_id = #{id}
+    <select id="getHoList" resultMap="ho">
+        <![CDATA[
+        SELECT *
+        FROM (
+            SELECT A.*, ROWNUM AS RNUM
+            FROM (
+                SELECT *
+                FROM ho_VIEW
+                ORDER BY ho_ID
+            ) A
+            WHERE ROWNUM <= #{endRow}
+        )
+        WHERE RNUM > #{startRow}
+        ]]>
+    </select>
+
+    <select id="searchByHoId" resultMap="ho">
+        <![CDATA[
+        SELECT * FROM ho_VIEW WHERE ho_ID LIKE '%' || #{term} || '%'
+        ]]>
+    </select>
+
+    <select id="selectRegion" resultType="string">
+        SELECT DISTINCT HO_REGION FROM HO
     </select>
 
 </mapper>

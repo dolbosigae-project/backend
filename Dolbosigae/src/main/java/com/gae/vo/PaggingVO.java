@@ -1,6 +1,6 @@
 package com.gae.vo;
 
-public class PageVo {
+public class PaggingVO {
 
 private int count;
 //현재 페이지 번호
@@ -10,7 +10,7 @@ private int pageOfContentCount;
 //게시판 하단에 나타낼 페이지 번호 개수
 private final int PAGE_GROUP_OF_COUNT = 5;
 
-public PageVo(int count, int currentPage, int pageOfContentCount) {
+public PaggingVO(int count, int currentPage, int pageOfContentCount) {
 	this.count = count;
 	this.currentPage = currentPage;
 	this.pageOfContentCount = pageOfContentCount;
