@@ -1,8 +1,11 @@
 package com.gae.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,6 +15,7 @@ import com.gae.dto.ShelterDTO;
 import com.gae.service.ShelterService;
 import com.gae.vo.PageVo;
 
+@CrossOrigin(origins = {"http://localhost:3000", "http://nam3324.synology.me:32800"})
 @RestController
 public class ShelterController {
 
@@ -22,24 +26,16 @@ public class ShelterController {
     }
     
     @GetMapping("/shelter")
-    public ModelAndView shelter(ModelAndView view,
-                                @RequestParam(defaultValue = "1") int pageNo,
-                                @RequestParam(defaultValue = "10") int pageContentEa) {
-        // 해당 페이지 게시글 목록 읽어옴
+    public Map<String, Object> shelter(@RequestParam(defaultValue = "1") int pageNo,
+                                       @RequestParam(defaultValue = "10") int pageContentEa) {
         List<ShelterDTO> shelterList = shelterService.selectShelterList(pageNo, pageContentEa);
-
-        // 전체 게시글 수 읽어옴
         int totalCount = shelterService.selectShelterTotalCount();
+        int totalPage = (int) Math.ceil((double) totalCount / pageContentEa);
 
-        // 페이징 정보 생성
-        PageVo vo = new PageVo(totalCount, pageNo, pageContentEa);
+        Map<String, Object> response = new HashMap<>();
+        response.put("list", shelterList);
+        response.put("totalPage", totalPage);
 
-        // request 영역에 저장
-        view.addObject("list", shelterList);
-        view.addObject("pagging", vo);
-
-        // 뷰 이름 설정
-        view.setViewName("shelter");
-        return view;
+        return response;
     }
 }
