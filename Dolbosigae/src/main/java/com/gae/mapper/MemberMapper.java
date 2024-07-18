@@ -26,4 +26,5 @@ public interface MemberMapper {
 	void insertPet(BoardMemberDTO member);
 	void insertDefaultPet(BoardMemberDTO defaultPet);
 	void insertPetImg(BoardMemberDTO member);
+	int updatePasswd(String boardMemberId, String boardMemberPasswd);
 }

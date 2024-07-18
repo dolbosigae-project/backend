@@ -5,11 +5,13 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Member;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.Base64;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -63,10 +65,10 @@ public class MemberService {
     	int memberResult = memberMapper.updateMember(member);
     	int petResult = memberMapper.updatePet(member);
         if (memberResult == 0) {
-            throw new RuntimeException("Failed to delete member");
+            throw new RuntimeException("Failed to update member");
         }
         if(petResult == 0) {
-        	throw new RuntimeException("Failed to delete member");
+        	throw new RuntimeException("Failed to update member");
         }
 		return 0;
 	}
@@ -145,7 +147,14 @@ public class MemberService {
             throw new RuntimeException("회원 등록 중 오류가 발생했습니다.");
         }
     }
-    
+
+    public int updatePasswd(Map<String, String> params) {
+        String boardMemberId = params.get("id");
+        String boardMemberPasswd = params.get("passwd");
+
+        return memberMapper.updatePasswd(boardMemberId, boardMemberPasswd);
+    }
+
     
     
 }

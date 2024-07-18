@@ -66,6 +66,22 @@ public class MemberController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("error: " + e.getMessage());
         }
     }
+    
+    //비밀번호 찾기
+    @PostMapping("/find/passwd")
+    public ResponseEntity<String> findPasswd(@RequestBody Map<String, String> params) {
+        String id = params.get("id");
+        String passwd = params.get("passwd");
+        System.out.println("ID: " + id);
+        System.out.println("Password: " + passwd);
+
+        int updateResult = memberService.updatePasswd(params);
+        if (updateResult > 0) {
+            return ResponseEntity.ok("회원 정보가 업데이트되었습니다.");
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("비밀번호 업데이트에 실패했습니다.");
+        }
+    }
 
     @GetMapping("/member/list")
     @ResponseBody
@@ -117,6 +133,7 @@ public class MemberController {
     public int isDuplicate(@RequestParam String idValue) {
         return memberService.checkDuplicate(idValue);
     }
+    
     
     @PostMapping("/member/register")
     public ResponseEntity<String> registerMember(@RequestBody BoardMemberDTO member) {

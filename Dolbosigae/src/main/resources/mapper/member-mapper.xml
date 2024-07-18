@@ -34,6 +34,15 @@
       AND MEMBER_PASSWORD = STANDARD_HASH(#{pass}, 'SHA512')
     ]]>
   </select>
+    
+  <!-- 비밀번호 설정하기 -->
+  <update id="updatePasswd" parameterType="member">
+  <![CDATA[
+  	UPDATE "MEMBER" SET  
+	M_PW = STANDARD_HASH(#{boardMemberPasswd}, 'SHA512')
+	WHERE M_ID LIKE #{boardMemberId}
+    ]]>
+  </update>
 
   <!-- 전체 멤버 수 조회 -->
   <select id="getTotalCount" resultType="int">
@@ -73,7 +82,7 @@
   	UPDATE "MEMBER" SET  
 	M_GRADE_NO = #{boardMemberGradeNo},
 	M_NAME = #{boardMemberName},
-	M_PW = #{boardMemberPasswd},
+	M_PW = STANDARD_HASH(#{boardMemberPasswd}, 'SHA512'),
 	M_REGION = #{boardMemberRegion},
 	M_PETWITH = #{boardMemberPetWith}
 	WHERE M_ID LIKE #{boardMemberId}
