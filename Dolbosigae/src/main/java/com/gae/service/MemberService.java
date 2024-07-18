@@ -27,6 +27,7 @@ public class MemberService {
         this.memberMapper = memberMapper;
     }
 
+    //로그인
     public BoardMemberDTO login(String id, String passwd) {
         try {
             return memberMapper.login(id, passwd);

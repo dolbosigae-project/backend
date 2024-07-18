@@ -1,6 +1,7 @@
 package com.gae.controller;
 
 import java.lang.reflect.Member;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -33,20 +34,24 @@ public class MemberController {
 
     @PostMapping("/login")
     @ResponseBody
-    public ResponseEntity<String> login(@RequestBody Map<String, String> loginRequest, HttpSession session) {
+    public ResponseEntity<Map<String, Object>> login(@RequestBody Map<String, String> loginRequest, HttpSession session) {
         try {
             String id = loginRequest.get("id");
             String pass = loginRequest.get("pass");
             BoardMemberDTO dto = memberService.login(id, pass);
             if (dto != null) {
                 session.setAttribute("user", dto);
-                return ResponseEntity.ok("success");
+                // 사용자 정보를 포함한 응답 생성
+                Map<String, Object> response = new HashMap<String, Object>();
+                response.put("success", true);
+                response.put("user", dto); // 사용자 정보를 응답에 포함
+                return ResponseEntity.ok(response);
             } else {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("fail");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("success", false));
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("error: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("success", false, "error", e.getMessage()));
         }
     }
 
@@ -93,12 +98,20 @@ public class MemberController {
         return ResponseEntity.ok("회원 정보가 업데이트되었습니다.");
     }
     
+    //카테고리별로 멤버 서치
     @GetMapping("/member/search")
     public ResponseEntity<?> memberSearch(@RequestParam String category, @RequestParam String term) {
         List<Member> searchResults = memberService.searchMembers(category, term);
         return ResponseEntity.ok(searchResults);
     }
     
+    //마이페이지 조회시 사용
+    @GetMapping("/member/search/{id}")
+    public ResponseEntity<?> memberIdSearch(@PathVariable String id) {
+        return memberSearch("회원ID", id);
+    }
+    
+    //아이디 중복 찾기
     @GetMapping("/member/duplicate")
     @ResponseBody
     public int isDuplicate(@RequestParam String idValue) {
