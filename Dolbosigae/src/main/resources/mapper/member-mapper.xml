@@ -120,15 +120,18 @@
     ]]>
   </select>
   
+  <!-- 아이디 중복 확인 -->
   <select id="checkDuplicate" parameterType="String" resultType="int">
   	SELECT COUNT(*) FROM MEMBER_PET_VIEW WHERE MEMBER_ID = #{idValue}
   </select>
   
+  <!-- 회원가입 (회원정보) -->
   <insert id="insertMember" parameterType="com.gae.dto.BoardMemberDTO">
     INSERT INTO MEMBER (M_ID, M_NAME, M_PW, M_REGION, M_PETWITH)
     VALUES (#{boardMemberId}, #{boardMemberName}, STANDARD_HASH(#{boardMemberPasswd}, 'SHA512'), #{boardMemberRegion}, #{boardMemberPetWith})
   </insert>
    
+    <!-- 회원가입 (펫정보) -->
   	<insert id="insertPet" parameterType="com.gae.dto.BoardMemberDTO">
     INSERT INTO PET (P_ID, M_ID, P_NICK, P_BIRTH, P_GENDER, P_SIZE, P_WEIGHT, P_INFO, P_WALKPROFILE)
     VALUES (PET_ID_SEQ.NEXTVAL, #{boardMemberId}, #{boardMemberNick}, #{petBirth}, #{petGender}, #{petSize}, #{petWeight}, #{petInfo}, #{petWalkProfile})
