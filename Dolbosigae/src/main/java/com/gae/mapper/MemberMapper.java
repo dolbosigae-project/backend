@@ -22,4 +22,9 @@ public interface MemberMapper {
     List<Member> searchByBoardMemberRegion(@Param("term") String term);
     List<Member> searchByBoardMemberGradeName(@Param("term") String term);
     Integer checkDuplicate(String idValue);
+	void insertMember(BoardMemberDTO member);
+	void insertPet(BoardMemberDTO member);
+	void insertDefaultPet(BoardMemberDTO defaultPet);
+	void insertPetImg(BoardMemberDTO member);
+	int updatePasswd(String boardMemberId, String boardMemberPasswd);
 }

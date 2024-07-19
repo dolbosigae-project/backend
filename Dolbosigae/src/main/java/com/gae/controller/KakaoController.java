@@ -1,21 +1,25 @@
 package com.gae.controller;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-@Controller
+@RestController
 public class KakaoController {
 
     private static final Logger logger = LoggerFactory.getLogger(KakaoController.class);
@@ -24,71 +28,73 @@ public class KakaoController {
     private final String REDIRECT_URI = "http://localhost:9999/kakao/callback";
 
     @GetMapping("/kakao")
-    public String kakaoLogin() {
+    public void kakaoLogin(HttpServletResponse response) throws IOException {
         String apiURL = "https://kauth.kakao.com/oauth/authorize?"
                 + "response_type=code"
                 + "&client_id=" + REST_API_KEY
                 + "&redirect_uri=" + REDIRECT_URI;
-
-        return "redirect:" + apiURL;
+        response.sendRedirect(apiURL);
     }
 
     @GetMapping("/kakao/callback")
-    public String kakaoCallBack(HttpSession session, @RequestParam String code) {
-        logger.debug("Received code: {}", code);  // 디버깅 로그 추가
+    public Map<String, String> kakaoCallBack(HttpSession session, @RequestParam String code) {
+    	
+        logger.debug("Received code: {}", code);
 
-        String apiURL = "https://kauth.kakao.com/oauth/token?"
-                + "grant_type=authorization_code"
+        String apiURL = "https://kauth.kakao.com/oauth/token";
+        String postParams = "grant_type=authorization_code"
                 + "&client_id=" + REST_API_KEY
                 + "&redirect_uri=" + REDIRECT_URI
                 + "&code=" + code;
 
-        String res = requestKakaoServer(apiURL, null);
-        
-        logger.debug("Response from Kakao: {}", res);  // 디버깅 로그 추가
+        String res = requestKakaoServer(apiURL, postParams);
 
-        if (res != null && !res.equals("")) {
+        Map<String, String> response = new HashMap<>();
+        if (res != null && !res.isEmpty()) {
             JSONObject json = new JSONObject(res);
-            session.setAttribute("accessToken", json.get("access_token"));
-            session.setAttribute("refreshToken", json.get("refresh_token"));
-            return "redirect:/?loginSuccess=true"; // 로그인 성공 시 쿼리 파라미터 추가
+            session.setAttribute("accessToken", json.getString("access_token"));
+            session.setAttribute("refreshToken", json.getString("refresh_token"));
+            session.setAttribute("expiresIn", json.getInt("expires_in"));
+            session.setAttribute("scope", json.getString("scope"));
+            response.put("status", "success");
         } else {
-            return "redirect:/login?loginSuccess=false"; // 로그인 실패 시 쿼리 파라미터 추가
+            response.put("status", "failure");
         }
+        return response;
     }
 
-    @GetMapping("/kakao/logout")
-    @ResponseBody
-    public String logout(HttpSession session) {
-        session.invalidate();
-        return "Logout successful";
-    }
-
-    public String requestKakaoServer(String apiURL, String header) {
-        StringBuffer res = new StringBuffer();
+    public String requestKakaoServer(String apiURL, String postParams) {
+        StringBuilder res = new StringBuilder();
         try {
             URL url = new URL(apiURL);
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
-            con.setRequestMethod("GET");
-            if (header != null && !header.equals("")) {
-                con.setRequestProperty("Authorization", header);
+            con.setRequestMethod("POST");
+            con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+            con.setDoOutput(true);
+
+            // POST 파라미터 전송
+            try (OutputStream os = con.getOutputStream()) {
+                byte[] input = postParams.getBytes("utf-8");
+                os.write(input, 0, input.length);
             }
 
             int responseCode = con.getResponseCode();
             BufferedReader br;
-            if (responseCode == 200) { // 정상 호출
-                br = new BufferedReader(new InputStreamReader(con.getInputStream()));
-            } else { // 에러 발생
-                br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                br = new BufferedReader(new InputStreamReader(con.getInputStream(), "utf-8"));
+            } else {
+                br = new BufferedReader(new InputStreamReader(con.getErrorStream(), "utf-8"));
             }
-            String inputLine;
-            while ((inputLine = br.readLine()) != null) {
-                res.append(inputLine);
+
+            String responseLine;
+            while ((responseLine = br.readLine()) != null) {
+                res.append(responseLine.trim());
             }
             br.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Error during request to Kakao server: ", e);
         }
+        logger.debug("Response content: {}", res.toString());  // 응답 내용을 로그에 기록
         return res.toString();
     }
 }

@@ -34,6 +34,15 @@
       AND MEMBER_PASSWORD = STANDARD_HASH(#{pass}, 'SHA512')
     ]]>
   </select>
+    
+  <!-- 비밀번호 설정하기 -->
+  <update id="updatePasswd" parameterType="member">
+  <![CDATA[
+  	UPDATE "MEMBER" SET  
+	M_PW = STANDARD_HASH(#{boardMemberPasswd}, 'SHA512')
+	WHERE M_ID LIKE #{boardMemberId}
+    ]]>
+  </update>
 
   <!-- 전체 멤버 수 조회 -->
   <select id="getTotalCount" resultType="int">
@@ -73,7 +82,7 @@
   	UPDATE "MEMBER" SET  
 	M_GRADE_NO = #{boardMemberGradeNo},
 	M_NAME = #{boardMemberName},
-	M_PW = #{boardMemberPasswd},
+	M_PW = STANDARD_HASH(#{boardMemberPasswd}, 'SHA512'),
 	M_REGION = #{boardMemberRegion},
 	M_PETWITH = #{boardMemberPetWith}
 	WHERE M_ID LIKE #{boardMemberId}
@@ -120,10 +129,47 @@
     ]]>
   </select>
   
+  <!-- 아이디 중복 확인 -->
   <select id="checkDuplicate" parameterType="String" resultType="int">
-        SELECT COUNT(*) FROM MEMBER_PET_VIEW WHERE MEMBER_ID = #{idValue}
-    </select>
+  	SELECT COUNT(*) FROM MEMBER_PET_VIEW WHERE MEMBER_ID = #{idValue}
+  </select>
+  
+  <!-- 회원가입 (회원정보) -->
+  <insert id="insertMember" parameterType="com.gae.dto.BoardMemberDTO">
+    INSERT INTO MEMBER (M_ID, M_NAME, M_PW, M_REGION, M_PETWITH)
+    VALUES (#{boardMemberId}, #{boardMemberName}, STANDARD_HASH(#{boardMemberPasswd}, 'SHA512'), #{boardMemberRegion}, #{boardMemberPetWith})
+  </insert>
+   
+    <!-- 회원가입 (펫정보) -->
+  	<insert id="insertPet" parameterType="com.gae.dto.BoardMemberDTO">
+    INSERT INTO PET (P_ID, M_ID, P_NICK, P_BIRTH, P_GENDER, P_SIZE, P_WEIGHT, P_INFO, P_WALKPROFILE)
+    VALUES (PET_ID_SEQ.NEXTVAL, #{boardMemberId}, #{boardMemberNick}, #{petBirth}, #{petGender}, #{petSize}, #{petWeight}, #{petInfo}, #{petWalkProfile})
+    <selectKey keyProperty="pId" resultType="String" order="AFTER">
+        SELECT TO_CHAR(PET_ID_SEQ.CURRVAL) FROM DUAL
+    </selectKey>
+	</insert>
+
+  <insert id="insertDefaultPet" parameterType="com.gae.dto.BoardMemberDTO">
+    INSERT INTO PET (P_ID, M_ID, P_NICK, P_BIRTH, P_GENDER, P_SIZE, P_WEIGHT, P_INFO)
+    VALUES (PET_ID_SEQ.NEXTVAL, #{boardMemberId}, #{boardMemberNick}, '0000-00', 'M', '소형견', '0.0', 'No pet information')
+  </insert>
+  
+  	<insert id="insertPetImg" parameterType="com.gae.dto.BoardMemberDTO">
+    INSERT INTO P_IMG (P_ID, P_IMG_NO, P_IMG_PATH)
+    VALUES (
+        #{pId}, 
+        CASE 
+            WHEN #{petImagePath} IS NULL THEN 0 
+            ELSE P_IMG_NO_SEQ.NEXTVAL 
+        END, 
+        #{petImagePath}
+    )
+	</insert>
+  
   
   
 
 </mapper>
+
+
+
