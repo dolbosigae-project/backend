@@ -4,20 +4,33 @@ import org.apache.ibatis.type.Alias;
 
 @Alias("ho")
 public class HODTO {
-    private String hoId;
+    private int hoId;
     private String hoRegion;
     private String hoAddress;
     private String hoName;
     private String hoTel;
     private String hoPost;
 
+    public HODTO() {	}
+
+    public HODTO(int hoId, String hoRegion, String hoAddress, String hoName, String hoTel, String hoPost) {
+		super();
+		this.hoId = hoId;
+		this.hoRegion = hoRegion;
+		this.hoAddress = hoAddress;
+		this.hoName = hoName;
+		this.hoTel = hoTel;
+		this.hoPost = hoPost;
+
+	}
+    
     // Getters and Setters
 
-    public String getHoId() {
+    public int getHoId() {
         return hoId;
     }
 
-    public void setHoId(String hoId) {
+    public void setHoId(int hoId) {
         this.hoId = hoId;
     }
 

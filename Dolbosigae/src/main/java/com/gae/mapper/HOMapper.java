@@ -9,8 +9,10 @@ import org.apache.ibatis.annotations.Param;
 
 @Mapper
 public interface HOMapper {
-	List<HODTO> selectHo();  // 모든 HO를 선택
-    List<HODTO> getHoList(Map<String, Object> map);  // 페이징된 HO 리스트 선택
-    HODTO searchByHoId(@Param("term") String term); 
-    List<String> selectRegion();  // 지역 리스트 선택
-}
+	   List<HODTO> getHoList(@Param("startRow") int startRow, @Param("endRow") int endRow);
+	    int getTotalCount();
+	    HODTO selectHoInfo(@Param("hoId") int hoId);
+	    List<HODTO> searchHo(@Param("hoText") String hoText, @Param("startRow") int startRow, @Param("endRow") int endRow);
+	    int getTotalCountBySearch(@Param("hoText") String hoText); // 추가된 메서드
+		int deleteHo(int hoId);
+	}

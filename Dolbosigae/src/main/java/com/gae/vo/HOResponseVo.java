@@ -5,27 +5,19 @@ import com.gae.dto.HODTO;
 import java.util.List;
 
 public class HOResponseVo {
-    private List<HODTO> contents;
-    private PaggingVO pagination;
+	 private List<HODTO> contents;
+	    private PaggingVO pagination;
 
-    public HOResponseVo(List<HODTO> contents, PaggingVO pagination) {
-        this.contents = contents;
-        this.pagination = pagination;
-    }
+	    public HOResponseVo(List<HODTO> contents, PaggingVO pagination) {
+	        this.contents = contents;
+	        this.pagination = pagination;
+	    }
 
-    public List<HODTO> getContents() {
-        return contents;
-    }
+	    public List<HODTO> getContents() {
+	        return contents;
+	    }
 
-    public void setContents(List<HODTO> contents) {
-        this.contents = contents;
-    }
-
-    public PaggingVO getPagination() {
-        return pagination;
-    }
-
-    public void setPagination(PaggingVO pagination) {
-        this.pagination = pagination;
-    }
-}
+	    public PaggingVO getPagination() {
+	        return pagination;
+	    }
+	}

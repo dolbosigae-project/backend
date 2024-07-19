@@ -3,7 +3,6 @@
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.gae.mapper.HOMapper">
-
     <!-- HODTO에 해당하는 resultMap -->
     <resultMap type="com.gae.dto.HODTO" id="ho">
         <id column="HO_ID" property="hoId" />
@@ -19,29 +18,40 @@
     </select>
 
     <select id="getHoList" resultMap="ho">
-        <![CDATA[
-        SELECT *
-        FROM (
-            SELECT A.*, ROWNUM AS RNUM
-            FROM (
-                SELECT *
-                FROM ho_VIEW
-                ORDER BY ho_ID
-            ) A
+         <![CDATA[
+        SELECT * FROM (
+            SELECT ROWNUM AS rnum, a.*
+            FROM (SELECT * FROM HO ORDER BY ho_id) a
             WHERE ROWNUM <= #{endRow}
         )
-        WHERE RNUM > #{startRow}
+        WHERE rnum >= #{startRow}
         ]]>
     </select>
-
-    <select id="searchByHoId" resultMap="ho">
+    
+    <select id="getTotalCount" resultType="int">
         <![CDATA[
-        SELECT * FROM ho_VIEW WHERE ho_ID LIKE '%' || #{term} || '%'
+        SELECT COUNT(*) FROM HO
+        ]]>
+    </select>
+    
+    <select id="searchHo" parameterType="map" resultMap="ho">
+        <![CDATA[
+        SELECT * FROM (
+            SELECT ROWNUM AS rnum, a.*
+            FROM (SELECT * FROM HO WHERE ho_address LIKE '%' || #{hoText} || '%' ORDER BY ho_id) a
+            WHERE ROWNUM <= #{endRow}
+        )
+        WHERE rnum >= #{startRow}
         ]]>
     </select>
 
-    <select id="selectRegion" resultType="string">
-        SELECT DISTINCT HO_REGION FROM HO
+    <delete id="deleteHo">
+        DELETE FROM HO WHERE ho_id = #{hoId}
+    </delete>
+    
+    <select id="getTotalCountBySearch" resultType="int">
+        <![CDATA[
+        SELECT COUNT(*) FROM HO WHERE ho_address LIKE '%' || #{hoText} || '%'
+        ]]>
     </select>
-
 </mapper>
