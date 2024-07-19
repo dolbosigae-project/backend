@@ -107,11 +107,16 @@ public class MemberController {
     
     @PostMapping("/member/update")
     public ResponseEntity<String> memberUpdate(@RequestBody BoardMemberDTO member) {
-        System.out.println(member);
-        int result = memberService.updateMember(member);
-        System.out.println(result);
-        
-        return ResponseEntity.ok("회원 정보가 업데이트되었습니다.");
+        try {
+            System.out.println("Received Member Data: " + member); // 데이터 출력
+            int result = memberService.updateMember(member);
+            System.out.println("Update Result: " + result);
+
+            return ResponseEntity.ok("회원 정보가 업데이트되었습니다.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("회원정보 업데이트 중 오류가 발생했습니다.");
+        }
     }
     
     //카테고리별로 멤버 서치

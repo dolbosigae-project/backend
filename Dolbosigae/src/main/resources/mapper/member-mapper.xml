@@ -76,18 +76,26 @@
     ]]>
   </delete>
   
-  <!-- 회원 테이블 업데이트 -->
-  <update id="updateMember" parameterType="member">
-  <![CDATA[
-  	UPDATE "MEMBER" SET  
-	M_GRADE_NO = #{boardMemberGradeNo},
-	M_NAME = #{boardMemberName},
-	M_PW = STANDARD_HASH(#{boardMemberPasswd}, 'SHA512'),
-	M_REGION = #{boardMemberRegion},
-	M_PETWITH = #{boardMemberPetWith}
-	WHERE M_ID LIKE #{boardMemberId}
-    ]]>
-  </update>
+	<!-- 회원 테이블 업데이트 -->
+	<update id="updateMember" parameterType="com.gae.dto.BoardMemberDTO">
+	<![CDATA[
+	  UPDATE "MEMBER" SET  
+	    M_GRADE_NO = #{boardMemberGradeNo},
+	    M_NAME = #{boardMemberName},
+	    M_REGION = #{boardMemberRegion},
+	    M_PETWITH = #{boardMemberPetWith}
+	  WHERE M_ID = #{boardMemberId}
+	]]>
+	</update>
+	
+	<!-- 회원 테이블 업데이트(해시값 변경으로 비밀번호 분리함) -->
+	<update id="updateMemberPassword" parameterType="com.gae.dto.BoardMemberDTO">
+	<![CDATA[
+	  UPDATE "MEMBER" SET  
+	    M_PW = STANDARD_HASH(#{boardMemberPasswd}, 'SHA512')
+	  WHERE M_ID = #{boardMemberId}
+	]]>
+	</update>
   
   <!-- 펫 테이블 업데이트 -->
   <update id="updatePet" parameterType="member">
