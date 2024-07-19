@@ -15,10 +15,9 @@
     </resultMap>
 
     <select id="selectShelterList" resultMap="shelter">
-        SELECT * FROM SH
-        ORDER BY SH_ID
-        LIMIT #{pageContentCount} OFFSET #{pageNo}
-    </select>
+    	SELECT * FROM SH
+    	ORDER BY SH_ID
+	</select>
 
     <select id="selectShelterTotalCount" resultType="int">
         SELECT COUNT(*) FROM SH

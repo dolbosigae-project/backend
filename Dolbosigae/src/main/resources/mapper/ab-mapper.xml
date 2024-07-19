@@ -20,9 +20,7 @@
 
    <select id="selectABList" parameterType="map" resultMap="ad">
         SELECT * FROM ab
-        WHERE shID = #{shID}
         ORDER BY abID
-        LIMIT #{pageContentCount} OFFSET #{pageNo}
     </select>
 
     <select id="selectABTotalCount" parameterType="map" resultType="int">

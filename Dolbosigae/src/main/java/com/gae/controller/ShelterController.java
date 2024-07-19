@@ -49,6 +49,10 @@ public class ShelterController {
     public Map<String, Object> ab(@RequestParam String shID,
     							  @RequestParam(defaultValue = "1") int pageNo,
     							  @RequestParam(defaultValue = "6") int pageContentEa){
+		if (shID == null || shID.trim().isEmpty()) {
+	        throw new IllegalArgumentException("shID must not be null or empty");
+	    }
+		
     	List<ABDTO> abList = abService.selectABList(shID, pageNo, pageContentEa);
     	int totalCount = abService.selectABTotalCount(shID);
     	int totalPage = (int) Math.ceil((double) totalCount / pageContentEa);
