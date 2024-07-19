@@ -3,45 +3,59 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.gae.mapper.PlMapper">
-    <resultMap type="com.gae.dto.PlSearchViewDTO" id="plSearch">
-    	<id column="pl_id" property="plId"/>
-    	<result column="pl_name" property="plName" />
-        <result column="pl_hour" property="plHour" />
-        <result column="pl_tel" property="plTel" />
-        <result column="pl_address" property="plAddress" />
-    </resultMap>
     <resultMap type="com.gae.dto.PlDTO" id="pl">
-    	<id column="pl_id" property="plId"/>
-    	<result column="pl_name" property="plName"/>
-    	<result column="pl_hour" property="plHour"/>
-    	<result column="pl_tel" property="plTel"/>
-    	<result column="pl_address" property="plAddress"/>
-    	<result column="pl_info" property="plInfo"/>
-    	<result column="pl_expense" property="plExpense"/>
-    	<result column="pl_img" property="plImg"/>
-    	<result column="pl_area" property="plArea"/>
-    	<result column="pl_day" property="plDay"/>
-    	<result column="pl_city" property="plCity"/>
+        <id column="pl_id" property="plId"/>
+        <result column="pl_name" property="plName"/>
+        <result column="pl_hour" property="plHour"/>
+        <result column="pl_tel" property="plTel"/>
+        <result column="pl_address" property="plAddress"/>
+        <result column="pl_info" property="plInfo"/>
+        <result column="pl_expense" property="plExpense"/>
+        <result column="pl_img" property="plImg"/>
+        <result column="pl_area" property="plArea"/>
+        <result column="pl_day" property="plDay"/>
+        <result column="pl_city" property="plCity"/>
     </resultMap>
-	
-	<select id="getCityList" resultMap="plSearch">
-		<![CDATA[
-		SELECT * FROM PL_SEARCH_VIEW
-		]]>
-	</select>
+    
+    <select id="getCityList" resultMap="pl">
+        <![CDATA[
+        SELECT * FROM (
+            SELECT ROWNUM AS rnum, a.*
+            FROM (SELECT * FROM PL ORDER BY pl_id) a
+            WHERE ROWNUM <= #{endRow}
+        )
+        WHERE rnum >= #{startRow}
+        ]]>
+    </select>
     
     <select id="getTotalCount" resultType="int">
-    	<![CDATA[
-    	SELECT COUNT(*) FROM PL_SEARCH_VIEW
-    	]]>
+        <![CDATA[
+        SELECT COUNT(*) FROM PL
+        ]]>
     </select>
-	
-	<select id="searchCity" parameterType="map" resultMap="plSearch">
-		SELECT * FROM PL_SEARCH_VIEW
-		WHERE ${plText} like '%' || #{} || '%'
-	</select>
-	
-	<select id="selectCityInfo" resultMap="pl">
-		select * from pl where pl_id = #{plId}
-	</select>
+    
+    <select id="searchCity" parameterType="map" resultMap="pl">
+        <![CDATA[
+        SELECT * FROM (
+            SELECT ROWNUM AS rnum, a.*
+            FROM (SELECT * FROM PL WHERE pl_address LIKE '%' || #{plText} || '%' ORDER BY pl_id) a
+            WHERE ROWNUM <= #{endRow}
+        )
+        WHERE rnum >= #{startRow}
+        ]]>
+    </select>
+    
+    <select id="selectCityInfo" resultMap="pl">
+        SELECT * FROM PL WHERE pl_id = #{plId}
+    </select>
+    
+    <delete id="deleteCity">
+        DELETE FROM PL WHERE pl_id = #{plId}
+    </delete>
+    
+    <select id="getTotalCountBySearch" resultType="int">
+        <![CDATA[
+        SELECT COUNT(*) FROM PL WHERE pl_address LIKE '%' || #{plText} || '%'
+        ]]>
+    </select>
 </mapper>

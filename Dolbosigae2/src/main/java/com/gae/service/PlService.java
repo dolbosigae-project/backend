@@ -1,14 +1,12 @@
 package com.gae.service;
 
-import java.util.List;
-
 import org.springframework.stereotype.Service;
-
-import com.gae.dto.PlDTO;
-import com.gae.dto.PlSearchViewDTO;
 import com.gae.mapper.PlMapper;
+import com.gae.dto.PlDTO;
 import com.gae.vo.PlPaggingVo;
 import com.gae.vo.PlResponseVo;
+
+import java.util.List;
 
 @Service
 public class PlService {
@@ -19,26 +17,33 @@ public class PlService {
         this.plMapper = plMapper;
     }
 
-    //기본 리스트
+    public PlResponseVo getCityList(int page, int limit) {
+        int startRow = (page - 1) * limit + 1;
+        int endRow = page * limit;
+        List<PlDTO> list = plMapper.getCityList(startRow, endRow);
+        PlPaggingVo pagination = getPagination(page, limit, null);
+        return new PlResponseVo(list, pagination);
+    }
 
-	public PlResponseVo getCityList(int page, int limit) {
-		int pageOfContentCount = 5;
-		int totalCount = plMapper.getTotalCount();
-		PlPaggingVo pageVo = new PlPaggingVo(totalCount, page, pageOfContentCount);
-		
-		int startRow = (page - 1) * pageOfContentCount;
-		int endRow = startRow + pageOfContentCount;
-		List<PlSearchViewDTO> list = plMapper.getCityList(startRow, endRow);
-		return new PlResponseVo(list , pageVo);
-	}
+    public PlResponseVo searchCity(String plText, int page, int limit) {
+        int startRow = (page - 1) * limit + 1;
+        int endRow = page * limit;
+        List<PlDTO> list = plMapper.searchCity(plText, startRow, endRow);
+        PlPaggingVo pagination = getPagination(page, limit, plText);
+        return new PlResponseVo(list, pagination);
+    }
 
-	public PlDTO selectCityInfo(int plid) {
-		return plMapper.selectCityInfo(plid);
-	}
+    public PlDTO selectCityInfo(int plId) {
+        return plMapper.selectCityInfo(plId);
+    }
 
-	
+    public void deleteCity(int plId) {
+        plMapper.deleteCity(plId);
+    }
 
-
-   
-   
+    public PlPaggingVo getPagination(int page, int limit, String plText) {
+        int totalCount = plText == null ? plMapper.getTotalCount() : plMapper.getTotalCountBySearch(plText);
+        System.out.println("Total Count: " + totalCount); // 로그 추가
+        return new PlPaggingVo(totalCount, page, limit);
+    }
 }

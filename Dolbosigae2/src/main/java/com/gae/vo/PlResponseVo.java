@@ -2,18 +2,18 @@ package com.gae.vo;
 
 import java.util.List;
 
-import com.gae.dto.PlSearchViewDTO;
+import com.gae.dto.PlDTO;
 
 public class PlResponseVo {
-    private List<PlSearchViewDTO> contents;
+    private List<PlDTO> contents;
     private PlPaggingVo pagination;
 
-    public PlResponseVo(List<PlSearchViewDTO> contents, PlPaggingVo pagination) {
+    public PlResponseVo(List<PlDTO> contents, PlPaggingVo pagination) {
         this.contents = contents;
         this.pagination = pagination;
     }
 
-    public List<PlSearchViewDTO> getContents() {
+    public List<PlDTO> getContents() {
         return contents;
     }
 

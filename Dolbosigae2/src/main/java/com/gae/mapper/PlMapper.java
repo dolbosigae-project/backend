@@ -1,23 +1,17 @@
-
 package com.gae.mapper;
-
-import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-
 import com.gae.dto.PlDTO;
-import com.gae.dto.PlSearchViewDTO;
-import com.gae.vo.PlResponseVo;
+
+import java.util.List;
 
 @Mapper
 public interface PlMapper {
-
-	List<PlSearchViewDTO> getCityList(@Param("startRow") int startRow, @Param("endRow") int endRow);
-
-	int getTotalCount();
-
-	PlDTO selectCityInfo(int plid);
-
-	
+    List<PlDTO> getCityList(@Param("startRow") int startRow, @Param("endRow") int endRow);
+    int getTotalCount();
+    PlDTO selectCityInfo(@Param("plId") int plId);
+    List<PlDTO> searchCity(@Param("plText") String plText, @Param("startRow") int startRow, @Param("endRow") int endRow);
+    int getTotalCountBySearch(@Param("plText") String plText); // 추가된 메서드
+	int deleteCity(int plId);
 }
