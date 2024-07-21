@@ -16,6 +16,7 @@ public interface MemberMapper {
 	List<BoardMemberDTO> getMemberList(@Param("startRow") int startRow, @Param("endRow") int endRow);
 	int deleteMember(@Param("id") String id);
 	int updateMember(BoardMemberDTO member);
+	int updateMemberPassword(BoardMemberDTO member);
 	int updatePet(BoardMemberDTO member);
 	List<Member> searchByBoardMemberId(@Param("term") String term);
     List<Member> searchByBoardMemberName(@Param("term") String term);
@@ -27,4 +28,5 @@ public interface MemberMapper {
 	void insertDefaultPet(BoardMemberDTO defaultPet);
 	void insertPetImg(BoardMemberDTO member);
 	int updatePasswd(String boardMemberId, String boardMemberPasswd);
+	BoardMemberDTO myPage(String id);
 }

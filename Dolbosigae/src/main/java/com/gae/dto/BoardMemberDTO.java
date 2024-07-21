@@ -23,7 +23,14 @@ public class BoardMemberDTO {
     private String petInfo;
     private String pId; 
     private String profileImg;
+    private int passwordChanged; 
     
+	public int getPasswordChanged() {
+		return passwordChanged;
+	}
+	public void setPasswordChanged(int passwordChanged) {
+		this.passwordChanged = passwordChanged;
+	}
 	public String getpId() {
 		return pId;
 	}
@@ -138,7 +145,6 @@ public class BoardMemberDTO {
 	public void setPetInfo(String petInfo) {
 		this.petInfo = petInfo;
 	}
-	
 	@Override
 	public String toString() {
 		return "BoardMemberDTO [boardMemberId=" + boardMemberId + ", boardMemberPasswd=" + boardMemberPasswd
@@ -148,7 +154,7 @@ public class BoardMemberDTO {
 				+ boardMemberNick + ", petBirth=" + petBirth + ", petGender=" + petGender + ", petSize=" + petSize
 				+ ", petWeight=" + petWeight + ", petWalkProfile=" + petWalkProfile + ", petImageNo=" + petImageNo
 				+ ", petImagePath=" + petImagePath + ", petInfo=" + petInfo + ", pId=" + pId + ", profileImg="
-				+ profileImg + "]";
+				+ profileImg + ", passwordChanged=" + passwordChanged + "]";
 	}
 	
 	

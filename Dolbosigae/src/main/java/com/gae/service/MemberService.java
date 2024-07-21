@@ -61,17 +61,25 @@ public class MemberService {
     }
 
     @Transactional
-	public int updateMember(BoardMemberDTO member) {
-    	int memberResult = memberMapper.updateMember(member);
-    	int petResult = memberMapper.updatePet(member);
+    public int updateMember(BoardMemberDTO member) {
+        int memberResult = memberMapper.updateMember(member);
+        int petResult = memberMapper.updatePet(member);
+        
+        if (member.getPasswordChanged() == 1) {  
+            int passwordResult = memberMapper.updateMemberPassword(member);
+            if (passwordResult == 0) {
+                throw new RuntimeException("Failed to update member password");
+            }
+        }
+
         if (memberResult == 0) {
             throw new RuntimeException("Failed to update member");
         }
-        if(petResult == 0) {
-        	throw new RuntimeException("Failed to update member");
+        if (petResult == 0) {
+            throw new RuntimeException("Failed to update pet");
         }
-		return 0;
-	}
+        return memberResult;
+    }
 
     public List<Member> searchMembers(String category, String term) {
         switch (category) {
@@ -87,6 +95,13 @@ public class MemberService {
                 throw new IllegalArgumentException("Invalid search category: " + category);
         }
     }
+    
+    
+	public BoardMemberDTO myPage(String id) {
+		return memberMapper.myPage(id);
+	}
+    
+    
 
     public int checkDuplicate(String idValue) {
         Integer result = memberMapper.checkDuplicate(idValue);
@@ -154,6 +169,10 @@ public class MemberService {
 
         return memberMapper.updatePasswd(boardMemberId, boardMemberPasswd);
     }
+
+
+
+
 
     
     

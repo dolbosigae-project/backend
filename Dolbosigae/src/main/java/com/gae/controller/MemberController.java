@@ -107,11 +107,16 @@ public class MemberController {
     
     @PostMapping("/member/update")
     public ResponseEntity<String> memberUpdate(@RequestBody BoardMemberDTO member) {
-        System.out.println(member);
-        int result = memberService.updateMember(member);
-        System.out.println(result);
-        
-        return ResponseEntity.ok("회원 정보가 업데이트되었습니다.");
+        try {
+            System.out.println("Received Member Data: " + member); // 데이터 출력
+            int result = memberService.updateMember(member);
+            System.out.println("Update Result: " + result);
+
+            return ResponseEntity.ok("회원 정보가 업데이트되었습니다.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("회원정보 업데이트 중 오류가 발생했습니다.");
+        }
     }
     
     //카테고리별로 멤버 서치
@@ -121,10 +126,16 @@ public class MemberController {
         return ResponseEntity.ok(searchResults);
     }
     
-    //마이페이지 조회시 사용
+    //마이페이지 조회
     @GetMapping("/member/search/{id}")
-    public ResponseEntity<?> memberIdSearch(@PathVariable String id) {
-        return memberSearch("회원ID", id);
+    public ResponseEntity<?> findMemberById(@PathVariable String id) {
+        BoardMemberDTO member = memberService.myPage(id);
+        if (member != null) {
+        	System.out.println("Member found: " + member); // 디버깅을 위해 추가
+            return ResponseEntity.ok(member);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("회원 정보를 찾을 수 없습니다.");
+        }
     }
     
     //아이디 중복 찾기
