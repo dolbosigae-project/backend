@@ -126,10 +126,16 @@ public class MemberController {
         return ResponseEntity.ok(searchResults);
     }
     
-    //마이페이지 조회시 사용
+    //마이페이지 조회
     @GetMapping("/member/search/{id}")
-    public ResponseEntity<?> memberIdSearch(@PathVariable String id) {
-        return memberSearch("회원ID", id);
+    public ResponseEntity<?> findMemberById(@PathVariable String id) {
+        BoardMemberDTO member = memberService.myPage(id);
+        if (member != null) {
+        	System.out.println("Member found: " + member); // 디버깅을 위해 추가
+            return ResponseEntity.ok(member);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("회원 정보를 찾을 수 없습니다.");
+        }
     }
     
     //아이디 중복 찾기

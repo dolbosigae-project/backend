@@ -95,6 +95,13 @@ public class MemberService {
                 throw new IllegalArgumentException("Invalid search category: " + category);
         }
     }
+    
+    
+	public BoardMemberDTO myPage(String id) {
+		return memberMapper.myPage(id);
+	}
+    
+    
 
     public int checkDuplicate(String idValue) {
         Integer result = memberMapper.checkDuplicate(idValue);
@@ -162,6 +169,10 @@ public class MemberService {
 
         return memberMapper.updatePasswd(boardMemberId, boardMemberPasswd);
     }
+
+
+
+
 
     
     

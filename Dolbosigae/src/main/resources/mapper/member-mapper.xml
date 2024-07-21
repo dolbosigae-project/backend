@@ -137,6 +137,13 @@
     ]]>
   </select>
   
+  <!-- 마이페이지 -->
+  <select id="myPage" resultMap="member">
+    <![CDATA[
+      SELECT * FROM MEMBER_PET_VIEW WHERE MEMBER_ID = #{id}
+    ]]>
+  </select>
+  
   <!-- 아이디 중복 확인 -->
   <select id="checkDuplicate" parameterType="String" resultType="int">
   	SELECT COUNT(*) FROM MEMBER_PET_VIEW WHERE MEMBER_ID = #{idValue}
@@ -178,6 +185,5 @@
   
 
 </mapper>
-
 
 
