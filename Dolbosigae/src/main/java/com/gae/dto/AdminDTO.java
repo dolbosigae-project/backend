@@ -20,6 +20,7 @@ public class AdminDTO {
 	private String FAQTitle;
 	private String FAQContent;
 	private Date FAQDate;
+	
 	public int getAdminNo() {
 		return adminNo;
 	}
