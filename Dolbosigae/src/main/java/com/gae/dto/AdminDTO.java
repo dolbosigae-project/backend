@@ -1,6 +1,7 @@
 package com.gae.dto;
 
 import java.sql.Date;
+import java.util.List;
 
 import org.apache.ibatis.type.Alias;
 
@@ -22,6 +23,9 @@ public class AdminDTO {
 	private String FAQTitle;
 	private String FAQContent;
 	private Date FAQDate;
+	
+	// 댓글 목록 필드
+    private List<AdminDTO> commentDetails;
 	
 	public int getAdminNo() {
 		return adminNo;
@@ -119,6 +123,13 @@ public class AdminDTO {
 	public void setFAQDate(Date fAQDate) {
 		FAQDate = fAQDate;
 	}
+    public List<AdminDTO> getCommentDetails() {
+		return commentDetails;
+	}
+	public void setCommentDetails(List<AdminDTO> commentDetails) {
+        this.commentDetails = commentDetails;
+    }
+    
 	@Override
 	public String toString() {
 		return "AdminDTO [adminNo=" + adminNo + ", adminMemberId=" + adminMemberId + ", adminTitle=" + adminTitle
@@ -127,14 +138,8 @@ public class AdminDTO {
 				+ ", adminCommentContent=" + adminCommentContent + ", adminCommentDate=" + adminCommentDate
 				+ ", adminCommentMemberId=" + adminCommentMemberId + ", adminCommentNick=" + adminCommentNick
 				+ ", FAQId=" + FAQId + ", FAQTitle=" + FAQTitle + ", FAQContent=" + FAQContent + ", FAQDate=" + FAQDate
-				+ ", getAdminNo()=" + getAdminNo() + ", getAdminMemberId()=" + getAdminMemberId() + ", getAdminTitle()="
-				+ getAdminTitle() + ", getAdminContent()=" + getAdminContent() + ", getAdminDate()=" + getAdminDate()
-				+ ", getAdminCommentCount()=" + getAdminCommentCount() + ", getAdminNick()=" + getAdminNick()
-				+ ", getAdminCommentNo()=" + getAdminCommentNo() + ", getAdminCommentContent()="
-				+ getAdminCommentContent() + ", getAdminCommentDate()=" + getAdminCommentDate()
-				+ ", getAdminCommentMemberId()=" + getAdminCommentMemberId() + ", getAdminCommentNick()="
-				+ getAdminCommentNick() + ", getFAQId()=" + getFAQId() + ", getFAQTitle()=" + getFAQTitle()
-				+ ", getFAQContent()=" + getFAQContent() + ", getFAQDate()=" + getFAQDate() + ", getClass()="
-				+ getClass() + ", hashCode()=" + hashCode() + ", toString()=" + super.toString() + "]";
+				+ ", commentDetails=" + commentDetails + "]";
 	}
+	
+	
 }

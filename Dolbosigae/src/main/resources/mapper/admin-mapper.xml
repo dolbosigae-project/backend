@@ -12,7 +12,7 @@
     	<result column="FAQ_DATE" property="FAQDate"/>
   	</resultMap>
   	
-  	<!-- 일반 문의 게시판 resultMap(ACB_BOARD_VIEW) -->
+  	<!-- 일반 문의 게시판 resultMap (ACB_BOARD_VIEW) -->
   	<resultMap type="com.gae.dto.AdminDTO" id="admin">
   		<id column="ACB_NO" property="adminNo"/>
     	<result column="M_ID" property="adminMemberId"/>
@@ -21,6 +21,16 @@
     	<result column="ACB_DATE" property="adminDate"/>
     	<result column="COMMENT_COUNT" property="adminCommentCount"/>
     	<result column="PET_NICKNAME" property="adminNick"/>
+  	</resultMap>
+  	
+  	<!-- 일반 문의 게시판 : 댓글 resultMap (ACB_BOARD_COMMENT_VIEW) -->
+  	<resultMap type="com.gae.dto.AdminDTO" id="adminComment">
+  		<id column="ACB_COMMENT_NO" property="adminCommentNo"/>
+    	<result column="ACB_NO" property="adminNo"/>
+    	<result column="M_ID" property="adminCommentMemberId"/>
+    	<result column="ACB_COMMENT_CONTENT" property="adminCommentContent"/>
+    	<result column="ACB_COMMENT_DATE" property="adminCommentDate"/>
+    	<result column="PET_NICKNAME" property="adminCommentNick"/>
   	</resultMap>
   	  	
   	<!-- 자주 묻는 질문 -->
@@ -54,7 +64,11 @@
 	<select id="getAdminContactDetail" parameterType="int" resultMap="admin">
 		 SELECT * FROM ACB_BOARD_VIEW WHERE ACB_NO = #{adminNo}
 	</select>
-
+	
+	<!--  일반 문의 게시판 : 상세 中 댓글 -->
+	<select id="getAdminContactCommentDetail" parameterType="int" resultMap="adminComment">
+		select * from ACB_BOARD_COMMENT_VIEW where ACB_NO =#{adminNo}
+	</select>
 
 
 

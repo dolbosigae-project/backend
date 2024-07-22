@@ -38,9 +38,19 @@ public class AdminService {
 
 	//일반 문의 게시판 - 상세
 	public AdminDTO getAdminContactDetail(int adminNo) {
-        return adminMapper.getAdminContactDetail(adminNo);
-    }
+        // 게시물 상세 정보 가져오기
+        AdminDTO adminDetail = adminMapper.getAdminContactDetail(adminNo);
 
+        // 댓글 정보 가져오기
+        List<AdminDTO> commentDetails = adminMapper.getAdminContactCommentDetail(adminNo);
+
+        // 댓글 정보를 adminDetail에 설정
+        if (adminDetail != null) {
+            adminDetail.setCommentDetails(commentDetails);
+        }
+
+        return adminDetail;
+    }
 	
 	
 
