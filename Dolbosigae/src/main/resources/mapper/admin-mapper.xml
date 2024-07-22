@@ -12,11 +12,48 @@
     	<result column="FAQ_DATE" property="FAQDate"/>
   	</resultMap>
   	
+  	<!-- 일반 문의 게시판 resultMap(ACB_BOARD_VIEW) -->
+  	<resultMap type="com.gae.dto.AdminDTO" id="admin">
+  		<id column="ACB_NO" property="adminNo"/>
+    	<result column="M_ID" property="adminMemberId"/>
+    	<result column="ACB_TITLE" property="adminTitle"/>
+    	<result column="ACB_CONTENT" property="adminContent"/>
+    	<result column="ACB_DATE" property="adminDate"/>
+    	<result column="COMMENT_COUNT" property="adminCommentCount"/>
+    	<result column="PET_NICKNAME" property="adminNick"/>
+  	</resultMap>
+  	  	
   	<!-- 자주 묻는 질문 -->
 	<select id="selectAllDefault" resultMap="default">
-		select * from FAQ
+		select * from faq
 	</select>
 
+	<!-- 일반 문의 게시판 : 전체 게시글 수 조회 -->
+	<select id="getTotalCount" resultType="int">
+		select count(*) from acb_board_view
+	</select>
+	
+	<!-- 일반 문의 게시판 : 리스트 조회 (페이징) -->
+	<select id="getAdminList" resultMap="admin">
+	 <![CDATA[
+      SELECT *
+      FROM (
+        SELECT A.*, ROWNUM AS RNUM
+        FROM (
+          SELECT *
+          FROM acb_board_view
+          ORDER BY ACB_NO
+        ) A
+        WHERE ROWNUM <= #{endRow}
+      )
+      WHERE RNUM > #{startRow}
+    ]]>	
+	</select>
+	
+	<!-- 일반 문의 게시판 : 상세 -->
+	<select id="getAdminContactDetail" parameterType="int" resultMap="admin">
+		 SELECT * FROM ACB_BOARD_VIEW WHERE ACB_NO = #{adminNo}
+	</select>
 
 
 

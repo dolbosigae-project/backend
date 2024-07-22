@@ -16,6 +16,8 @@ public class AdminDTO {
 	private int adminCommentNo;
 	private String adminCommentContent;
 	private Date adminCommentDate;
+	private String adminCommentMemberId;
+	private String adminCommentNick;
 	private int FAQId;
 	private String FAQTitle;
 	private String FAQContent;
@@ -81,6 +83,18 @@ public class AdminDTO {
 	public void setAdminCommentDate(Date adminCommentDate) {
 		this.adminCommentDate = adminCommentDate;
 	}
+	public String getAdminCommentMemberId() {
+		return adminCommentMemberId;
+	}
+	public void setAdminCommentMemberId(String adminCommentMemberId) {
+		this.adminCommentMemberId = adminCommentMemberId;
+	}
+	public String getAdminCommentNick() {
+		return adminCommentNick;
+	}
+	public void setAdminCommentNick(String adminCommentNick) {
+		this.adminCommentNick = adminCommentNick;
+	}
 	public int getFAQId() {
 		return FAQId;
 	}
@@ -110,7 +124,17 @@ public class AdminDTO {
 		return "AdminDTO [adminNo=" + adminNo + ", adminMemberId=" + adminMemberId + ", adminTitle=" + adminTitle
 				+ ", adminContent=" + adminContent + ", adminDate=" + adminDate + ", adminCommentCount="
 				+ adminCommentCount + ", adminNick=" + adminNick + ", adminCommentNo=" + adminCommentNo
-				+ ", adminCommentContent=" + adminCommentContent + ", adminCommentDate=" + adminCommentDate + ", FAQId="
-				+ FAQId + ", FAQTitle=" + FAQTitle + ", FAQContent=" + FAQContent + ", FAQDate=" + FAQDate + "]";
+				+ ", adminCommentContent=" + adminCommentContent + ", adminCommentDate=" + adminCommentDate
+				+ ", adminCommentMemberId=" + adminCommentMemberId + ", adminCommentNick=" + adminCommentNick
+				+ ", FAQId=" + FAQId + ", FAQTitle=" + FAQTitle + ", FAQContent=" + FAQContent + ", FAQDate=" + FAQDate
+				+ ", getAdminNo()=" + getAdminNo() + ", getAdminMemberId()=" + getAdminMemberId() + ", getAdminTitle()="
+				+ getAdminTitle() + ", getAdminContent()=" + getAdminContent() + ", getAdminDate()=" + getAdminDate()
+				+ ", getAdminCommentCount()=" + getAdminCommentCount() + ", getAdminNick()=" + getAdminNick()
+				+ ", getAdminCommentNo()=" + getAdminCommentNo() + ", getAdminCommentContent()="
+				+ getAdminCommentContent() + ", getAdminCommentDate()=" + getAdminCommentDate()
+				+ ", getAdminCommentMemberId()=" + getAdminCommentMemberId() + ", getAdminCommentNick()="
+				+ getAdminCommentNick() + ", getFAQId()=" + getFAQId() + ", getFAQTitle()=" + getFAQTitle()
+				+ ", getFAQContent()=" + getFAQContent() + ", getFAQDate()=" + getFAQDate() + ", getClass()="
+				+ getClass() + ", hashCode()=" + hashCode() + ", toString()=" + super.toString() + "]";
 	}
 }
