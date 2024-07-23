@@ -52,8 +52,14 @@ public class AdminService {
         return adminDetail;
     }
 
+	//일반 문의 게시판 : 글쓰기
 	public void writeAdmin(AdminDTO admin) {
 		adminMapper.writeAdmin(admin);
+	}
+
+	//일반 문의 게시판 : 댓글쓰기
+	public void writeAdminComment(AdminDTO admin) {
+		adminMapper.writeAdminComment(admin);
 	}
 	
 	

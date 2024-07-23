@@ -55,6 +55,14 @@ public class AdminController {
     	return ResponseEntity.ok("회원가입 성공");
     }
     
+    //일반 문의 게시판 : 댓글쓰기
+    @PostMapping("/admin/comment/write")
+    public ResponseEntity<String> writeAdminComment(@RequestBody AdminDTO admin){
+    	System.out.println(admin);
+    	adminService.writeAdminComment(admin);
+    	return ResponseEntity.ok("댓글 등록 성공");
+    }
+    
     
 	
 }

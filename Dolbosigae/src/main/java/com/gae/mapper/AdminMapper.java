@@ -16,5 +16,6 @@ public interface AdminMapper {
 	AdminDTO getAdminContactDetail(int adminNo);
 	List<AdminDTO> getAdminContactCommentDetail(int adminNo);
 	void writeAdmin(AdminDTO admin);
+	void writeAdminComment(AdminDTO admin);
 
 }

@@ -4,108 +4,86 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.gae.mapper.AdminMapper">
 
-	<!-- 자주 묻는 질문 resultMap -->
-  	<resultMap type="com.gae.dto.AdminDTO" id="default">
-    	<id column="FAQ_ID" property="FAQId"/>
-    	<result column="FAQ_TITLE" property="FAQTitle"/>
-    	<result column="FAQ_CONTENT" property="FAQContent"/>
-    	<result column="FAQ_DATE" property="FAQDate"/>
-  	</resultMap>
-  	
-  	<!-- 일반 문의 게시판 resultMap (ACB_BOARD_VIEW) -->
-  	<resultMap type="com.gae.dto.AdminDTO" id="admin">
-  		<id column="ACB_NO" property="adminNo"/>
-    	<result column="M_ID" property="adminMemberId"/>
-    	<result column="ACB_TITLE" property="adminTitle"/>
-    	<result column="ACB_CONTENT" property="adminContent"/>
-    	<result column="ACB_DATE" property="adminDate"/>
-    	<result column="COMMENT_COUNT" property="adminCommentCount"/>
-    	<result column="PET_NICKNAME" property="adminNick"/>
-  	</resultMap>
-  	
-  	<!-- 일반 문의 게시판 : 댓글 resultMap (ACB_BOARD_COMMENT_VIEW) -->
-  	<resultMap type="com.gae.dto.AdminDTO" id="adminComment">
-  		<id column="ACB_COMMENT_NO" property="adminCommentNo"/>
-    	<result column="ACB_NO" property="adminNo"/>
-    	<result column="M_ID" property="adminCommentMemberId"/>
-    	<result column="ACB_COMMENT_CONTENT" property="adminCommentContent"/>
-    	<result column="ACB_COMMENT_DATE" property="adminCommentDate"/>
-    	<result column="PET_NICKNAME" property="adminCommentNick"/>
-  	</resultMap>
-  	  	
-  	<!-- 자주 묻는 질문 -->
-	<select id="selectAllDefault" resultMap="default">
-		select * from faq
-	</select>
+  <!-- 자주 묻는 질문 resultMap -->
+  <resultMap type="com.gae.dto.AdminDTO" id="default">
+    <id column="FAQ_ID" property="FAQId"/>
+    <result column="FAQ_TITLE" property="FAQTitle"/>
+    <result column="FAQ_CONTENT" property="FAQContent"/>
+    <result column="FAQ_DATE" property="FAQDate"/>
+  </resultMap>
+  
+  <!-- 일반 문의 게시판 resultMap (ACB_BOARD_VIEW) -->
+  <resultMap type="com.gae.dto.AdminDTO" id="admin">
+    <id column="ACB_NO" property="adminNo"/>
+    <result column="M_ID" property="adminMemberId"/>
+    <result column="ACB_TITLE" property="adminTitle"/>
+    <result column="ACB_CONTENT" property="adminContent"/>
+    <result column="ACB_DATE" property="adminDate"/>
+    <result column="COMMENT_COUNT" property="adminCommentCount"/>
+    <result column="PET_NICKNAME" property="adminNick"/>
+  </resultMap>
+  
+  <!-- 일반 문의 게시판 : 댓글 resultMap (ACB_BOARD_COMMENT_VIEW) -->
+  <resultMap type="com.gae.dto.AdminDTO" id="adminComment">
+    <id column="ACB_COMMENT_NO" property="adminCommentNo"/>
+    <result column="ACB_NO" property="adminNo"/>
+    <result column="M_ID" property="adminCommentMemberId"/>
+    <result column="ACB_COMMENT_CONTENT" property="adminCommentContent"/>
+    <result column="ACB_COMMENT_DATE" property="adminCommentDate"/>
+    <result column="PET_NICKNAME" property="adminCommentNick"/>
+  </resultMap>
+  
+  <!-- 자주 묻는 질문 -->
+  <select id="selectAllDefault" resultMap="default">
+    select * from faq
+  </select>
 
-	<!-- 일반 문의 게시판 : 전체 게시글 수 조회 -->
-	<select id="getTotalCount" resultType="int">
-		select count(*) from acb_board_view
-	</select>
-	
-	<!-- 일반 문의 게시판 : 리스트 조회 (페이징) -->
-	<select id="getAdminList" resultMap="admin">
-	 <![CDATA[
+  <!-- 일반 문의 게시판 : 전체 게시글 수 조회 -->
+  <select id="getTotalCount" resultType="int">
+    select count(*) from acb_board_view
+  </select>
+  
+  <!-- 일반 문의 게시판 : 리스트 조회 (페이징) -->
+  <select id="getAdminList" resultMap="admin">
+    <![CDATA[
       SELECT *
-		FROM (
-		  SELECT A.*, ROWNUM AS RNUM
-		  FROM (
-		    SELECT *
-		    FROM (
-		      SELECT *
-		      FROM acb_board_view
-		      ORDER BY ACB_DATE DESC
-		    )
-		    ORDER BY ACB_NO DESC
-		  ) A
-		  WHERE ROWNUM <= #{endRow}
-		)
-		WHERE RNUM > #{startRow}
-    ]]>	
-	</select>
-	
-	<!-- 일반 문의 게시판 : 상세 -->
-	<select id="getAdminContactDetail" parameterType="int" resultMap="admin">
-		 SELECT * FROM ACB_BOARD_VIEW WHERE ACB_NO = #{adminNo}
-	</select>
-	
-	<!--  일반 문의 게시판 : 상세 中 댓글 -->
-	<select id="getAdminContactCommentDetail" parameterType="int" resultMap="adminComment">
-		select * from ACB_BOARD_COMMENT_VIEW where ACB_NO =#{adminNo}
-	</select>
+      FROM (
+        SELECT A.*, ROWNUM AS RNUM
+        FROM (
+          SELECT *
+          FROM (
+            SELECT *
+            FROM acb_board_view
+            ORDER BY ACB_DATE DESC
+          )
+          ORDER BY ACB_NO DESC
+        ) A
+        WHERE ROWNUM <= #{endRow}
+      )
+      WHERE RNUM > #{startRow}
+    ]]>  
+  </select>
+  
+  <!-- 일반 문의 게시판 : 상세 -->
+  <select id="getAdminContactDetail" parameterType="int" resultMap="admin">
+    select * from acb_board_view where acb_no = #{adminNo}
+  </select>
+  
+  <!--  일반 문의 게시판 : 상세 中 댓글 -->
+  <select id="getAdminContactCommentDetail" parameterType="int" resultMap="adminComment">
+    select * from acb_board_comment_view where acb_no = #{adminNo}
+  </select>
 
-	<!-- 일반 문의 게시판 : 게시글 등록 -->
-	<insert id="writeAdmin" parameterType="admin">
-		insert into ADMIN_CONTACT_BOARD (M_ID, ACB_TITLE, ACB_CONTENT)
-		values (#{adminMemberId}, #{adminTitle}, #{adminContent})
-	</insert>
-
+  <!-- 일반 문의 게시판 : 게시글 등록 -->
+  <insert id="writeAdmin" parameterType="com.gae.dto.AdminDTO">
+    insert into admin_contact_board (m_id, acb_title, acb_content)
+    values (#{adminMemberId}, #{adminTitle}, #{adminContent})
+  </insert>
+  
+  <!-- 일반 문의 게시판 : 댓글 등록 -->
+  <insert id="writeAdminComment" parameterType="com.gae.dto.AdminDTO">
+    insert into acb_comment (acb_no, m_id, acb_comment_content)
+    values (#{adminNo}, #{adminCommentMemberId}, #{adminCommentContent})
+</insert>
 
 </mapper>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
