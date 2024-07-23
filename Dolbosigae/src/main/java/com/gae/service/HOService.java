@@ -16,30 +16,38 @@ public class HOService {
     public HOService(HOMapper mapper) {
         this.mapper = mapper;
     }
-
+    
+    
+    // 병원 목록을 가져오는 메서드
     public HOResponseVo getHoList(int page, int limit) {
-        int startRow = (page - 1) * limit + 1;
+        int startRow = (page - 1) * limit + 1;  // startRow 수정: 1부터 시작
         int endRow = page * limit;
-        List<HODTO> list = mapper.getHoList(startRow, endRow); // 변경된 부분
+        List<HODTO> list = mapper.getHoList(startRow, endRow);
         PaggingVO pagination = getPagination(page, limit, null);
         return new HOResponseVo(list, pagination);
     }
 
-    public HOResponseVo searchHo(String hoText, int page, int limit) { // plText를 hoText로 변경
-        int startRow = (page - 1) * limit + 1;
+    // 병원 검색 결과를 가져오는 메서드
+    public HOResponseVo searchHo(String hoText, int page, int limit) {
+        int startRow = (page - 1) * limit + 1;  // startRow 수정: 1부터 시작
         int endRow = page * limit;
-        List<HODTO> list = mapper.searchHo(hoText, startRow, endRow); // 변경된 부분
+        List<HODTO> list = mapper.searchHo(hoText, startRow, endRow);
         PaggingVO pagination = getPagination(page, limit, hoText);
         return new HOResponseVo(list, pagination);
     }
-
-    public void deleteHo(int hoId) {
-        mapper.deleteHo(hoId); // 변경된 부분
+    
+    
+    // 병원 상세 정보를 가져오는 메서드
+    public HODTO selectHoInfo(int hoId) {
+        return mapper.selectHoInfo(hoId);
     }
-
+    // 병원 정보를 삭제하는 메서드
+    public void deleteHo(int hoId) {
+        mapper.deleteHo(hoId);
+    }
+ // 페이지네이션 정보를 가져오는 메서드
     public PaggingVO getPagination(int page, int limit, String hoText) {
-        int totalCount = hoText == null ? mapper.getTotalCount() : mapper.getTotalCountBySearch(hoText); // 변경된 부분
-        System.out.println("Total Count: " + totalCount); // 로그 추가
+        int totalCount = hoText == null ? mapper.getTotalCount() : mapper.getTotalCountBySearch(hoText);
         return new PaggingVO(totalCount, page, limit);
     }
 }
