@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<!-- 디버깅 위해 SQL 쿼리와 바인딩된 파라미터를 콘솔에 출력함 -->
+<!-- 
+	디버깅 위해 SQL 쿼리와 바인딩된 파라미터를 콘솔에 출력함
+	필요시 아래의 주석 풀면 콘솔에 내용 출력됨
+ -->
 <!DOCTYPE configuration
   PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-config.dtd">
 
 <configuration>
-    <settings>
+<!--     <settings>
         <setting name="logImpl" value="STDOUT_LOGGING"/>
-    </settings>
+    </settings> -->
 </configuration>

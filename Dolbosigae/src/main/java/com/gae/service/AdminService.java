@@ -51,6 +51,10 @@ public class AdminService {
 
         return adminDetail;
     }
+
+	public void writeAdmin(AdminDTO admin) {
+		adminMapper.writeAdmin(admin);
+	}
 	
 	
 

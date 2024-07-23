@@ -6,6 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -34,7 +36,7 @@ public class AdminController {
 		return ResponseEntity.ok(adminService.getAdminList(page));
 	}
 	
-	//일반 문의 게시판 - 상세
+	//일반 문의 게시판 : 상세
     @GetMapping("/admin/contact/detail/{adminNo}")
     public ResponseEntity<AdminDTO> getAdminContactDetail(@PathVariable int adminNo) {
         AdminDTO detail = adminService.getAdminContactDetail(adminNo);
@@ -44,5 +46,40 @@ public class AdminController {
             return ResponseEntity.notFound().build();
         }
     }	
+    
+    //일반 문의 게시판 : 글쓰기
+    @PostMapping("/admin/write")
+    public ResponseEntity<String> writeAdmin(@RequestBody AdminDTO admin){
+    	System.out.println(admin);
+    	adminService.writeAdmin(admin);
+    	return ResponseEntity.ok("회원가입 성공");
+    }
+    
+    
 	
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

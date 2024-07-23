@@ -47,16 +47,20 @@
 	<select id="getAdminList" resultMap="admin">
 	 <![CDATA[
       SELECT *
-      FROM (
-        SELECT A.*, ROWNUM AS RNUM
-        FROM (
-          SELECT *
-          FROM acb_board_view
-          ORDER BY ACB_NO
-        ) A
-        WHERE ROWNUM <= #{endRow}
-      )
-      WHERE RNUM > #{startRow}
+		FROM (
+		  SELECT A.*, ROWNUM AS RNUM
+		  FROM (
+		    SELECT *
+		    FROM (
+		      SELECT *
+		      FROM acb_board_view
+		      ORDER BY ACB_DATE DESC
+		    )
+		    ORDER BY ACB_NO DESC
+		  ) A
+		  WHERE ROWNUM <= #{endRow}
+		)
+		WHERE RNUM > #{startRow}
     ]]>	
 	</select>
 	
@@ -70,6 +74,38 @@
 		select * from ACB_BOARD_COMMENT_VIEW where ACB_NO =#{adminNo}
 	</select>
 
+	<!-- 일반 문의 게시판 : 게시글 등록 -->
+	<insert id="writeAdmin" parameterType="admin">
+		insert into ADMIN_CONTACT_BOARD (M_ID, ACB_TITLE, ACB_CONTENT)
+		values (#{adminMemberId}, #{adminTitle}, #{adminContent})
+	</insert>
 
 
 </mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
