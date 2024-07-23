@@ -4,11 +4,15 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 	<mapper namespace="com.gae.mapper.CoMapper">
 		<resultMap type="com.gae.dto.CoDTO" id="co">
-			<id column="co_id" property="plId" />
+			<id column="co_id" property="coId" />			
+			<result column="co_distinction" property="coDistinction" />
 			<result column="co_name" property="coName" />
 			<result column="co_hour" property="coHour" />
 			<result column="co_tel" property="coTel" />
 			<result column="co_address" property="coAddress" />
+			<result column="co_satHour" property="coSatHour" />
+			<result column="co_sunHour" property="coSunHour" />
+			<result column="co_day" property="coDay" />
 			<result column="co_img" property="coImg" />
 		</resultMap>
 		
