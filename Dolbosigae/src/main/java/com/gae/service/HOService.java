@@ -50,4 +50,10 @@ public class HOService {
         int totalCount = hoText == null ? mapper.getTotalCount() : mapper.getTotalCountBySearch(hoText);
         return new PaggingVO(totalCount, page, limit);
     }
+    
+    //병원 데이터 추가하는 메서드
+    public void insertHo(HODTO hoDTO) {
+        mapper.insertHo(hoDTO);
+    }
+    
 }
