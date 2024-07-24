@@ -62,4 +62,11 @@
         SELECT COUNT(*) FROM PH WHERE ph_address LIKE '%' || #{phText} || '%'
         ]]>
     </select>
+    
+       <insert id="insertPh" parameterType="ph">
+        INSERT INTO PH (PH_ID, PH_REGION, PH_ADDRESS, PH_NAME, PH_TEL, PH_HOUR, PH_LAT, PH_LNG)
+        VALUES (#{phId}, #{phRegion}, #{phAddress}, #{phName}, #{phTel}, #{phHour}, #{phLat}, #{phLng})
+    </insert>
+    
+    
 </mapper>
