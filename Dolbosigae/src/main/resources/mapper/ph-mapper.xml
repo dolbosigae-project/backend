@@ -19,7 +19,7 @@
     </select>
     
     <select id="selectPhInfo" resultMap="ph">
-        SELECT * FROM HO WHERE ph_id = #{phId}
+        SELECT * FROM PH WHERE ph_id = #{phId}
     </select>
 
     
@@ -54,7 +54,7 @@
 
 
     <delete id="deletePh">
-        DELETE FROM HO WHERE ph_id = #{phId}
+        DELETE FROM PH WHERE ph_id = #{phId}
     </delete>
     
     <select id="getTotalCountBySearch" resultType="int">
