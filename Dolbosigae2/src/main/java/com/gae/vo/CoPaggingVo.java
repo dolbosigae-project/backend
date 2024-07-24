@@ -8,7 +8,7 @@ public class CoPaggingVo {
     // 한 페이지당 출력할 게시글 개수
     private int pageOfContentCount;
     // 게시판 하단에 나타낼 페이지 번호 개수
-    private final int PAGE_GROUP_OF_COUNT = 5;
+    private final int PAGE_GROUP_OF_COUNT = 10;
 
     public CoPaggingVo(int count, int currentPage, int pageOfContentCount) {
         this.count = count;

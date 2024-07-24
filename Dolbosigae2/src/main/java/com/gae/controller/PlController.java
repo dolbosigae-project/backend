@@ -1,6 +1,5 @@
 package com.gae.controller;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,9 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.gae.service.MemberService;
 import com.gae.service.PlService;
-import com.gae.dto.BoardMemberDTO;
 import com.gae.dto.PlDTO;
 import com.gae.vo.PlResponseVo;
 
@@ -22,11 +19,9 @@ import java.util.Map;
 public class PlController {
 
     private final PlService plService;
-    private final MemberService memberService;
     
-    public PlController(PlService plService, MemberService memberService) {
+    public PlController(PlService plService) {
         this.plService = plService;
-        this.memberService = memberService;
     }
 
     //게시물 기본 리스트
@@ -36,7 +31,7 @@ public class PlController {
         @RequestParam(defaultValue = "5") int limit,
         @RequestParam(required = false) String plText) {
         
-        Map<String, Object> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<String, Object>();
         try {
             System.out.println("Fetching data with params - page: " + page + ", limit: " + limit + ", plText: " + plText);
             PlResponseVo response;
@@ -46,8 +41,8 @@ public class PlController {
                 response = plService.searchCity(plText, page, limit);
             }
             map.put("contents", response.getContents());
-            map.put("pagination", response.getPagination());
             System.out.println("Pagination info: " + response.getPagination()); // 로그 추가
+            map.put("pagination", response.getPagination());
         } catch (Exception e) {
             e.printStackTrace();
             map.put("error", "Internal Server Error");

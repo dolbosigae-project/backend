@@ -43,7 +43,7 @@ public class PlService {
 
     public PlPaggingVo getPagination(int page, int limit, String plText) {
         int totalCount = plText == null ? plMapper.getTotalCount() : plMapper.getTotalCountBySearch(plText);
-        System.out.println("Total Count: " + totalCount); // 로그 추가
+        System.out.println("Total Count: " + totalCount); 
         return new PlPaggingVo(totalCount, page, limit);
     }
 }

@@ -15,5 +15,39 @@
 			<result column="co_day" property="coDay" />
 			<result column="co_img" property="coImg" />
 		</resultMap>
-		
+		 <select id="getConvenList" resultMap="co">
+        <![CDATA[
+        SELECT * FROM (
+            SELECT ROWNUM AS rnum, a.*
+            FROM (SELECT * FROM co ORDER BY co_id) a
+            WHERE ROWNUM <= #{endRow}
+        )
+        WHERE rnum >= #{startRow}
+        ]]>
+    </select>
+    
+    <select id="getTotalCount" resultType="int">
+        <![CDATA[
+        SELECT COUNT(*) FROM co
+        ]]>
+    </select>
+    
+		<select id="searchConven" resultMap="co">
+		<![CDATA[
+			SELECT * FROM (
+				SELECT ROWNUM AS rnum, a.*
+				FROM (SELECT * FROM co WHERE co_address LIKE '%' || #{coText} || '%' ORDER BY co_id) a
+				WHERE ROWNUM <= #{endRow}
+			)
+			WHERE rnum >= #{startRow}
+		]]>
+	</select>
+
+	<select id="getTotalCountBySearch" resultType="int">
+		select count(*) from co WHERE co_name LIKE '%' || #{coText} || '%'		
+	</select>
+	
+	<select id="selectConvenInfo" resultMap="co">
+		select * from co where co_id = #{coId}
+	</select>
 	</mapper>
