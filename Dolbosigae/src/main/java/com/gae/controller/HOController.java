@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -57,8 +58,16 @@ public class HOController {
     }
     
     @DeleteMapping("/hospitals/delete/{hoId}")
-    public Map<String, String> deleteHospitals(@PathVariable int hoId) {
+    public Map<String, String> deleteHospitals(
+            @PathVariable int hoId, 
+            @RequestHeader(value = "userRole", defaultValue = "") String userRole) {
+
         Map<String, String> response = new HashMap<>();
+        if (!"ADMIN".equals(userRole)) {
+            response.put("status", "error");
+            response.put("message", "Unauthorized");
+            return response;
+        }
         try {
             hoService.deleteHo(hoId);
             response.put("status", "success");
