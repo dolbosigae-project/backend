@@ -32,18 +32,18 @@ public class ShelterController {
 
 
 	@GetMapping("/shelter")
-    public Map<String, Object> shelter(@RequestParam(defaultValue = "1") int pageNo,
-                                       @RequestParam(defaultValue = "10") int pageContentEa) {
-        List<ShelterDTO> shelterList = shelterService.selectShelterList(pageNo, pageContentEa);
-        int totalCount = shelterService.selectShelterTotalCount();
-        int totalPage = (int) Math.ceil((double) totalCount / pageContentEa);
+	public Map<String, Object> shelter(@RequestParam(defaultValue = "1") int pageNo,
+									   @RequestParam(defaultValue = "10") int pageContentEa) {
+			List<ShelterDTO> shelterList = shelterService.selectShelterList(pageNo, pageContentEa);
+			int totalCount = shelterService.selectShelterTotalCount();
+			int totalPage = (int) Math.ceil((double) totalCount / pageContentEa);
 
-        Map<String, Object> response = new HashMap<>();
-        response.put("list", shelterList);
-        response.put("totalPage", totalPage);
+			Map<String, Object> response = new HashMap<>();
+			response.put("list", shelterList);
+			response.put("totalPage", totalPage);
 
-        return response;
-    }
+			return response;
+	}
     
 	@GetMapping("/ab")
     public Map<String, Object> ab(@RequestParam String shID,

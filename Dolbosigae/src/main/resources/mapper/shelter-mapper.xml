@@ -14,10 +14,16 @@
         <result column="SH_HOUR" property="shHour"/>
     </resultMap>
 
-    <select id="selectShelterList" resultMap="shelter">
-    	SELECT * FROM SH
-    	ORDER BY SH_ID
-	</select>
+   <select id="selectShelterList" resultMap="shelter">
+        SELECT * FROM (
+            SELECT 
+                SH.*,
+                ROW_NUMBER() OVER (ORDER BY SH_ID) AS row_num
+            FROM SH
+        ) WHERE row_num BETWEEN #{startRow} AND #{endRow}
+    </select>
+
+
 
     <select id="selectShelterTotalCount" resultType="int">
         SELECT COUNT(*) FROM SH

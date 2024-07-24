@@ -20,13 +20,19 @@ public class ShelterService {
 
     public List<ShelterDTO> selectShelterList(int pageNo, int pageContentEa) {
         Map<String, Object> map = new HashMap<>();
-        map.put("pageNo", (pageNo - 1) * pageContentEa); 
-        map.put("pageContentCount", pageContentEa);
-        return mapper.selectShelterList(map);
+        int startRow = (pageNo - 1) * pageContentEa + 1;
+        int endRow = pageNo * pageContentEa;
+        map.put("startRow", startRow);
+        map.put("endRow", endRow);
+        System.out.println("Fetching shelter list with startRow: " + startRow + " and endRow: " + endRow);
+        List<ShelterDTO> result = mapper.selectShelterList(map);
+        System.out.println("Fetched " + result.size() + " shelters");
+        return result;
     }
 
     public int selectShelterTotalCount() {
-        // 전체 게시글 수를 반환하는 메서드
-        return mapper.selectShelterTotalCount();
+        int totalCount = mapper.selectShelterTotalCount();
+        System.out.println("Total count of shelters: " + totalCount);
+        return totalCount;
     }
 }
