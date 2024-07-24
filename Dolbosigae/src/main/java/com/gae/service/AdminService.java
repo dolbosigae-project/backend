@@ -61,6 +61,33 @@ public class AdminService {
 	public void writeAdminComment(AdminDTO admin) {
 		adminMapper.writeAdminComment(admin);
 	}
+
+	//문의글 삭제
+	public int deleteAdmin(int adminNo) {
+		int adminResult = adminMapper.deleteAdmin(adminNo);
+		if(adminResult == 0) {
+			throw new RuntimeException("문의글 삭제에 실패하였습니다.");
+		}
+		return 1;
+	}
+
+	//문의글 삭제 (하위 댓글 모두 삭제)
+	public int deleteAllComment(int adminNo) {
+		int commentResult = adminMapper.deleteAllComment(adminNo);
+		if(commentResult == 0) {
+			throw new RuntimeException("댓글 삭제에 실패하였습니다.");
+		}
+		return 1;
+	}
+
+	//특정 댓글 삭제
+	public int adminCommentDelete(int adminCommentNo) {
+		int result = adminMapper.adminCommentDelete(adminCommentNo);
+		if(result == 0) {
+			throw new RuntimeException("댓글 삭제에 실패하였습니다.");
+		}
+		return 1;
+	}
 	
 	
 

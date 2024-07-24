@@ -70,20 +70,39 @@
   </select>
   
   <!--  일반 문의 게시판 : 상세 中 댓글 -->
-  <select id="getAdminContactCommentDetail" parameterType="int" resultMap="adminComment">
-    select * from acb_board_comment_view where acb_no = #{adminNo}
-  </select>
+  	<select id="getAdminContactCommentDetail" parameterType="int" resultMap="adminComment">
+    	select * from acb_board_comment_view where acb_no = #{adminNo}
+  	</select>
 
   <!-- 일반 문의 게시판 : 게시글 등록 -->
-  <insert id="writeAdmin" parameterType="com.gae.dto.AdminDTO">
-    insert into admin_contact_board (m_id, acb_title, acb_content)
-    values (#{adminMemberId}, #{adminTitle}, #{adminContent})
-  </insert>
+  	<insert id="writeAdmin" parameterType="com.gae.dto.AdminDTO">
+    	insert into admin_contact_board (m_id, acb_title, acb_content)
+    	values (#{adminMemberId}, #{adminTitle}, #{adminContent})
+  	</insert>
   
   <!-- 일반 문의 게시판 : 댓글 등록 -->
-  <insert id="writeAdminComment" parameterType="com.gae.dto.AdminDTO">
-    insert into acb_comment (acb_no, m_id, acb_comment_content)
-    values (#{adminNo}, #{adminCommentMemberId}, #{adminCommentContent})
-</insert>
+  	<insert id="writeAdminComment" parameterType="com.gae.dto.AdminDTO">
+    	insert into acb_comment (acb_no, m_id, acb_comment_content)
+    	values (#{adminNo}, #{adminCommentMemberId}, #{adminCommentContent})
+	</insert>
+	
+	
+	<!-- 문의글 삭제 (하위 댓글 우선 삭제 : 트리거 문제로 cascade 외 설정) -->
+	<delete id="deleteAllComment">
+		delete from acb_comment where acb_no = #{adminNo} 
+	</delete>
+	
+	<!-- 문의글 삭제 -->
+	<delete id="deleteAdmin">
+		delete from admin_contact_board where acb_no = #{adminNo}
+	</delete>
+	
+	<!-- 댓글 삭제 -->
+	<delete id="adminCommentDelete">
+		delete from acb_comment where acb_comment_no = #{adminCommentNo} 
+	</delete>
+
+	
+
 
 </mapper>

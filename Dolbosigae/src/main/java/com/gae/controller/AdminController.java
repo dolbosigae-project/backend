@@ -2,8 +2,11 @@ package com.gae.controller;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -61,6 +64,32 @@ public class AdminController {
     	System.out.println(admin);
     	adminService.writeAdminComment(admin);
     	return ResponseEntity.ok("댓글 등록 성공");
+    }
+    
+    //문의글 삭제
+    @DeleteMapping("/admin/delete/{adminNo}/{adminCommentCount}")
+    public ResponseEntity<String> adminDelete(@PathVariable int adminNo, @PathVariable int adminCommentCount){
+    	// 댓글이 있을 경우 댓글 먼저 삭제    	
+    	if(adminCommentCount > 0) {
+    		int commentResult = adminService.deleteAllComment(adminNo);
+    	}
+    	int parentResult = adminService.deleteAdmin(adminNo);
+    	if(parentResult != 0) {
+    		return ResponseEntity.ok("문의글 삭제 성공");
+    	} else {
+    		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("문의글 삭제 실패");
+    	}
+    }
+    
+    //댓글 삭제
+    @DeleteMapping("/admin/delete/{adminCommentNo}")
+    public ResponseEntity<String> adminCommentDelete(@PathVariable int adminCommentNo){
+    	int result = adminService.adminCommentDelete(adminCommentNo);
+    	if(result != 0) {
+    		return ResponseEntity.ok("댓글 삭제 성공");
+    	}else {
+    		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("댓글 삭제 실패");
+    	}
     }
     
     

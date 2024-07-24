@@ -17,5 +17,8 @@ public interface AdminMapper {
 	List<AdminDTO> getAdminContactCommentDetail(int adminNo);
 	void writeAdmin(AdminDTO admin);
 	void writeAdminComment(AdminDTO admin);
+	int deleteAdmin(@Param("adminNo") int adminNo);
+	int deleteAllComment(@Param("adminNo") int adminNo);
+	int adminCommentDelete(@Param("adminCommentNo") int adminCommentNo);
 
 }
