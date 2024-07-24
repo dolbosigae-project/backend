@@ -50,4 +50,9 @@ public class PHService { // HOService를 PHService로 변경
         int totalCount = phText == null ? mapper.getTotalCount() : mapper.getTotalCountBySearch(phText); // HOMapper를 PHMapper로 변경
         return new PaggingVO(totalCount, page, limit);
     }
+
+	public void insertPh(PHDTO phDTO) {
+		mapper.insertPh(phDTO);
+		
+	}
 }
