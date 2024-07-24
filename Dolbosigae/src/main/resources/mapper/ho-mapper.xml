@@ -2,6 +2,7 @@
 <!DOCTYPE mapper
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
 <mapper namespace="com.gae.mapper.HOMapper">
     <resultMap type="com.gae.dto.HODTO" id="ho">
         <id column="HO_ID" property="hoId" />
@@ -62,4 +63,11 @@
         SELECT COUNT(*) FROM HO WHERE ho_address LIKE '%' || #{hoText} || '%'
         ]]>
     </select>
+    
+        <insert id="insertHo" parameterType="com.gae.dto.HODTO">
+        INSERT INTO HO (HO_ID, HO_REGION, HO_ADDRESS, HO_NAME, HO_TEL, HO_POST, HO_LAT, HO_LNG)
+        VALUES (#{hoId}, #{hoRegion}, #{hoAddress}, #{hoName}, #{hoTel}, #{hoPost}, #{hoLat}, #{hoLng})
+    </insert>
+    
+    
 </mapper>
