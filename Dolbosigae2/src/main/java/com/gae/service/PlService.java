@@ -46,4 +46,8 @@ public class PlService {
         System.out.println("Total Count: " + totalCount); 
         return new PlPaggingVo(totalCount, page, limit);
     }
+
+	public void cityInsert(PlDTO dto) {
+		
+	}
 }
