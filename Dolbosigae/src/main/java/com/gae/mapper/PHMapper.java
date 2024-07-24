@@ -13,4 +13,5 @@ public interface PHMapper {
     List<PHDTO> searchPh(@Param("phText") String phText, @Param("startRow") int startRow, @Param("endRow") int endRow);
     int getTotalCountBySearch(@Param("phText") String phText);
     int deletePh(int phId);
+    int insertPh(PHDTO phDTO);
 }
