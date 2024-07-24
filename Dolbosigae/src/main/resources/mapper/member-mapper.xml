@@ -24,15 +24,13 @@
     <result column="PET_IMAGE_PATH" property="petImagePath"/>
     <result column="PET_INFO" property="petInfo"/>
   </resultMap>
-
+  
   <!-- 로그인 -->
   <select id="login" resultMap="member">
-    <![CDATA[
       SELECT *
       FROM MEMBER_PET_VIEW
       WHERE MEMBER_ID = #{id}
       AND MEMBER_PASSWORD = STANDARD_HASH(#{pass}, 'SHA512')
-    ]]>
   </select>
     
   <!-- 비밀번호 설정하기 -->

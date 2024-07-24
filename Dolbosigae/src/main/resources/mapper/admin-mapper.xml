@@ -64,17 +64,37 @@
     ]]>  
   </select>
   
-  <!-- 일반 문의 게시판 : 상세 -->
-  <select id="getAdminContactDetail" parameterType="int" resultMap="admin">
-    select * from acb_board_view where acb_no = #{adminNo}
-  </select>
+	<!-- 카테고리 찾기 : 제목 -->
+	<select id="searchAdminTitle" resultMap="admin">
+		select * from acb_board_view where acb_title like '%' || #{term} || '%'
+	</select>
+	
+	<!-- 카테고리 찾기 : 내용 -->
+	<select id="searchAdminContent" resultMap="admin">
+		select * from acb_board_view where acb_content like '%' || #{term} || '%'
+	</select>
+	
+	<!-- 카테고리 찾기 : 작성자ID -->
+	<select id="searchAdminWriter" resultMap="admin">
+		select * from acb_board_view where m_id like '%' || #{term} || '%'
+	</select>
+	
+	<!-- 미답변 조회 -->
+	<select id="noAnswerOnly" resultMap="admin">
+		select * from acb_board_view where comment_count = 0
+	</select>
+	
+  	<!-- 일반 문의 게시판 : 상세 -->
+  	<select id="getAdminContactDetail" parameterType="int" resultMap="admin">
+	    select * from acb_board_view where acb_no = #{adminNo}
+  	</select>
   
-  <!--  일반 문의 게시판 : 상세 中 댓글 -->
+  	<!--  일반 문의 게시판 : 상세 中 댓글 -->
   	<select id="getAdminContactCommentDetail" parameterType="int" resultMap="adminComment">
     	select * from acb_board_comment_view where acb_no = #{adminNo}
   	</select>
 
-  <!-- 일반 문의 게시판 : 게시글 등록 -->
+  	<!-- 일반 문의 게시판 : 게시글 등록 -->
   	<insert id="writeAdmin" parameterType="com.gae.dto.AdminDTO">
     	insert into admin_contact_board (m_id, acb_title, acb_content)
     	values (#{adminMemberId}, #{adminTitle}, #{adminContent})
@@ -85,7 +105,6 @@
     	insert into acb_comment (acb_no, m_id, acb_comment_content)
     	values (#{adminNo}, #{adminCommentMemberId}, #{adminCommentContent})
 	</insert>
-	
 	
 	<!-- 문의글 삭제 (하위 댓글 우선 삭제 : 트리거 문제로 cascade 외 설정) -->
 	<delete id="deleteAllComment">
@@ -101,7 +120,8 @@
 	<delete id="adminCommentDelete">
 		delete from acb_comment where acb_comment_no = #{adminCommentNo} 
 	</delete>
-
+	
+	
 	
 
 

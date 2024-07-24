@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.boot.autoconfigure.kafka.KafkaProperties.Admin;
 
 import com.gae.dto.AdminDTO;
 
@@ -20,5 +21,9 @@ public interface AdminMapper {
 	int deleteAdmin(@Param("adminNo") int adminNo);
 	int deleteAllComment(@Param("adminNo") int adminNo);
 	int adminCommentDelete(@Param("adminCommentNo") int adminCommentNo);
+	List<Admin> searchAdminTitle(@Param("term") String term);
+	List<Admin> searchAdminContent(@Param("term") String term);
+	List<Admin> searchAdminWriter(@Param("term") String term);
+	List<AdminDTO> noAnswerOnly();
 
 }

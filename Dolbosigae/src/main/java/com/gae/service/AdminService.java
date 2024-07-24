@@ -3,6 +3,7 @@ package com.gae.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.kafka.KafkaProperties.Admin;
 import org.springframework.stereotype.Service;
 
 import com.gae.dto.AdminDTO;
@@ -88,6 +89,26 @@ public class AdminService {
 		}
 		return 1;
 	}
+
+	// 카테고리별로 문의글 서치 
+    public List<Admin> searchAdmin(String category, String term) {
+        switch(category) {
+            case "문의글 제목":
+                return adminMapper.searchAdminTitle(term);
+            case "문의글 내용":
+                return adminMapper.searchAdminContent(term);
+            case "작성자ID":
+            	return adminMapper.searchAdminWriter(term);
+            default:
+                throw new IllegalArgumentException("Invalid search category: " + category);
+        }
+    }
+
+    //미답변 글 확인
+    public List<AdminDTO> noAnswerOnly() {
+        return adminMapper.noAnswerOnly();
+    }
+
 	
 	
 
