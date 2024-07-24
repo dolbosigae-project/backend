@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -58,10 +59,19 @@ public class PHController { // 클래스 이름도 HOController에서 PHControll
     }
     
     @DeleteMapping("/pharmacies/delete/{phId}") // 엔드포인트 변경
-    public Map<String, String> deletePharmacies(@PathVariable int phId) { // 파라미터도 변경
+    public Map<String, String> deletePharmacies(
+    		@PathVariable int phId,
+    		 @RequestHeader(value = "userRole", defaultValue = "") String userRole) {
+
+    		{ // 파라미터도 변경
         Map<String, String> response = new HashMap<>();
+        if (!"ADMIN".equals(userRole)) {
+            response.put("status", "error");
+            response.put("message", "Unauthorized");
+            return response;
+        }
         try {
-        	phService.deletePh(phId); // 메서드도 PHService의 대응 메서드로 변경
+            phService.deletePh(phId);
             response.put("status", "success");
         } catch (Exception e) {
             e.printStackTrace();
@@ -69,5 +79,6 @@ public class PHController { // 클래스 이름도 HOController에서 PHControll
             response.put("message", "Internal Server Error");
         }
         return response;
+}
     }
 }
