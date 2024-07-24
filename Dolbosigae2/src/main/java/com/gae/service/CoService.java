@@ -44,5 +44,9 @@ public class CoService {
 	public CoDTO selectConvenInfo(int coId) {
 		return coMapper.selectConvenInfo(coId);
 	}
+
+	public void deleteConvenience(int coId) {
+		coMapper.deleteConvenience(coId);
+	}
 	
 }

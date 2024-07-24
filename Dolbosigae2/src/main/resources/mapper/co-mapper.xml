@@ -42,7 +42,11 @@
 			WHERE rnum >= #{startRow}
 		]]>
 	</select>
-
+	
+	<delete id="deleteConvenience">
+        DELETE FROM co WHERE co_id = #{coId}
+    </delete>
+    
 	<select id="getTotalCountBySearch" resultType="int">
 		select count(*) from co WHERE co_name LIKE '%' || #{coText} || '%'		
 	</select>

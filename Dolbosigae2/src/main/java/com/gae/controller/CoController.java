@@ -5,7 +5,9 @@ import java.util.Map;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -53,5 +55,20 @@ public class CoController {
 		System.out.println(result);
 		return result;
 	}
+	
+	 @DeleteMapping("/conven/delete/{coId}")
+	    public Map<String, String> deleteCity(@PathVariable int coId) {
+	        Map<String, String> response = new HashMap<>();
+	        
+	        coService.deleteConvenience(coId);
+	        try {
+	            response.put("status", "success");
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	            response.put("status", "error");
+	            response.put("message", "Internal Server Error");
+	        }
+	        return response;
+	    }
 	
 }
