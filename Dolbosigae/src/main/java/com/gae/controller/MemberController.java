@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -27,6 +29,9 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 public class MemberController {
     private final MemberService memberService;
+    
+    private static final Logger logger = LoggerFactory.getLogger(MemberController.class);
+
 
     public MemberController(MemberService memberService) {
         this.memberService = memberService;
@@ -39,6 +44,7 @@ public class MemberController {
             String id = loginRequest.get("id");
             String pass = loginRequest.get("pass");
             BoardMemberDTO dto = memberService.login(id, pass);
+            //System.out.println(dto);
             if (dto != null) {
                 session.setAttribute("user", dto);
                 // 사용자 정보를 포함한 응답 생성
@@ -153,6 +159,42 @@ public class MemberController {
         return ResponseEntity.ok("회원가입 성공");
     }
     
+    
+    //이 밑으로 주의
+    @GetMapping("/member/walkmates")
+    @ResponseBody
+    public ResponseEntity<MemberResponseVo> selectWalkMates(@RequestParam(defaultValue = "1") int page) {
+        logger.debug("산책 친구 목록 요청 수신: page={}", page);
+        MemberResponseVo response = memberService.getWalkMateList(page);
+        logger.debug("응답: {}", response);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/member/walkmates/search")
+    @ResponseBody
+    public ResponseEntity<MemberResponseVo> searchWalkMatesByRegion(@RequestParam String region, @RequestParam(defaultValue = "1") int page) {
+        logger.debug("지역별 산책 친구 검색 요청 수신: region={}, page={}", region, page);
+        MemberResponseVo response = memberService.searchWalkMatesByRegion(region, page);
+        logger.debug("응답: {}", response);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/member/petprofile/{id}")
+    public ResponseEntity<?> selectPetProfile(@PathVariable String id) {
+        logger.debug("Pet profile 요청 수신: id={}", id);
+        BoardMemberDTO member = memberService.getPetProfile(id);
+        if (member != null) {
+            return ResponseEntity.ok(member);
+        } else {
+            logger.debug("Pet profile 찾을 수 없음: id={}", id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("찾을 수 없는 회원");
+        }
+    }
+
+    @PostMapping("/mate/fav")
+    public void insertFavorite(@RequestParam String loginId, @RequestParam String targetId) {
+        memberService.insertFavorite(loginId, targetId);
+    }
     
     
     

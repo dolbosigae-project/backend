@@ -15,4 +15,5 @@ public interface HOMapper {
 	    List<HODTO> searchHo(@Param("hoText") String hoText, @Param("startRow") int startRow, @Param("endRow") int endRow);
 	    int getTotalCountBySearch(@Param("hoText") String hoText); // 추가된 메서드
 		int deleteHo(int hoId);
+		int insertHo(HODTO hoDTO);
 	}

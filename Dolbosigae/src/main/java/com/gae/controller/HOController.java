@@ -7,6 +7,9 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -32,25 +35,22 @@ public class HOController {
 
         Map<String, Object> map = new HashMap<>();
         try {
-            System.out.println("Fetching data with params - page: " + page + ", limit: " + limit + ", hoText: " + hoText);
-            
             HOResponseVo response;
             if (hoText == null || hoText.isEmpty()) { 
                 response = hoService.getHoList(page, limit);
             } else {
                 response = hoService.searchHo(hoText, page, limit); 
             }
-            
+
             map.put("contents", response.getContents());
             map.put("pagination", response.getPagination());
-            System.out.println("Pagination info: " + response.getPagination());
         } catch (Exception e) {
             e.printStackTrace();
             map.put("error", "Internal Server Error");
         }
         return map;
     }
-
+    
     @GetMapping("/hoinfo")
     public HODTO selectHoInfo(@RequestParam int hoId) {
         System.out.println(hoId);
@@ -60,11 +60,20 @@ public class HOController {
     }
     
     @DeleteMapping("/hospitals/delete/{hoId}")
-    public Map<String, String> deleteHospitals(@PathVariable int hoId) {
+    public Map<String, String> deleteHospitals(
+            @PathVariable int hoId, 
+            @RequestHeader(value = "userRole", defaultValue = "") String userRole) {
+
         Map<String, String> response = new HashMap<>();
+        if (!"ADMIN".equals(userRole)) {
+            response.put("status", "error");
+            response.put("message", "Unauthorized");
+            return response;
+        }
         try {
             hoService.deleteHo(hoId);
             response.put("status", "success");
+            response.put("message", "Hospital deleted successfully");
         } catch (Exception e) {
             e.printStackTrace();
             response.put("status", "error");
@@ -72,4 +81,18 @@ public class HOController {
         }
         return response;
     }
+    
+    @PostMapping("/hospitals")
+    public String addHospital(@RequestBody HODTO hoDTO) {
+        try {
+            hoService.insertHo(hoDTO);
+            return "Hospital added successfully";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Error adding hospital";
+        }
+    }
+
+    
+    
 }

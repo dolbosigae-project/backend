@@ -10,10 +10,12 @@ public class HODTO {
     private String hoName;
     private String hoTel;
     private String hoPost;
+    private double hoLat; // 추가: 위도
+    private double hoLng; // 추가: 경도
 
     public HODTO() { }
 
-    public HODTO(int hoId, String hoRegion, String hoAddress, String hoName, String hoTel, String hoPost) {
+    public HODTO(int hoId, String hoRegion, String hoAddress, String hoName, String hoTel, String hoPost, double hoLat, double hoLng) {
         super();
         this.hoId = hoId;
         this.hoRegion = hoRegion;
@@ -21,6 +23,8 @@ public class HODTO {
         this.hoName = hoName;
         this.hoTel = hoTel;
         this.hoPost = hoPost;
+        this.hoLat = hoLat;
+        this.hoLng = hoLng;
     }
 
     // Getters and Setters
@@ -72,11 +76,20 @@ public class HODTO {
     public void setHoPost(String hoPost) {
         this.hoPost = hoPost;
     }
+
+    public double getHoLat() {
+        return hoLat;
+    }
+
+    public void setHoLat(double hoLat) {
+        this.hoLat = hoLat;
+    }
+
+    public double getHoLng() {
+        return hoLng;
+    }
+
+    public void setHoLng(double hoLng) {
+        this.hoLng = hoLng;
+    }
 }
-
-
-
-
-
-
-
