@@ -73,6 +73,7 @@ public class HOController {
         try {
             hoService.deleteHo(hoId);
             response.put("status", "success");
+            response.put("message", "Hospital deleted successfully");
         } catch (Exception e) {
             e.printStackTrace();
             response.put("status", "error");
