@@ -24,7 +24,14 @@ public class BoardMemberDTO {
     private String pId; 
     private String profileImg;
     private int passwordChanged; 
+    private int petAge;
     
+	public int getPetAge() {
+		return petAge;
+	}
+	public void setPetAge(int petAge) {
+		this.petAge = petAge;
+	}
 	public int getPasswordChanged() {
 		return passwordChanged;
 	}
