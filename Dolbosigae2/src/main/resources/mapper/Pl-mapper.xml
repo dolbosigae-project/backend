@@ -37,7 +37,7 @@
     <!-- 검색 -->
     <select id="searchCity" parameterType="map" resultMap="pl">
         <![CDATA[
-        SELECT * FROM ("src/main/java/com/gae/controller/CoController.java"
+        SELECT * FROM (
             SELECT ROWNUM AS rnum, a.*
             FROM (SELECT * FROM PL WHERE pl_address LIKE '%' || #{plText} || '%' ORDER BY pl_id) a
             WHERE ROWNUM <= #{endRow}
