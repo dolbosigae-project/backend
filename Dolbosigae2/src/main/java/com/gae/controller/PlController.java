@@ -1,9 +1,12 @@
 package com.gae.controller;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -75,4 +78,10 @@ public class PlController {
         return response;
     }
   
+    //게시물 추가
+    @PostMapping("/city/insert")
+    public ResponseEntity<String> cityInsert(@RequestBody PlDTO dto){
+    	plService.cityInsert(dto);
+    	return ResponseEntity.ok("놀이시설 추가 완료");
+    }
 }

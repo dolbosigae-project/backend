@@ -1,6 +1,11 @@
 package com.gae.service;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.util.Base64;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
@@ -47,6 +52,42 @@ public class CoService {
 
 	public void deleteConvenience(int coId) {
 		coMapper.deleteConvenience(coId);
+	}
+
+	public void convenInsert(CoDTO dto) {
+		try {
+            if (dto.getCoImg() != null && !dto.getCoImg().isEmpty()) {
+                String base64Image = dto.getCoImg().split(",")[1];
+                String mimeType = dto.getCoImg().split(",")[0].split(":")[1].split(";")[0];
+                String extension;
+                switch (mimeType) {
+                    case "image/jpeg":
+                        extension = "jpg";
+                        break;
+                    case "image/png":
+                        extension = "png";
+                        break;
+                    default:
+                        throw new IllegalArgumentException("Unsupported image type: " + mimeType);
+                }
+                byte[] imageBytes = Base64.getDecoder().decode(base64Image);
+                String imagePath = "C:\\Users\\user1\\git\\fileupload\\coProfile\\" + UUID.randomUUID().toString() + "." + extension;
+                System.out.println(imagePath);
+                File directory = new File("C:\\Users\\user1\\git\\fileupload\\coProfile");
+                if (!directory.exists()) {
+                    directory.mkdirs();
+                }
+                try (OutputStream os = new FileOutputStream(imagePath)) {
+                    os.write(imageBytes);
+                }
+                dto.setCoImgPath(imagePath);  // 메서드명 수정
+            }
+            coMapper.convenInsert(dto);
+        } catch (Exception e) {
+            System.out.println("편의시설 등록 중 오류 발생 : " + e.getMessage());
+            e.printStackTrace();
+            throw new RuntimeException("편의시설 등록 중 오류 발생");
+        }
 	}
 	
 }
