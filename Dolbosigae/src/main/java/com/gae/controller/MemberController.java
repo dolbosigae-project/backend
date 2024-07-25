@@ -4,9 +4,9 @@ import java.lang.reflect.Member;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -28,8 +28,10 @@ import jakarta.servlet.http.HttpSession;
 @CrossOrigin(origins = "http://localhost:3000")
 @Controller
 public class MemberController {
-	private static final Logger logger = LoggerFactory.getLogger(MemberController.class);
     private final MemberService memberService;
+    
+    private static final Logger logger = LoggerFactory.getLogger(MemberController.class);
+
 
     public MemberController(MemberService memberService) {
         this.memberService = memberService;
@@ -42,6 +44,7 @@ public class MemberController {
             String id = loginRequest.get("id");
             String pass = loginRequest.get("pass");
             BoardMemberDTO dto = memberService.login(id, pass);
+            //System.out.println(dto);
             if (dto != null) {
                 session.setAttribute("user", dto);
                 // 사용자 정보를 포함한 응답 생성
@@ -69,6 +72,22 @@ public class MemberController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("error: " + e.getMessage());
         }
     }
+    
+    //비밀번호 찾기
+    @PostMapping("/find/passwd")
+    public ResponseEntity<String> findPasswd(@RequestBody Map<String, String> params) {
+        String id = params.get("id");
+        String passwd = params.get("passwd");
+        System.out.println("ID: " + id);
+        System.out.println("Password: " + passwd);
+
+        int updateResult = memberService.updatePasswd(params);
+        if (updateResult > 0) {
+            return ResponseEntity.ok("회원 정보가 업데이트되었습니다.");
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("비밀번호 업데이트에 실패했습니다.");
+        }
+    }
 
     @GetMapping("/member/list")
     @ResponseBody
@@ -94,11 +113,16 @@ public class MemberController {
     
     @PostMapping("/member/update")
     public ResponseEntity<String> memberUpdate(@RequestBody BoardMemberDTO member) {
-        System.out.println(member);
-        int result = memberService.updateMember(member);
-        System.out.println(result);
-        
-        return ResponseEntity.ok("회원 정보가 업데이트되었습니다.");
+        try {
+            System.out.println("Received Member Data: " + member); // 데이터 출력
+            int result = memberService.updateMember(member);
+            System.out.println("Update Result: " + result);
+
+            return ResponseEntity.ok("회원 정보가 업데이트되었습니다.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("회원정보 업데이트 중 오류가 발생했습니다.");
+        }
     }
     
     //카테고리별로 멤버 서치
@@ -108,10 +132,16 @@ public class MemberController {
         return ResponseEntity.ok(searchResults);
     }
     
-    //마이페이지 조회시 사용
+    //마이페이지 조회
     @GetMapping("/member/search/{id}")
-    public ResponseEntity<?> memberIdSearch(@PathVariable String id) {
-        return memberSearch("회원ID", id);
+    public ResponseEntity<?> findMemberById(@PathVariable String id) {
+        BoardMemberDTO member = memberService.myPage(id);
+        if (member != null) {
+        	System.out.println("Member found: " + member); // 디버깅을 위해 추가
+            return ResponseEntity.ok(member);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("회원 정보를 찾을 수 없습니다.");
+        }
     }
     
     //아이디 중복 찾기
@@ -121,19 +151,13 @@ public class MemberController {
         return memberService.checkDuplicate(idValue);
     }
     
+    
     @PostMapping("/member/register")
     public ResponseEntity<String> registerMember(@RequestBody BoardMemberDTO member) {
         System.out.println(member);
         memberService.registerMember(member);
         return ResponseEntity.ok("회원가입 성공");
     }
-    
-    
-//    @GetMapping("/member/list")
-//    @ResponseBody
-//    public ResponseEntity<MemberResponseVo> selectAllMember(@RequestParam(defaultValue = "1") int page) {
-//        return ResponseEntity.ok(memberService.getMemberList(page));
-//    }
     
     @GetMapping("/member/walkmates")
     @ResponseBody
@@ -155,10 +179,12 @@ public class MemberController {
 
     @GetMapping("/member/petprofile/{id}")
     public ResponseEntity<?> selectPetProfile(@PathVariable String id) {
+        logger.debug("Pet profile 요청 수신: id={}", id);
         BoardMemberDTO member = memberService.getPetProfile(id);
         if (member != null) {
             return ResponseEntity.ok(member);
         } else {
+            logger.debug("Pet profile 찾을 수 없음: id={}", id);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("찾을 수 없는 회원");
         }
     }
@@ -168,41 +194,6 @@ public class MemberController {
         memberService.insertFavorite(loginId, targetId);
     }
     
-    
-    
-  //채팅창 페이지 왼쪽에 띄울 반려동물의 정보 가져오기
-    //가 아니고 일단 사용자의 정보를 가져옴
-//    @GetMapping("/member/myInfo")
-//    public ResponseEntity<BoardMemberDTO> selectLoginUserInfo(HttpSession session) {
-//        BoardMemberDTO user = (BoardMemberDTO) session.getAttribute("user");
-//        if (user == null) 
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-//        
-//        String id = user.getBoardMemberId();
-//        BoardMemberDTO userprofile = memberService.selectLoginUserInfo(id);
-//        if (userprofile != null) {
-//            System.out.println("현재 ID : " + id);
-//            return ResponseEntity.ok(userprofile);
-//        } else {
-//            return ResponseEntity.notFound().build();
-//        }
-//    }
-//    
-//    @GetMapping("/member/petinfo")
-//    public ResponseEntity<BoardMemberDTO> selectPetInfo(HttpSession session) {
-//        BoardMemberDTO user = (BoardMemberDTO) session.getAttribute("user");
-//        if (user == null) 
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-//        
-//        String id = user.getBoardMemberId();
-//        BoardMemberDTO petprofile = memberService.selectPetInfo(id);
-//        if (petprofile != null) {
-//            System.out.println("현재 ID : " + id);
-//            return ResponseEntity.ok(petprofile);
-//        } else {
-//            return ResponseEntity.notFound().build();
-//        }
-//    } 
     
     
     

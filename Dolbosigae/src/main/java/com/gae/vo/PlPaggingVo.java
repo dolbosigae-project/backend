@@ -1,6 +1,6 @@
 package com.gae.vo;
 
-public class MemberPaggingVo {
+public class PlPaggingVo {
     // 전체 게시글 개수
     private int count;
     // 현재 페이지 번호
@@ -10,7 +10,7 @@ public class MemberPaggingVo {
     // 게시판 하단에 나타낼 페이지 번호 개수
     private final int PAGE_GROUP_OF_COUNT = 5;
 
-    public MemberPaggingVo(int count, int currentPage, int pageOfContentCount) {
+    public PlPaggingVo(int count, int currentPage, int pageOfContentCount) {
         this.count = count;
         this.currentPage = currentPage;
         this.pageOfContentCount = pageOfContentCount;
@@ -24,15 +24,15 @@ public class MemberPaggingVo {
         return pageOfContentCount;
     }
 
-    // 전체 페이지 개수 : 전체 게시글 개수 / 한페이지당 출력할 게시글 개수 + (나머지가 0 아니면 1)
-    public int getTotalPage() {
+    // 전체 페이지 개수 : 전체 게시글 개수 / 한 페이지당 출력할 게시글 개수 + (나머지가 0 아니면 1)
+    public int getTotalPages() {
         return count / pageOfContentCount + (count % pageOfContentCount == 0 ? 0 : 1);
     }
 
     // 전체 페이지 그룹 개수 : 전체 페이지 개수 / 게시판 하단에 나타낼 페이지 번호 개수 + (나머지가 0 아니면 1)
     public int getTotalPageGroup() {
-        return getTotalPage() / PAGE_GROUP_OF_COUNT +
-                (getTotalPage() % PAGE_GROUP_OF_COUNT == 0 ? 0 : 1);
+        return getTotalPages() / PAGE_GROUP_OF_COUNT +
+                (getTotalPages() % PAGE_GROUP_OF_COUNT == 0 ? 0 : 1);
     }
 
     // 현재 페이지의 그룹번호
@@ -49,13 +49,13 @@ public class MemberPaggingVo {
     // 현재 페이지 그룹의 마지막 페이지 번호
     public int getEndPageOfPageGroup() {
         int lastNo = getCurrentPageGroupNo() * PAGE_GROUP_OF_COUNT;
-        if (lastNo > getTotalPage())
-            lastNo = getTotalPage();
+        if (lastNo > getTotalPages())
+            lastNo = getTotalPages();
         return lastNo;
     }
 
     // 이전 페이지 그룹이 있냐?
-    public boolean isPreviousPageGroup() {  // 여기서 이름을 수정합니다.
+    public boolean isPriviousPageGroup() {
         return getCurrentPageGroupNo() > 1;
     }
 
@@ -66,7 +66,7 @@ public class MemberPaggingVo {
 
     @Override
     public String toString() {
-        return "MemberPaggingVo [count=" + count + ", currentPage=" + currentPage + ", pageOfContentCount="
+        return "PlPaggingVo [count=" + count + ", currentPage=" + currentPage + ", pageOfContentCount="
                 + pageOfContentCount + ", PAGE_GROUP_OF_COUNT=" + PAGE_GROUP_OF_COUNT + "]";
     }
 }

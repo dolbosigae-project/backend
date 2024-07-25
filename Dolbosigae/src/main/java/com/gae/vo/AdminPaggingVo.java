@@ -1,6 +1,6 @@
 package com.gae.vo;
 
-public class MemberPaggingVo {
+public class AdminPaggingVo {
     // 전체 게시글 개수
     private int count;
     // 현재 페이지 번호
@@ -10,13 +10,13 @@ public class MemberPaggingVo {
     // 게시판 하단에 나타낼 페이지 번호 개수
     private final int PAGE_GROUP_OF_COUNT = 5;
 
-    public MemberPaggingVo(int count, int currentPage, int pageOfContentCount) {
-        this.count = count;
-        this.currentPage = currentPage;
-        this.pageOfContentCount = pageOfContentCount;
-    }
+    public AdminPaggingVo(int count, int currentPage, int pageOfContentCount) {
+		this.count = count;
+		this.currentPage = currentPage;
+		this.pageOfContentCount = pageOfContentCount;
+	}
 
-    public int getCurrentPage() {
+	public int getCurrentPage() {
         return currentPage;
     }
 
@@ -55,7 +55,7 @@ public class MemberPaggingVo {
     }
 
     // 이전 페이지 그룹이 있냐?
-    public boolean isPreviousPageGroup() {  // 여기서 이름을 수정합니다.
+    public boolean isPreviousPageGroup() {  
         return getCurrentPageGroupNo() > 1;
     }
 
@@ -64,9 +64,11 @@ public class MemberPaggingVo {
         return getCurrentPageGroupNo() < getTotalPageGroup();
     }
 
-    @Override
-    public String toString() {
-        return "MemberPaggingVo [count=" + count + ", currentPage=" + currentPage + ", pageOfContentCount="
-                + pageOfContentCount + ", PAGE_GROUP_OF_COUNT=" + PAGE_GROUP_OF_COUNT + "]";
-    }
+	@Override
+	public String toString() {
+		return "AdminPaggingVo [count=" + count + ", currentPage=" + currentPage + ", pageOfContentCount="
+				+ pageOfContentCount + ", PAGE_GROUP_OF_COUNT=" + PAGE_GROUP_OF_COUNT + "]";
+	}
+
+    
 }

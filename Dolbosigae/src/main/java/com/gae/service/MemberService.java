@@ -6,6 +6,7 @@ import java.io.OutputStream;
 import java.lang.reflect.Member;
 import java.util.Base64;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.gae.controller.MemberController;
 import com.gae.dto.BoardMemberDTO;
 import com.gae.mapper.MemberMapper;
 import com.gae.vo.MemberPaggingVo;
@@ -21,9 +23,10 @@ import com.gae.vo.MemberResponseVo;
 
 @Service
 public class MemberService {
-	private static final Logger logger = LoggerFactory.getLogger(MemberService.class); //디버깅용
     @Autowired
     private MemberMapper memberMapper;
+    
+    private static final Logger logger = LoggerFactory.getLogger(MemberService.class);
 
     public MemberService(MemberMapper memberMapper) {
         this.memberMapper = memberMapper;
@@ -61,17 +64,25 @@ public class MemberService {
     }
 
     @Transactional
-	public int updateMember(BoardMemberDTO member) {
-    	int memberResult = memberMapper.updateMember(member);
-    	int petResult = memberMapper.updatePet(member);
+    public int updateMember(BoardMemberDTO member) {
+        int memberResult = memberMapper.updateMember(member);
+        int petResult = memberMapper.updatePet(member);
+        
+        if (member.getPasswordChanged() == 1) {  
+            int passwordResult = memberMapper.updateMemberPassword(member);
+            if (passwordResult == 0) {
+                throw new RuntimeException("Failed to update member password");
+            }
+        }
+
         if (memberResult == 0) {
-            throw new RuntimeException("Failed to delete member");
+            throw new RuntimeException("Failed to update member");
         }
-        if(petResult == 0) {
-        	throw new RuntimeException("Failed to delete member");
+        if (petResult == 0) {
+            throw new RuntimeException("Failed to update pet");
         }
-		return 0;
-	}
+        return memberResult;
+    }
 
     public List<Member> searchMembers(String category, String term) {
         switch (category) {
@@ -87,6 +98,13 @@ public class MemberService {
                 throw new IllegalArgumentException("Invalid search category: " + category);
         }
     }
+    
+    
+	public BoardMemberDTO myPage(String id) {
+		return memberMapper.myPage(id);
+	}
+    
+    
 
     public int checkDuplicate(String idValue) {
         Integer result = memberMapper.checkDuplicate(idValue);
@@ -147,29 +165,17 @@ public class MemberService {
             throw new RuntimeException("회원 등록 중 오류가 발생했습니다.");
         }
     }
-    
-    
-//    public BoardMemberDTO selectLoginUserInfo(String id) {
-//		return memberMapper.selectLoginUserInfo(id);
-//	}
-//
-//	public BoardMemberDTO selectPetInfo(String id) {
-//		return memberMapper.selectPetInfo(id);
-//	}
 
-	
-//	public MemberResponseVo getMemberList(int page) {
-//        int pageOfContentCount = 10; // 페이지당 멤버 수
-//        int totalCount = memberMapper.getTotalCount(); // 전체 멤버 수 가져오기
-//        MemberPaggingVo paggingVo = new MemberPaggingVo(totalCount, page, pageOfContentCount);
-//
-//        int startRow = (page - 1) * pageOfContentCount;
-//        int endRow = startRow + pageOfContentCount;
-//        List<BoardMemberDTO> members = memberMapper.getMemberList(startRow, endRow);
-//        return new MemberResponseVo(members, paggingVo);
-//    }
-	
-	public MemberResponseVo getWalkMateList(int page) {
+    public int updatePasswd(Map<String, String> params) {
+        String boardMemberId = params.get("id");
+        String boardMemberPasswd = params.get("passwd");
+
+        return memberMapper.updatePasswd(boardMemberId, boardMemberPasswd);
+    }
+
+    
+    //이 밑으로 주의
+    public MemberResponseVo getWalkMateList(int page) {
         int pageOfContentCount = 7; // 페이지마다 표시될 회원 수
         int totalCount = memberMapper.getTotalCountWalk(); // 펫 프로필을 킨 회원들의 전체 수
         MemberPaggingVo paggingVo = new MemberPaggingVo(totalCount, page, pageOfContentCount);
@@ -213,12 +219,15 @@ public class MemberService {
 
     public BoardMemberDTO getPetProfile(String id) {
         List<BoardMemberDTO> petProfiles = memberMapper.getPetProfile(id);
+        logger.info("Fetched pet profiles for ID {}: {}", id, petProfiles);
+
         if (petProfiles.isEmpty()) {
+            logger.info("No pet profile found for ID {}", id);
             return null;
         }
         return petProfiles.get(0); // 첫 번째 결과만 반환
     }
-
+    
 	
 	public void insertFavorite(String loginId, String targetId) {
 		logger.info("즐겨찾기 등록 시도 - 로그인 ID: {}, 대상 ID: {}", loginId, targetId);
@@ -230,8 +239,10 @@ public class MemberService {
         	throw new IllegalArgumentException("자기 자신은 즐겨찾을 수 없습니다");
         }
     }
+
+
+
+
     
-    
-	
     
 }

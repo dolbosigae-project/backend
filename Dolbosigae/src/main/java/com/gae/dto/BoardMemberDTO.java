@@ -24,8 +24,9 @@ public class BoardMemberDTO {
     private String petInfo;
     private String pId; 
     private String profileImg;
+    private int passwordChanged; 
     
-    //산책친구 시, 구
+  //산책친구 시, 구
     private String city;
     private String district;
     //즐겨찾기 - 현재 로그인, 대상
@@ -67,7 +68,13 @@ public class BoardMemberDTO {
 	public void setMateFav(String mateFav) {
 		this.mateFav = mateFav;
 	}
-	
+    
+	public int getPasswordChanged() {
+		return passwordChanged;
+	}
+	public void setPasswordChanged(int passwordChanged) {
+		this.passwordChanged = passwordChanged;
+	}
 	public String getpId() {
 		return pId;
 	}
@@ -182,7 +189,6 @@ public class BoardMemberDTO {
 	public void setPetInfo(String petInfo) {
 		this.petInfo = petInfo;
 	}
-	
 	@Override
 	public String toString() {
 		return "BoardMemberDTO [boardMemberId=" + boardMemberId + ", boardMemberPasswd=" + boardMemberPasswd
@@ -192,8 +198,11 @@ public class BoardMemberDTO {
 				+ boardMemberNick + ", petBirth=" + petBirth + ", petGender=" + petGender + ", petSize=" + petSize
 				+ ", petWeight=" + petWeight + ", petWalkProfile=" + petWalkProfile + ", petImageNo=" + petImageNo
 				+ ", petImagePath=" + petImagePath + ", petInfo=" + petInfo + ", pId=" + pId + ", profileImg="
-				+ profileImg + "]";
+				+ profileImg + ", passwordChanged=" + passwordChanged + "]";
 	}
+	
+	
+	
 	
 	
 }
