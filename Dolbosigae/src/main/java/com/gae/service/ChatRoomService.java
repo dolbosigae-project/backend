@@ -1,15 +1,25 @@
 package com.gae.service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.gae.dto.BoardMemberDTO;
+import com.gae.mapper.ChatMapper;
 
 @Service
 public class ChatRoomService {
     private final Map<String, Set<String>> chatRooms = new ConcurrentHashMap<>();
 
+    
+    @Autowired
+    private ChatMapper chatMapper;
+    
     // 채팅방 생성
     public synchronized boolean createRoom(String roomId, String userA, String userB) {
         if (chatRooms.containsKey(roomId)) {
@@ -58,4 +68,17 @@ public class ChatRoomService {
     public Set<String> getUsersInRoom(String roomId) {
         return chatRooms.get(roomId);
     }
+
+//    public List<BoardMemberDTO> searchChatMembers(String category, String search) {
+//        try {
+//            return chatMapper.searchChatMembers(category, search);
+//        } catch (Exception e) {
+//            throw new RuntimeException("서비스 - 채팅상대를 찾다가 에러뜸", e);
+//        }
+//    }
+    
+    public List<BoardMemberDTO> searchChatMembers(String category, String search) {
+        return chatMapper.searchChatMembers(category, search);
+    }
+	
 }

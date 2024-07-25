@@ -27,6 +27,16 @@ public interface MemberMapper {
 	void insertDefaultPet(BoardMemberDTO defaultPet);
 	void insertPetImg(BoardMemberDTO member);
 	
-	BoardMemberDTO selectLoginUserInfo(@Param("id") String id);
-	BoardMemberDTO selectPetInfo(@Param("id") String id);
+	//이 밑으로 주의
+//	BoardMemberDTO selectLoginUserInfo(@Param("id") String id);
+//	BoardMemberDTO selectPetInfo(@Param("id") String id);
+	int getTotalCountWalk();
+    int getTotalCountWalkByRegion(String region);
+    List<BoardMemberDTO> getWalkMateList(@Param("startRow") int startRow, @Param("endRow") int endRow);
+    List<BoardMemberDTO> searchWalkMatesByRegion(@Param("region") String region, @Param("startRow") int startRow, @Param("pageOfContentCount") int pageOfContentCount);
+    List<BoardMemberDTO> getPetProfile(String id);
+	void insertFavorite(@Param("loginId")String loginId, @Param("targetId") String targetId);
+	
+	
+	
 }

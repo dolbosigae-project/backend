@@ -4,10 +4,11 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Member;
+import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
-import java.util.Base64;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ import com.gae.vo.MemberResponseVo;
 
 @Service
 public class MemberService {
+	private static final Logger logger = LoggerFactory.getLogger(MemberService.class); //디버깅용
     @Autowired
     private MemberMapper memberMapper;
 
@@ -147,12 +149,89 @@ public class MemberService {
     }
     
     
-    public BoardMemberDTO selectLoginUserInfo(String id) {
-		return memberMapper.selectLoginUserInfo(id);
-	}
+//    public BoardMemberDTO selectLoginUserInfo(String id) {
+//		return memberMapper.selectLoginUserInfo(id);
+//	}
+//
+//	public BoardMemberDTO selectPetInfo(String id) {
+//		return memberMapper.selectPetInfo(id);
+//	}
 
-	public BoardMemberDTO selectPetInfo(String id) {
-		return memberMapper.selectPetInfo(id);
-	}
+	
+//	public MemberResponseVo getMemberList(int page) {
+//        int pageOfContentCount = 10; // 페이지당 멤버 수
+//        int totalCount = memberMapper.getTotalCount(); // 전체 멤버 수 가져오기
+//        MemberPaggingVo paggingVo = new MemberPaggingVo(totalCount, page, pageOfContentCount);
+//
+//        int startRow = (page - 1) * pageOfContentCount;
+//        int endRow = startRow + pageOfContentCount;
+//        List<BoardMemberDTO> members = memberMapper.getMemberList(startRow, endRow);
+//        return new MemberResponseVo(members, paggingVo);
+//    }
+	
+	public MemberResponseVo getWalkMateList(int page) {
+        int pageOfContentCount = 7; // 페이지마다 표시될 회원 수
+        int totalCount = memberMapper.getTotalCountWalk(); // 펫 프로필을 킨 회원들의 전체 수
+        MemberPaggingVo paggingVo = new MemberPaggingVo(totalCount, page, pageOfContentCount);
+        
+        int startRow = (page - 1) * pageOfContentCount + 1; // 시작 행 (1부터 시작)
+        int endRow = startRow + pageOfContentCount - 1; // 종료 행
+
+        logger.debug("산책 친구 목록을 불러오는 중: startRow={}, endRow={}", startRow, endRow);
+
+        List<BoardMemberDTO> members = memberMapper.getWalkMateList(startRow, endRow);
+        
+        // 콘솔에 결과 출력
+//        logger.debug("=== 산책 친구 목록 ===");
+        for (BoardMemberDTO member : members) {
+            logger.debug(member.toString());
+        }
+
+        return new MemberResponseVo(members, paggingVo);
+    }
+
+    public MemberResponseVo searchWalkMatesByRegion(String region, int page) {
+        int pageOfContentCount = 7; // 페이지마다 표시될 회원 수
+        int totalCount = memberMapper.getTotalCountWalkByRegion(region); // 특정 지역의 펫 프로필을 킨 회원들의 전체 수
+        MemberPaggingVo paggingVo = new MemberPaggingVo(totalCount, page, pageOfContentCount);
+        
+        int startRow = (page - 1) * pageOfContentCount + 1; // 시작 행 (1부터 시작)
+        int endRow = startRow + pageOfContentCount - 1; // 종료 행
+
+        logger.debug("지역으로 산책 친구 검색: region={}, startRow={}, endRow={}", region, startRow, endRow);
+
+        List<BoardMemberDTO> members = memberMapper.searchWalkMatesByRegion(region, startRow, endRow);
+        
+        // 콘솔에 결과 출력
+        logger.debug("=== 지역별 산책 친구 목록: {} ===", region);
+        for (BoardMemberDTO member : members) {
+            logger.debug(member.toString());
+        }
+
+        return new MemberResponseVo(members, paggingVo);
+    }
+
+    public BoardMemberDTO getPetProfile(String id) {
+        List<BoardMemberDTO> petProfiles = memberMapper.getPetProfile(id);
+        if (petProfiles.isEmpty()) {
+            return null;
+        }
+        return petProfiles.get(0); // 첫 번째 결과만 반환
+    }
+
+	
+	public void insertFavorite(String loginId, String targetId) {
+		logger.info("즐겨찾기 등록 시도 - 로그인 ID: {}, 대상 ID: {}", loginId, targetId);
+        if (!loginId.equals(targetId)) {
+            memberMapper.insertFavorite(loginId, targetId);
+            logger.info("즐겨찾기 등록 성공 - 로그인 ID: {}, 대상 ID: {}", loginId, targetId);
+        } else {
+        	logger.error("자기 자신을 즐겨찾기에 등록 시도 - 로그인 ID: {}", loginId);
+        	throw new IllegalArgumentException("자기 자신은 즐겨찾을 수 없습니다");
+        }
+    }
+    
+    
+	
     
 }

@@ -1,14 +1,23 @@
 package com.gae.controller;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
+import com.gae.dto.BoardMemberDTO;
 import com.gae.dto.ChatMessage;
 import com.gae.service.ChatRoomService;
 
@@ -18,7 +27,10 @@ public class ChatController {
     private static final Logger logger = LoggerFactory.getLogger(ChatController.class);
 
     private final SimpMessageSendingOperations messagingTemplate;
-    private final ChatRoomService chatRoomService;
+//    private final ChatRoomService chatRoomService;
+    
+    @Autowired
+    private ChatRoomService chatRoomService;
 
     public ChatController(SimpMessageSendingOperations messagingTemplate, ChatRoomService chatRoomService) {
         this.messagingTemplate = messagingTemplate;
@@ -80,6 +92,17 @@ public class ChatController {
         return (userA.compareTo(userB) < 0) ? userA + "-" + userB : userB + "-" + userA;
     }
 
+    @GetMapping("/chat/IdNick/search")
+    public ResponseEntity<?> searchChatMembers(@RequestParam String category, @RequestParam String search) {
+        try {
+        	List<BoardMemberDTO> searchat = chatRoomService.searchChatMembers(category, search);
+            return ResponseEntity.ok(searchat);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body( "Internal Server에서 에러난거임");
+        }
+    }
+    
+    
   
     
     

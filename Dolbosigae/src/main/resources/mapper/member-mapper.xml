@@ -13,8 +13,9 @@
     <result column="MEMBER_GRADE_NO" property="boardMemberGradeNo"/>
     <result column="MEMBER_GRADE_NAME" property="boardMemberGradeName"/>
     <result column="MEMBER_PETWITH" property="boardMemberPetWith" jdbcType="CHAR"/>
+    <result column="MATE_FAVORITE" property="mateFav"/>		<!-- 여기가 산책친구 즐찾 -->
     <result column="PET_ID" property="petId"/>
-    <result column="PET_NICKNAME" property="boardMemberNick"/>
+    <result column="PET_NICKNAME" property="boardMemberNick"/>	<!-- memberNick이지만 사실 사람말고 개 이름 -->
     <result column="PET_BIRTH" property="petBirth"/>
     <result column="PET_GENDER" property="petGender" jdbcType="CHAR"/>
     <result column="PET_SIZE" property="petSize"/>
@@ -179,7 +180,142 @@
 	  	where
 	  		member_id = #{id}
 	  </select>
-  
+	  
+	  <select id="searchChatMembers" resultMap="member">
+		    SELECT * FROM MEMBER_PET_VIEW 
+		    WHERE 
+		    <if test="category == 'nickname'">
+		        MEMBER_NAME LIKE '%' || #{search} || '%'
+		    </if>
+		    <if test="category == 'id'">
+		        MEMBER_ID LIKE '%' || #{search} || '%'
+		    </if>
+		</select>
+		
+		<select id="getTotalCountWalk" resultType="int">
+		    <![CDATA[
+		      SELECT COUNT(*)
+		      FROM MEMBER_PET_VIEW
+		      WHERE PET_WALKPROFILE = 'T'
+		    ]]>
+		</select>
+		
+		<select id="getTotalCountWalkByRegion" resultType="int">
+		    <![CDATA[
+		      SELECT COUNT(*)
+		      FROM MEMBER_PET_VIEW
+		      WHERE PET_WALKPROFILE = 'T' AND MEMBER_REGION = #{region}
+		    ]]>
+		</select>
+		
+		<!-- <select id="getMemberList" resultMap="member">
+		    <![CDATA[
+		      SELECT *
+		      FROM (
+		        SELECT A.*, ROWNUM AS RNUM
+		        FROM (
+		          SELECT *
+		          FROM MEMBER_PET_VIEW
+		          ORDER BY MEMBER_ID
+		        ) A
+		        WHERE ROWNUM <= #{endRow}
+		      )
+		      WHERE RNUM > #{startRow}
+		    ]]>
+		  </select> -->
+		
+		<select id="getWalkMateList" resultMap="member">
+		    <![CDATA[
+		      SELECT *
+		      FROM (
+		        SELECT A.*, ROWNUM AS RNUM
+		        FROM (
+		          SELECT *
+		          FROM MEMBER_PET_VIEW
+		          WHERE PET_WALKPROFILE = 'T'
+		          ORDER BY MEMBER_ID
+		        ) A
+		        WHERE ROWNUM <= #{endRow}
+		      )
+		      WHERE RNUM > #{startRow}
+		    ]]>
+		</select>
+		
+		
+		<select id="searchWalkMatesByRegion" resultMap="member">
+		    <![CDATA[
+		      SELECT *
+		      FROM (
+		        SELECT A.*, ROWNUM AS RNUM
+		        FROM (
+		          SELECT *
+		          FROM MEMBER_PET_VIEW
+		          WHERE PET_WALKPROFILE = 'T' AND MEMBER_REGION = #{region}
+		          ORDER BY MEMBER_ID
+		        ) A
+		        WHERE ROWNUM <= #{endRow}
+		      )
+		      WHERE RNUM > #{startRow}
+		    ]]>
+		</select>
+		
+		<select id="getPetProfile" resultType="com.gae.dto.BoardMemberDTO">
+	        <![CDATA[
+	            SELECT * FROM MEMBER_PET_VIEW WHERE MEMBER_ID = #{id}
+	        ]]>
+	    </select>
+	    
+	    
+		<insert id="insertFavorite" parameterType="com.gae.dto.BoardMemberDTO">
+		    insert into w_mate_fav (m_id, mate) values (#{loginId}, #{targetId})
+		</insert>
+		<!-- <select id="getWalkMate" resultMap="member">
+		    <![CDATA[
+		      SELECT * 
+		      FROM MEMBER_PET_VIEW 
+		      WHERE PET_WALKPROFILE = 'T' 
+		      AND (MEMBER_REGION LIKE '%' || #{city} || '%' OR MEMBER_REGION LIKE '%' || #{district} || '%')
+		    ]]>
+		  </select> -->
+		  
+		  <!-- 전체 목록 가져오기 -->
+	    <!-- <select id="getWalkMate" resultType="com.gae.dto.BoardMemberDTO">
+	        <![CDATA[
+	            SELECT *,
+	            SUBSTRING_INDEX(SUBSTRING_INDEX(MEMBER_REGION, ' ', 3), ' ', -2) AS city,
+	            SUBSTRING_INDEX(MEMBER_REGION, ' ', -1) AS district
+	            FROM MEMBER_PET_VIEW 
+	            WHERE PET_WALKPROFILE = 'T'
+	        ]]>
+	    </select> -->
+	    
+	    <!-- 특정 시와 구에 기반한 목록 가져오기 -->
+	   <!--  <select id="getWalkMate" resultType="com.gae.dto.BoardMemberDTO">
+	        <![CDATA[
+	            SELECT *,
+	            SUBSTRING_INDEX(SUBSTRING_INDEX(MEMBER_REGION, ' ', 3), ' ', -2) AS city,
+	            SUBSTRING_INDEX(MEMBER_REGION, ' ', -1) AS district
+	            FROM MEMBER_PET_VIEW 
+	            WHERE PET_WALKPROFILE = 'T' 
+	            AND (MEMBER_REGION LIKE '%' || #{city} || '%' OR MEMBER_REGION LIKE '%' || #{district} || '%')
+	        ]]>
+	    </select> -->
+		<!-- <select id="getWalkMate" resultType="com.gae.dto.BoardMemberDTO">
+	        <![CDATA[
+	            SELECT *,
+	            SUBSTRING_INDEX(SUBSTRING_INDEX(MEMBER_REGION, ' ', 3), ' ', -2) AS city,
+	            SUBSTRING_INDEX(MEMBER_REGION, ' ', -1) AS district
+	            FROM MEMBER_PET_VIEW 
+	            WHERE PET_WALKPROFILE = 'T'
+	        ]]>
+	        <if test="city != null and !city.isEmpty()">
+	            <![CDATA[ AND MEMBER_REGION LIKE '%' || #{city} || '%' ]]>
+	        </if>
+	        <if test="district != null and !district.isEmpty()">
+	            <![CDATA[ OR MEMBER_REGION LIKE '%' || #{district} || '%' ]]>
+	        </if>
+	     </select> -->
+	  
   
 
 </mapper>

@@ -4,6 +4,8 @@ import java.lang.reflect.Member;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +28,7 @@ import jakarta.servlet.http.HttpSession;
 @CrossOrigin(origins = "http://localhost:3000")
 @Controller
 public class MemberController {
+	private static final Logger logger = LoggerFactory.getLogger(MemberController.class);
     private final MemberService memberService;
 
     public MemberController(MemberService memberService) {
@@ -124,6 +127,48 @@ public class MemberController {
         memberService.registerMember(member);
         return ResponseEntity.ok("회원가입 성공");
     }
+    
+    
+//    @GetMapping("/member/list")
+//    @ResponseBody
+//    public ResponseEntity<MemberResponseVo> selectAllMember(@RequestParam(defaultValue = "1") int page) {
+//        return ResponseEntity.ok(memberService.getMemberList(page));
+//    }
+    
+    @GetMapping("/member/walkmates")
+    @ResponseBody
+    public ResponseEntity<MemberResponseVo> selectWalkMates(@RequestParam(defaultValue = "1") int page) {
+        logger.debug("산책 친구 목록 요청 수신: page={}", page);
+        MemberResponseVo response = memberService.getWalkMateList(page);
+        logger.debug("응답: {}", response);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/member/walkmates/search")
+    @ResponseBody
+    public ResponseEntity<MemberResponseVo> searchWalkMatesByRegion(@RequestParam String region, @RequestParam(defaultValue = "1") int page) {
+        logger.debug("지역별 산책 친구 검색 요청 수신: region={}, page={}", region, page);
+        MemberResponseVo response = memberService.searchWalkMatesByRegion(region, page);
+        logger.debug("응답: {}", response);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/member/petprofile/{id}")
+    public ResponseEntity<?> selectPetProfile(@PathVariable String id) {
+        BoardMemberDTO member = memberService.getPetProfile(id);
+        if (member != null) {
+            return ResponseEntity.ok(member);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("찾을 수 없는 회원");
+        }
+    }
+
+    @PostMapping("/mate/fav")
+    public void insertFavorite(@RequestParam String loginId, @RequestParam String targetId) {
+        memberService.insertFavorite(loginId, targetId);
+    }
+    
+    
     
   //채팅창 페이지 왼쪽에 띄울 반려동물의 정보 가져오기
     //가 아니고 일단 사용자의 정보를 가져옴
