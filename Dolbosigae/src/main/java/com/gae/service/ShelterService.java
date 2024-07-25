@@ -11,7 +11,6 @@ import com.gae.mapper.ShelterMapper;
 
 @Service
 public class ShelterService {
-
     private final ShelterMapper mapper;
 
     public ShelterService(ShelterMapper mapper) {
@@ -20,19 +19,20 @@ public class ShelterService {
 
     public List<ShelterDTO> selectShelterList(int pageNo, int pageContentEa) {
         Map<String, Object> map = new HashMap<>();
-        int startRow = (pageNo - 1) * pageContentEa + 1;
-        int endRow = pageNo * pageContentEa;
-        map.put("startRow", startRow);
-        map.put("endRow", endRow);
-        System.out.println("Fetching shelter list with startRow: " + startRow + " and endRow: " + endRow);
-        List<ShelterDTO> result = mapper.selectShelterList(map);
-        System.out.println("Fetched " + result.size() + " shelters");
-        return result;
+        map.put("startRow", (pageNo - 1) * pageContentEa);
+        map.put("pageContentEa", pageContentEa);
+        return mapper.selectShelterList(map);
     }
 
     public int selectShelterTotalCount() {
-        int totalCount = mapper.selectShelterTotalCount();
-        System.out.println("Total count of shelters: " + totalCount);
-        return totalCount;
+        return mapper.selectShelterTotalCount();
+    }
+
+    public void insertShelter(ShelterDTO shelterDTO) {
+        mapper.insertShelter(shelterDTO);
+    }
+
+    public void deleteShelter(String id) {
+        mapper.deleteShelter(id);
     }
 }
