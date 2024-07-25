@@ -159,6 +159,8 @@ public class MemberController {
         return ResponseEntity.ok("회원가입 성공");
     }
     
+    
+    //이 밑으로 주의
     @GetMapping("/member/walkmates")
     @ResponseBody
     public ResponseEntity<MemberResponseVo> selectWalkMates(@RequestParam(defaultValue = "1") int page) {
