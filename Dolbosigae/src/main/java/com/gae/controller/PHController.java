@@ -75,6 +75,7 @@ public class PHController { // 클래스 이름도 HOController에서 PHControll
         try {
             phService.deletePh(phId);
             response.put("status", "success");
+            response.put("message", "Pharmacy deleted successfully");
         } catch (Exception e) {
             e.printStackTrace();
             response.put("status", "error");
