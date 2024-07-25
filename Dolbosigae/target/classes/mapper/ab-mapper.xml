@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gae.mapper.ABMapper">
+    <resultMap type="com.gae.dto.ABDTO" id="ad">
+        <id column="AB_ID" property="abID"/>
+        <result column="SH_ID" property="shID"/>
+        <result column="AB_DATE" property="abDate"/>
+        <result column="AB_LOCATION" property="abLocation"/>
+        <result column="AB_STATUS" property="abStatus"/>
+        <result column="AB_BREED" property="abBreed"/>
+        <result column="AB_GENDER" property="abGender"/>
+        <result column="AB_AGE" property="abAge"/>
+        <result column="AB_WEIGHT" property="abWeight"/>
+        <result column="AB_COLOR" property="abColor"/>
+        <result column="AB_RESCUED" property="abRescued"/>
+        <result column="AB_CHARACTER" property="abCharacter"/>
+    </resultMap>
+
+   <select id="selectABList" parameterType="map" resultMap="ad">
+        SELECT * FROM ab
+        WHERE shID = #{shID}
+        ORDER BY abID
+        LIMIT #{pageContentCount} OFFSET #{pageNo}
+    </select>
+
+    <select id="selectABTotalCount" parameterType="map" resultType="int">
+        SELECT COUNT(*) FROM ab
+        WHERE shID = #{shID}
+    </select>
+</mapper>

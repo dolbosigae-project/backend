@@ -13,9 +13,8 @@
     <result column="MEMBER_GRADE_NO" property="boardMemberGradeNo"/>
     <result column="MEMBER_GRADE_NAME" property="boardMemberGradeName"/>
     <result column="MEMBER_PETWITH" property="boardMemberPetWith" jdbcType="CHAR"/>
-    <result column="MATE_FAVORITE" property="mateFav"/>		<!-- 여기가 산책친구 즐찾 -->
     <result column="PET_ID" property="petId"/>
-    <result column="PET_NICKNAME" property="boardMemberNick"/>	<!-- memberNick이지만 사실 사람말고 개 이름 -->
+    <result column="PET_NICKNAME" property="boardMemberNick"/>
     <result column="PET_BIRTH" property="petBirth"/>
     <result column="PET_GENDER" property="petGender" jdbcType="CHAR"/>
     <result column="PET_SIZE" property="petSize"/>
@@ -25,7 +24,7 @@
     <result column="PET_IMAGE_PATH" property="petImagePath"/>
     <result column="PET_INFO" property="petInfo"/>
   </resultMap>
-  
+
   <!-- 로그인 -->
   <select id="login" resultMap="member">
     <![CDATA[
@@ -77,18 +76,17 @@
     ]]>
   </delete>
   
-  <!-- 회원 테이블 업데이트 -->
-  <update id="updateMember" parameterType="member">
-  <![CDATA[
-  	UPDATE "MEMBER" SET  
-	M_GRADE_NO = #{boardMemberGradeNo},
-	M_NAME = #{boardMemberName},
-	M_PW = #{boardMemberPasswd},
-	M_REGION = #{boardMemberRegion},
-	M_PETWITH = #{boardMemberPetWith}
-	WHERE M_ID LIKE #{boardMemberId}
-    ]]>
-  </update>
+	<!-- 회원 테이블 업데이트 -->
+	<update id="updateMember" parameterType="com.gae.dto.BoardMemberDTO">
+	<![CDATA[
+	  UPDATE "MEMBER" SET  
+	    M_GRADE_NO = #{boardMemberGradeNo},
+	    M_NAME = #{boardMemberName},
+	    M_REGION = #{boardMemberRegion},
+	    M_PETWITH = #{boardMemberPetWith}
+	  WHERE M_ID = #{boardMemberId}
+	]]>
+	</update>
 	
 	<!-- 회원 테이블 업데이트(해시값 변경으로 비밀번호 분리함) -->
 	<update id="updateMemberPassword" parameterType="com.gae.dto.BoardMemberDTO">
@@ -184,100 +182,8 @@
 	</insert>
   
   
-  	<!-- 이 밑으로 주의  -->
-  	<select id="selectLoginUserInfo" resultMap="member">
-  	 select * from member_pet_view
-  	 where member_id = #{id}
-  	</select>
-  
-	  <select id="selectPetInfo" parameterType="String" resultMap="member">
-	  	select 
-	  		pet_id,
-	  		pet_nickname,
-	  		pet_birth,
-	  		pet_gender,
-	  		pet_size,
-	  		pet_weight,
-	  		pet_image_no,
-	  		pet_image_path,
-	  		pet_info
-	  	from
-	  		member_pet_view
-	  	where
-	  		member_id = #{id}
-	  </select>
-	  
-	  <select id="searchChatMembers" resultMap="member">
-		    SELECT * FROM MEMBER_PET_VIEW 
-		    WHERE 
-		    <if test="category == 'nickname'">
-		        MEMBER_NAME LIKE '%' || #{search} || '%'
-		    </if>
-		    <if test="category == 'id'">
-		        MEMBER_ID LIKE '%' || #{search} || '%'
-		    </if>
-		</select>
-		
-		<select id="getTotalCountWalk" resultType="int">
-		    <![CDATA[
-		      SELECT COUNT(*)
-		      FROM MEMBER_PET_VIEW
-		      WHERE PET_WALKPROFILE = 'T'
-		    ]]>
-		</select>
-		
-		<select id="getTotalCountWalkByRegion" resultType="int">
-		    <![CDATA[
-		      SELECT COUNT(*)
-		      FROM MEMBER_PET_VIEW
-		      WHERE PET_WALKPROFILE = 'T' AND MEMBER_REGION = #{region}
-		    ]]>
-		</select>
-		
-		<select id="getWalkMateList" resultMap="member">
-		    <![CDATA[
-		      SELECT *
-		      FROM (
-		        SELECT A.*, ROWNUM AS RNUM
-		        FROM (
-		          SELECT *
-		          FROM MEMBER_PET_VIEW
-		          WHERE PET_WALKPROFILE = 'T'
-		          ORDER BY MEMBER_ID
-		        ) A
-		        WHERE ROWNUM <= #{endRow}
-		      )
-		      WHERE RNUM > #{startRow}
-		    ]]>
-		</select>
-		
-		
-		<select id="searchWalkMatesByRegion" resultMap="member">
-		    <![CDATA[
-		      SELECT *
-		      FROM (
-		        SELECT A.*, ROWNUM AS RNUM
-		        FROM (
-		          SELECT *
-		          FROM MEMBER_PET_VIEW
-		          WHERE PET_WALKPROFILE = 'T' AND MEMBER_REGION = #{region}
-		          ORDER BY MEMBER_ID
-		        ) A
-		        WHERE ROWNUM <= #{endRow}
-		      )
-		      WHERE RNUM > #{startRow}
-		    ]]>
-		</select>
-		
-	    <select id="getPetProfile" resultType="com.gae.dto.BoardMemberDTO">
-		    SELECT * FROM MEMBER_PET_VIEW WHERE MEMBER_ID = #{id}
-		</select>
-	    
-	    
-		<insert id="insertFavorite" parameterType="com.gae.dto.BoardMemberDTO">
-		    insert into w_mate_fav (m_id, mate) values (#{loginId}, #{targetId})
-		</insert>
-	  
   
 
 </mapper>
+
+
