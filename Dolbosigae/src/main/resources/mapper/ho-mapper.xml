@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="com.gae.mapper.HOMapper">
+    <resultMap type="com.gae.dto.HODTO" id="ho">
+        <id column="HO_ID" property="hoId" />
+        <result column="HO_REGION" property="hoRegion"/>
+        <result column="HO_ADDRESS" property="hoAddress"/>
+        <result column="HO_NAME" property="hoName"/>
+        <result column="HO_TEL" property="hoTel"/>
+        <result column="HO_POST" property="hoPost"/>
+          <result column="HO_LAT" property="hoLat"/>  <!-- 위도 추가 -->
+        <result column="HO_LNG" property="hoLng"/>  <!-- 경도 추가 -->
+    </resultMap>
+
+    <select id="selectHo" resultMap="ho">
+        SELECT * FROM HO
+    </select>
+    
+    <select id="selectHoInfo" resultMap="ho">
+        SELECT * FROM HO WHERE ho_id = #{hoId}
+    </select>
+
+    
+    <select id="getTotalCount" resultType="int">
+        <![CDATA[
+        SELECT COUNT(*) FROM HO
+        ]]>
+    </select>
+    
+    <select id="searchHo" parameterType="map" resultMap="ho">
+        <![CDATA[
+        SELECT * FROM (
+            SELECT ROWNUM AS rnum, a.*
+            FROM (SELECT * FROM HO WHERE ho_address LIKE '%' || #{hoText} || '%' ORDER BY ho_id) a
+            WHERE ROWNUM <= #{endRow}
+        )
+        WHERE rnum >= #{startRow}
+        ]]>
+    </select>
+    
+    
+    <select id="getHoList" resultMap="ho">
+    <![CDATA[
+    SELECT * FROM (
+        SELECT ROWNUM AS rnum, a.*
+        FROM (SELECT * FROM HO ORDER BY TO_NUMBER(ho_id)) a
+        WHERE ROWNUM <= #{endRow}
+    )
+    WHERE rnum >= #{startRow}
+    ]]>
+</select>
+
+
+    <delete id="deleteHo">
+        DELETE FROM HO WHERE ho_id = #{hoId}
+    </delete>
+    
+    <select id="getTotalCountBySearch" resultType="int">
+        <![CDATA[
+        SELECT COUNT(*) FROM HO WHERE ho_address LIKE '%' || #{hoText} || '%'
+        ]]>
+    </select>
+    
+        <insert id="insertHo" parameterType="com.gae.dto.HODTO">
+        INSERT INTO HO (HO_ID, HO_REGION, HO_ADDRESS, HO_NAME, HO_TEL, HO_POST, HO_LAT, HO_LNG)
+        VALUES (#{hoId}, #{hoRegion}, #{hoAddress}, #{hoName}, #{hoTel}, #{hoPost}, #{hoLat}, #{hoLng})
+    </insert>
+    
+    
+</mapper>
