@@ -17,5 +17,6 @@ public interface CoMapper {
 	int getTotalCountBySearch(@Param("coText") String coText);
 	CoDTO selectConvenInfo(int coId);
 	int deleteConvenience(int coId);
+	void convenInsert(CoDTO dto);
 
 }

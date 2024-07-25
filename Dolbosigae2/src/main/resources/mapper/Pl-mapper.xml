@@ -14,9 +14,10 @@
         <result column="pl_img" property="plImg"/>
         <result column="pl_area" property="plArea"/>
         <result column="pl_day" property="plDay"/>
-        <result column="pl_city" property="plCity"/>
+        <result column="pl_img_no" property="plImgNo"/>
+        <result column="pl_img_path" property="plImgPath"/>        
     </resultMap>
-    
+    <!-- 전체 리스트 뽑아오기 -->
     <select id="getCityList" resultMap="pl">
         <![CDATA[
         SELECT * FROM (
@@ -27,16 +28,16 @@
         WHERE rnum >= #{startRow}
         ]]>
     </select>
-    
+    <!-- 전체 개수 -->
     <select id="getTotalCount" resultType="int">
         <![CDATA[
         SELECT COUNT(*) FROM PL
         ]]>
     </select>
-    
+    <!-- 검색 -->
     <select id="searchCity" parameterType="map" resultMap="pl">
         <![CDATA[
-        SELECT * FROM (
+        SELECT * FROM ("src/main/java/com/gae/controller/CoController.java"
             SELECT ROWNUM AS rnum, a.*
             FROM (SELECT * FROM PL WHERE pl_address LIKE '%' || #{plText} || '%' ORDER BY pl_id) a
             WHERE ROWNUM <= #{endRow}
@@ -44,18 +45,23 @@
         WHERE rnum >= #{startRow}
         ]]>
     </select>
-    
+    <!-- 상세정보 보기 -->    
     <select id="selectCityInfo" resultMap="pl">
         SELECT * FROM PL WHERE pl_id = #{plId}
     </select>
-    
+    <!-- 삭제 -->
     <delete id="deleteCity">
         DELETE FROM PL WHERE pl_id = #{plId}
     </delete>
-    
+    <!-- 검색한 목록 개수 체크 -->
     <select id="getTotalCountBySearch" resultType="int">
         <![CDATA[
         SELECT COUNT(*) FROM PL WHERE pl_address LIKE '%' || #{plText} || '%'
         ]]>
     </select>
+    <insert id="cityInsert" parameterType="com.gae.dto.PlDTO">
+        INSERT INTO PL(PL_ID, PL_NAME, PL_HOUR, PL_TEL, PL_ADDRESS, PL_INFO, PL_EXPENSE, PL_IMG, PL_AREA, PL_DAY)
+        VALUES (PL_ID_SEQ.NEXTVAL, #{plName}, #{plHour}, #{plTel}, #{plAddress}, #{plInfo}, #{plExpense}, 
+        #{plImg,jdbcType=VARCHAR}, #{plArea}, #{plDay})
+    </insert>
 </mapper>

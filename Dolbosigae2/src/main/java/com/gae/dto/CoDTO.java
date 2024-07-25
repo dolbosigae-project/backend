@@ -1,5 +1,8 @@
 package com.gae.dto;
 
+import org.apache.ibatis.type.Alias;
+
+@Alias("co")
 public class CoDTO {
 	private int coId;
 	private String coDistinction;
@@ -11,11 +14,13 @@ public class CoDTO {
 	private String coSunHour;
 	private String coDay;
 	private String coImg;
+	private String coImgNo;
+	private String coImgPath;
 	
 	public CoDTO() {	}
 
 	public CoDTO(int coId, String coDistinction, String coName, String coHour, String coTel, String coAddress,
-			String coSatHour, String coSunHour, String coDay, String coImg) {
+			String coSatHour, String coSunHour, String coDay, String coImg, String coImgNo, String coImgPath) {
 		super();
 		this.coId = coId;
 		this.coDistinction = coDistinction;
@@ -27,8 +32,11 @@ public class CoDTO {
 		this.coSunHour = coSunHour;
 		this.coDay = coDay;
 		this.coImg = coImg;
+		this.coImgNo = coImgNo;
+		this.coImgPath = coImgPath;
 	}
 
+	
 	/**
 	 * @return the coId
 	 */
@@ -169,11 +177,41 @@ public class CoDTO {
 		this.coImg = coImg;
 	}
 
+	/**
+	 * @return the coImgNo
+	 */
+	public String getCoImgNo() {
+		return coImgNo;
+	}
+
+	/**
+	 * @param coImgNo the coImgNo to set
+	 */
+	public void setCoImgNo(String coImgNo) {
+		this.coImgNo = coImgNo;
+	}
+
+	/**
+	 * @return the coImgPath
+	 */
+	public String getCoImgPath() {
+		return coImgPath;
+	}
+
+	/**
+	 * @param coImgPath the coImgPath to set
+	 */
+	public void setCoImgPath(String coImgPath) {
+		this.coImgPath = coImgPath;
+	}
+
 	@Override
 	public String toString() {
 		return "CoDTO [coId=" + coId + ", coDistinction=" + coDistinction + ", coName=" + coName + ", coHour=" + coHour
 				+ ", coTel=" + coTel + ", coAddress=" + coAddress + ", coSatHour=" + coSatHour + ", coSunHour="
-				+ coSunHour + ", coDay=" + coDay + ", coImg=" + coImg + "]";
+				+ coSunHour + ", coDay=" + coDay + ", coImg=" + coImg + ", coImgNo=" + coImgNo + ", coImgPath="
+				+ coImgPath + "]";
 	}
+
 	
 }
