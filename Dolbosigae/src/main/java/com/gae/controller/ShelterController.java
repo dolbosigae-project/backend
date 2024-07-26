@@ -4,60 +4,85 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.*;
 
-import com.gae.dto.ABDTO;
 import com.gae.dto.ShelterDTO;
-import com.gae.service.ABService;
 import com.gae.service.ShelterService;
-import com.gae.vo.PageVo;
 
-@CrossOrigin(origins = {"http://localhost:3000", "http://nam3324.synology.me:32800"})
 @RestController
+@CrossOrigin(origins = {"http://localhost:3000", "http://nam3324.synology.me:32800"})
 public class ShelterController {
 
     private final ShelterService shelterService;
-    private final ABService abService;
-    
-    public ShelterController(ShelterService shelterService, ABService abService) {
-		this.shelterService = shelterService;
-		this.abService = abService;
-	}
 
+    public ShelterController(ShelterService shelterService) {
+        this.shelterService = shelterService;
+    }
 
+    // 전체 조회
+    @GetMapping("/shelters")
+    public List<ShelterDTO> getAllShelters() {
+        return shelterService.getAllShelters();
+    }
 
-	@GetMapping("/shelter")
-    public Map<String, Object> shelter(@RequestParam(defaultValue = "1") int pageNo,
-                                       @RequestParam(defaultValue = "10") int pageContentEa) {
-        List<ShelterDTO> shelterList = shelterService.selectShelterList(pageNo, pageContentEa);
-        int totalCount = shelterService.selectShelterTotalCount();
+    // 부분 조회 (필터링 및 페이징)
+    @GetMapping("/shelters/search")
+    public Map<String, Object> searchShelters(
+        @RequestParam(defaultValue = "1") int pageNo,
+        @RequestParam(defaultValue = "10") int pageContentEa,
+        @RequestParam(required = false) String region,
+        @RequestParam(required = false) String centerName) {
+
+        Map<String, Object> filterParams = new HashMap<>();
+        if (region != null && !region.isEmpty()) {
+            filterParams.put("region", region);
+        }
+        if (centerName != null && !centerName.isEmpty()) {
+            filterParams.put("centerName", centerName);
+        }
+        List<ShelterDTO> shelterList = shelterService.selectShelterList(pageNo, pageContentEa, filterParams);
+        int totalCount = shelterService.selectShelterTotalCount(filterParams);
         int totalPage = (int) Math.ceil((double) totalCount / pageContentEa);
 
         Map<String, Object> response = new HashMap<>();
         response.put("list", shelterList);
         response.put("totalPage", totalPage);
-
         return response;
     }
-    
-	@GetMapping("/ab")
-    public Map<String, Object> ab(@RequestParam String shID,
-    							  @RequestParam(defaultValue = "1") int pageNo,
-    							  @RequestParam(defaultValue = "6") int pageContentEa){
-    	List<ABDTO> abList = abService.selectABList(shID, pageNo, pageContentEa);
-    	int totalCount = abService.selectABTotalCount(shID);
-    	int totalPage = (int) Math.ceil((double) totalCount / pageContentEa);
-    	
-    	Map<String, Object> response = new HashMap<>();
-    	response.put("list", abList);
-    	response.put("totalPage", totalPage);
-    	
-		return response; 
-    	
+
+    // 상세 조회
+    @GetMapping("/shelters/detail/{id}")
+    public ShelterDTO getShelterById(@PathVariable String id) {
+        return shelterService.getShelterById(id);
+    }
+
+
+
+    @PostMapping("/shelters")
+    public String addShelter(@RequestBody ShelterDTO shelterDTO, @RequestHeader("userRole") String userRole) {
+        if (!"ADMIN".equals(userRole)) {
+            return "Unauthorized";
+        }
+        try {
+            shelterService.insertShelter(shelterDTO);
+            return "Shelter added successfully";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Error adding shelter";
+        }
+    }
+
+    @DeleteMapping("/shelters/delete/{id}")
+    public String deleteShelter(@PathVariable String id, @RequestHeader("userRole") String userRole) {
+        if (!"ADMIN".equals(userRole)) {
+            return "Unauthorized";
+        }
+        try {
+            shelterService.deleteShelter(id);
+            return "Shelter deleted successfully";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Error deleting shelter";
+        }
     }
 }

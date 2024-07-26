@@ -11,22 +11,37 @@ import com.gae.mapper.ShelterMapper;
 
 @Service
 public class ShelterService {
-
     private final ShelterMapper mapper;
 
     public ShelterService(ShelterMapper mapper) {
         this.mapper = mapper;
     }
 
-    public List<ShelterDTO> selectShelterList(int pageNo, int pageContentEa) {
+    public List<ShelterDTO> selectShelterList(int pageNo, int pageContentEa, Map<String, Object> filterParams) {
         Map<String, Object> map = new HashMap<>();
-        map.put("pageNo", (pageNo - 1) * pageContentEa); 
-        map.put("pageContentCount", pageContentEa);
+        map.put("startRow", (pageNo - 1) * pageContentEa);
+        map.put("pageContentEa", pageContentEa);
+        map.putAll(filterParams);
         return mapper.selectShelterList(map);
     }
 
-    public int selectShelterTotalCount() {
-        // 전체 게시글 수를 반환하는 메서드
-        return mapper.selectShelterTotalCount();
+    public int selectShelterTotalCount(Map<String, Object> filterParams) {
+        return mapper.selectShelterTotalCount(filterParams);
+    }
+
+    public void insertShelter(ShelterDTO shelterDTO) {
+        mapper.insertShelter(shelterDTO);
+    }
+
+    public void deleteShelter(String id) {
+        mapper.deleteShelter(id);
+    }
+    
+    public ShelterDTO getShelterById(String id) {
+        return mapper.selectShelterById(id);
+    }
+
+    public List<ShelterDTO> getAllShelters() {
+        return mapper.selectAllShelters();
     }
 }
