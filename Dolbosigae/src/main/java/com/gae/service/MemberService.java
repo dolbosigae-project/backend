@@ -222,14 +222,25 @@ public class MemberService {
     }
 
     public BoardMemberDTO getPetProfile(String id) {
+        // 데이터베이스에서 펫 프로필을 가져옴
         List<BoardMemberDTO> petProfiles = memberMapper.getPetProfile(id);
-        logger.info("Fetched pet profiles for ID {}: {}", id, petProfiles);
+        // 가져온 펫 프로필을 로그에 기록
+        logger.info("ID {}에 대한 펫 프로필을 가져왔습니다: {}", id, petProfiles);
 
-        if (petProfiles.isEmpty()) {
-            logger.info("No pet profile found for ID {}", id);
+        if (petProfiles == null) {
+            // petProfiles가 null인 경우 에러 로그 기록
+            logger.error("ID {}에 대한 getPetProfile이 null을 반환했습니다", id);
             return null;
         }
-        return petProfiles.get(0); // 첫 번째 결과만 반환
+
+        if (petProfiles.isEmpty()) {
+            // petProfiles가 비어 있는 경우 로그 기록
+            logger.info("ID {}에 대한 펫 프로필을 찾을 수 없습니다", id);
+            return null;
+        }
+
+        // 첫 번째 결과만 반환
+        return petProfiles.get(0); 
     }
     
 	
