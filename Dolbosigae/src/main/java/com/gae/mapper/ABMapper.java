@@ -11,7 +11,10 @@ import com.gae.dto.ABDTO;
 @Mapper
 public interface ABMapper {
     List<ABDTO> selectABList(Map<String, Object> map);
-    int selectABTotalCount(String shID);
-    void insertAB(ABDTO abDTO);
+    List<ABDTO> selectFilteredABList(Map<String, Object> map);
+    int selectABTotalCount(Map<String, Object> filterParams);
+    void insertAB(@Param("abDTO") ABDTO abDTO);
     void deleteAB(@Param("id") String id);
+    ABDTO selectABDetail(@Param("id") String id);
 }
+

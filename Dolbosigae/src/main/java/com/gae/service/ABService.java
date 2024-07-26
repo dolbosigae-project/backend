@@ -17,16 +17,20 @@ public class ABService {
         this.mapper = mapper;
     }
 
-    public List<ABDTO> selectABList(String shID, int pageNo, int pageContentEa) {
+    public List<ABDTO> selectABList(int pageNo, int pageContentEa, Map<String, Object> filterParams) {
         Map<String, Object> map = new HashMap<>();
-        map.put("shID", shID);
         map.put("startRow", (pageNo - 1) * pageContentEa);
         map.put("pageContentEa", pageContentEa);
-        return mapper.selectABList(map);
+        if (filterParams != null && !filterParams.isEmpty()) {
+            map.putAll(filterParams);
+            return mapper.selectFilteredABList(map); // 필터링된 조회
+        } else {
+            return mapper.selectABList(map); // 전체 조회
+        }
     }
 
-    public int selectABTotalCount(String shID) {
-        return mapper.selectABTotalCount(shID);
+    public int selectABTotalCount(Map<String, Object> filterParams) {
+        return mapper.selectABTotalCount(filterParams);
     }
 
     public void insertAB(ABDTO abDTO) {
@@ -35,5 +39,9 @@ public class ABService {
 
     public void deleteAB(String id) {
         mapper.deleteAB(id);
+    }
+
+    public ABDTO selectABDetail(String id) {
+        return mapper.selectABDetail(id);
     }
 }
