@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gae.mapper.DogRandomDateMapper">
+
+  <!--펫 정보 -->
+  <resultMap type="com.gae.dto.BoardMemberDTO" id="dogMate">
+    <id column="P_ID" property="petId"/>
+    <result column="M_ID" property="boardMemberId"/>
+    <result column="P_NICK" property="boardMemberNick"/>
+    <result column="P_BIRTH" property="petBirth"/>
+    <result column="P_GENDER" property="petGender" jdbcType="CHAR"/>
+    <result column="P_SIZE" property="petSize"/>
+    <result column="P_WEIGHT" property="petWeight"/>
+    <result column="P_INFO" property="petInfo"/>
+    <result column="P_WALKPROFILE" property="petWalkProfile" jdbcType="CHAR"/>
+    <result column="P_AGE" property="petAge"/>
+    <result column="P_IMG_NO" property="petImageNo" jdbcType="CHAR"/>
+    <result column="P_IMG_PATH" property="petImagePath"/>
+  </resultMap>
+  
+
+</mapper>

@@ -25,6 +25,7 @@ public class BoardMemberDTO {
     private String pId; 
     private String profileImg;
     private int passwordChanged; 
+    private int petAge;
     
   //산책친구 시, 구
     private String city;
@@ -69,6 +70,13 @@ public class BoardMemberDTO {
 		this.mateFav = mateFav;
 	}
     
+	public int getPetAge() {
+		return petAge;
+	}
+	public void setPetAge(int petAge) {
+		this.petAge = petAge;
+	}
+
 	public int getPasswordChanged() {
 		return passwordChanged;
 	}
