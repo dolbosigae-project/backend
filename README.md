@@ -13,3 +13,20 @@
 [https://lh7-us.googleusercontent.com/docsz/AD_4nXc3Zd_LHKCENrKy07-gCMawP6irH1OS7DnOACRMXqeF7cnyRAb1L3jOMJaxkargkDkasny-DzAaJX7MXIVfLPNSkbDwTFZZEHTVTmFattpCczJt_hZR-bHyTtFvrS2Hhgp9BKPs6ffQHW86erJPCEYAPec?key=mLyV__hhp_42J7tylHNhXA](https://lh7-us.googleusercontent.com/docsz/AD_4nXc3Zd_LHKCENrKy07-gCMawP6irH1OS7DnOACRMXqeF7cnyRAb1L3jOMJaxkargkDkasny-DzAaJX7MXIVfLPNSkbDwTFZZEHTVTmFattpCczJt_hZR-bHyTtFvrS2Hhgp9BKPs6ffQHW86erJPCEYAPec?key=mLyV__hhp_42J7tylHNhXA)
 
 ![Untitled](%E1%84%83%E1%85%A9%E1%86%AF%E1%84%87%E1%85%A9%E1%84%89%E1%85%B5%E1%84%80%E1%85%A2%20029a773e38db4052a4e09d355053b46f/Untitled.png)
+
+의존성에 
+<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+</dependency>
+웹소켓 추가
+
+<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+</dependency>
+디버깅용? 추가
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+디버깅용 임포트 (아마 controller랑 service..)

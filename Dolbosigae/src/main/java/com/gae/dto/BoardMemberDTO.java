@@ -11,6 +11,7 @@ public class BoardMemberDTO {
     private int boardMemberGradeNo; 
     private String boardMemberGradeName; 
     private char boardMemberPetWith; 
+    private String mateFav;
     private String petId; 
     private String boardMemberNick; 
     private String petBirth; 
@@ -26,12 +27,56 @@ public class BoardMemberDTO {
     private int passwordChanged; 
     private int petAge;
     
+  //산책친구 시, 구
+    private String city;
+    private String district;
+    //즐겨찾기 - 현재 로그인, 대상
+    private String loginId;  
+    private String targetId; 
+    
+    //마찬가지로 산책친구 시, 구의 get,set
+    public String getCity() {
+        return city;
+    }
+    public void setCity(String city) {
+        this.city = city;
+    }
+    public String getDistrict() {
+        return district;
+    }
+    public void setDistrict(String district) {
+        this.district = district;
+    }
+    
+    //즐찾
+	public String getLoginId() {
+		return loginId;
+	}
+	public void setLoginId(String loginId) {
+		this.loginId = loginId;
+	}
+	public String getTargetId() {
+		return targetId;
+	}
+	public void setTargetId(String targetId) {
+		this.targetId = targetId;
+	}
+	
+	//xml에 추가한 favorite에 대한 프로퍼티
+	public String getMateFav() {
+		return mateFav;
+	}
+	public void setMateFav(String mateFav) {
+		this.mateFav = mateFav;
+	}
+    
 	public int getPetAge() {
 		return petAge;
 	}
 	public void setPetAge(int petAge) {
 		this.petAge = petAge;
 	}
+
 	public int getPasswordChanged() {
 		return passwordChanged;
 	}

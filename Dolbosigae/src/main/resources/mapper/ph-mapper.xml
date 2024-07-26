@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gae.mapper.PHMapper">
+    <resultMap type="com.gae.dto.PHDTO" id="ph">
+        <id column="PH_ID" property="phId" />
+        <result column="PH_REGION" property="phRegion"/>
+        <result column="PH_ADDRESS" property="phAddress"/>
+        <result column="PH_NAME" property="phName"/>
+        <result column="PH_TEL" property="phTel"/>
+        <result column="PH_HOUR" property="phHour"/>
+          <result column="PH_LAT" property="phLat"/>  <!-- 위도 추가 -->
+        <result column="PH_LNG" property="phLng"/>  <!-- 경도 추가 -->
+    </resultMap>
+
+    <select id="selectPh" resultMap="ph">
+        SELECT * FROM PH
+    </select>
+    
+    <select id="selectPhInfo" resultMap="ph">
+        SELECT * FROM PH WHERE ph_id = #{phId}
+    </select>
+
+    
+    <select id="getTotalCount" resultType="int">
+        <![CDATA[
+        SELECT COUNT(*) FROM PH
+        ]]>
+    </select>
+    
+    <select id="searchPh" parameterType="map" resultMap="ph">
+        <![CDATA[
+        SELECT * FROM (
+            SELECT ROWNUM AS rnum, a.*
+            FROM (SELECT * FROM PH WHERE ph_address LIKE '%' || #{phText} || '%' ORDER BY ph_id) a
+            WHERE ROWNUM <= #{endRow}
+        )
+        WHERE rnum >= #{startRow}
+        ]]>
+    </select>
+    
+    
+    <select id="getPhList" resultMap="ph">
+    <![CDATA[
+    SELECT * FROM (
+        SELECT ROWNUM AS rnum, a.*
+        FROM (SELECT * FROM PH ORDER BY TO_NUMBER(ph_id)) a
+        WHERE ROWNUM <= #{endRow}
+    )
+    WHERE rnum >= #{startRow}
+    ]]>
+</select>
+
+
+    <delete id="deletePh">
+        DELETE FROM PH WHERE ph_id = #{phId}
+    </delete>
+    
+    <select id="getTotalCountBySearch" resultType="int">
+        <![CDATA[
+        SELECT COUNT(*) FROM PH WHERE ph_address LIKE '%' || #{phText} || '%'
+        ]]>
+    </select>
+
+    
+       <insert id="insertPh" parameterType="com.gae.dto.PHDTO">
+        INSERT INTO PH (PH_ID, PH_REGION, PH_ADDRESS, PH_NAME, PH_TEL, PH_HOUR, PH_LAT, PH_LNG)
+        VALUES (#{phId}, #{phRegion}, #{phAddress}, #{phName}, #{phTel}, #{phHour}, #{phLat}, #{phLng})
+    </insert>
+    
+    
+</mapper>
