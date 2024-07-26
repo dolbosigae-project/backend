@@ -14,4 +14,6 @@ public interface ShelterMapper {
     int selectShelterTotalCount();
     void insertShelter(ShelterDTO shelterDTO);
     void deleteShelter(@Param("id") String id);
+    ShelterDTO selectShelterById(@Param("id") String id);
+
 }

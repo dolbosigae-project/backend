@@ -32,6 +32,11 @@ public class ShelterController {
 
         return response;
     }
+    
+    @GetMapping("/shelters/{id}")
+    public ShelterDTO getShelterById(@PathVariable String id) {
+        return shelterService.getShelterById(id);
+    }
 
 
     @PostMapping("/shelters")

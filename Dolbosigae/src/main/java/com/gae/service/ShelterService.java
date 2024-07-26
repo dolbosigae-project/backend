@@ -35,4 +35,9 @@ public class ShelterService {
     public void deleteShelter(String id) {
         mapper.deleteShelter(id);
     }
+    
+    public ShelterDTO getShelterById(String id) {
+        return mapper.selectShelterById(id);
+    }
+
 }

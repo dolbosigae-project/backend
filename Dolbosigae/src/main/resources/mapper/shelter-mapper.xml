@@ -18,6 +18,9 @@
     SELECT * FROM SH
 </select>
 
+<select id="selectShelterById" resultMap="shelter">
+        SELECT * FROM SH WHERE SH_ID = #{id}
+    </select>
 
     <select id="selectShelterTotalCount" resultType="int">
         SELECT COUNT(*) FROM SH
