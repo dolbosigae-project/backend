@@ -1,8 +1,10 @@
 package com.gae.controller;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,10 +19,11 @@ public class DogRandomDateController {
 		this.dogMateService = dogMateService;
 	}
 
-	@GetMapping("/dog/random/date")
-	public ResponseEntity<String> searchDogMate(@RequestBody BoardMemberDTO dogRequest){
+	@PostMapping("/dog/random/date")
+	public ResponseEntity<List<BoardMemberDTO>> searchDogMate(@RequestBody BoardMemberDTO dogRequest){
 		//System.out.println(dogRequest);
-		dogMateService.searchDogMate(dogRequest);
-		return ResponseEntity.ok("정보 조회 성공");
+		List<BoardMemberDTO> response = dogMateService.searchDogMate(dogRequest);
+		//System.out.println(response);
+		return ResponseEntity.ok(response);
 	}
 }
