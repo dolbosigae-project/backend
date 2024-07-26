@@ -22,7 +22,7 @@ public class ABController {
     @GetMapping("/ab")
     public Map<String, Object> getABs(@RequestParam String shID,
                                       @RequestParam(defaultValue = "1") int pageNo,
-                                      @RequestParam(defaultValue = "10") int pageContentEa) {
+                                      @RequestParam(defaultValue = "6") int pageContentEa) {
         List<ABDTO> abList = abService.selectABList(shID, pageNo, pageContentEa);
         int totalCount = abService.selectABTotalCount(shID);
         int totalPage = (int) Math.ceil((double) totalCount / pageContentEa);
@@ -33,6 +33,7 @@ public class ABController {
 
         return response;
     }
+
 
     @PostMapping("/ab")
     public String addAB(@RequestBody ABDTO abDTO, @RequestHeader("userRole") String userRole) {

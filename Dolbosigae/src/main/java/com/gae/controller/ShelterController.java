@@ -33,6 +33,7 @@ public class ShelterController {
         return response;
     }
 
+
     @PostMapping("/shelters")
     public String addShelter(@RequestBody ShelterDTO shelterDTO, @RequestHeader("userRole") String userRole) {
         if (!"ADMIN".equals(userRole)) {

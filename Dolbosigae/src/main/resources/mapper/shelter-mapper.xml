@@ -3,7 +3,7 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.gae.mapper.ShelterMapper">
-    <resultMap type="com.gae.dto.ShelterDTO" id="shelter">
+    <resultMap id="shelter" type="com.gae.dto.ShelterDTO">
         <id column="SH_ID" property="shID"/>
         <result column="SH_REGION" property="shRegion"/>
         <result column="SH_DIS" property="shDis"/>
@@ -14,15 +14,9 @@
         <result column="SH_HOUR" property="shHour"/>
     </resultMap>
 
-   <select id="selectShelterList" resultMap="shelter">
-        SELECT * FROM (
-            SELECT 
-                SH.*,
-                ROW_NUMBER() OVER (ORDER BY SH_ID) AS row_num
-            FROM SH
-        ) WHERE row_num BETWEEN #{startRow} AND #{endRow}
-    </select>
-
+    <select id="selectShelterList" resultMap="shelter">
+    SELECT * FROM SH
+</select>
 
 
     <select id="selectShelterTotalCount" resultType="int">
