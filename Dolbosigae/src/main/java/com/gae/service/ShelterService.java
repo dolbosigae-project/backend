@@ -17,15 +17,16 @@ public class ShelterService {
         this.mapper = mapper;
     }
 
-    public List<ShelterDTO> selectShelterList(int pageNo, int pageContentEa) {
+    public List<ShelterDTO> selectShelterList(int pageNo, int pageContentEa, Map<String, Object> filterParams) {
         Map<String, Object> map = new HashMap<>();
         map.put("startRow", (pageNo - 1) * pageContentEa);
         map.put("pageContentEa", pageContentEa);
+        map.putAll(filterParams);
         return mapper.selectShelterList(map);
     }
 
-    public int selectShelterTotalCount() {
-        return mapper.selectShelterTotalCount();
+    public int selectShelterTotalCount(Map<String, Object> filterParams) {
+        return mapper.selectShelterTotalCount(filterParams);
     }
 
     public void insertShelter(ShelterDTO shelterDTO) {
@@ -40,4 +41,7 @@ public class ShelterService {
         return mapper.selectShelterById(id);
     }
 
+    public List<ShelterDTO> getAllShelters() {
+        return mapper.selectAllShelters();
+    }
 }

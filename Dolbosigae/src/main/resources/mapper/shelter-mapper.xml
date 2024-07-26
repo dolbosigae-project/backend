@@ -14,15 +14,43 @@
         <result column="SH_HOUR" property="shHour"/>
     </resultMap>
 
-    <select id="selectShelterList" resultMap="shelter">
-    SELECT * FROM SH
+    <!-- 전체 조회 -->
+    <select id="selectAllShelters" parameterType="map" resultMap="shelter">
+   SELECT * FROM (
+        SELECT a.*, ROW_NUMBER() OVER (ORDER BY SH_ID) rnum FROM SH a
+    ) WHERE rnum BETWEEN #{startRow} + 1 AND #{startRow} + #{pageContentEa}
+	</select>
+	
+    <!-- 필터링된 부분 조회 -->
+   <select id="selectShelterList" parameterType="map" resultMap="shelter">
+    SELECT * FROM (
+        SELECT a.*, ROW_NUMBER() OVER (ORDER BY SH_ID) AS rnum FROM (
+            SELECT * FROM SH
+            WHERE 1=1
+            <if test="region != null and region != ''">
+                AND SH_REGION LIKE '%' || #{region} || '%'
+            </if>
+            <if test="centerName != null and centerName != ''">
+                AND SH_NAME LIKE '%' || #{centerName} || '%'
+            </if>
+        ) a
+    ) WHERE rnum BETWEEN #{startRow} + 1 AND #{startRow} + #{pageContentEa}
 </select>
 
-<select id="selectShelterById" resultMap="shelter">
-        SELECT * FROM SH WHERE SH_ID = #{id}
-    </select>
-
+    <!-- 필터링된 총 카운트 -->
     <select id="selectShelterTotalCount" resultType="int">
-        SELECT COUNT(*) FROM SH
+    SELECT COUNT(*) FROM SH
+    WHERE 1=1
+    <if test="region != null and region != ''">
+        AND SH_REGION LIKE '%' || #{region} || '%'
+    </if>
+    <if test="centerName != null and centerName != ''">
+        AND SH_NAME LIKE '%' || #{centerName} || '%'
+    </if>
+</select>
+
+    <!-- ID로 조회 -->
+    <select id="selectShelterById" resultMap="shelter">
+        SELECT * FROM SH WHERE SH_ID = #{id}
     </select>
 </mapper>

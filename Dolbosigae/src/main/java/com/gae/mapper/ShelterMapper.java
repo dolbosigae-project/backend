@@ -11,9 +11,9 @@ import com.gae.dto.ShelterDTO;
 @Mapper
 public interface ShelterMapper {
     List<ShelterDTO> selectShelterList(Map<String, Object> map);
-    int selectShelterTotalCount();
     void insertShelter(ShelterDTO shelterDTO);
     void deleteShelter(@Param("id") String id);
     ShelterDTO selectShelterById(@Param("id") String id);
-
+    int selectShelterTotalCount(Map<String, Object> filterParams);
+    List<ShelterDTO> selectAllShelters();
 }

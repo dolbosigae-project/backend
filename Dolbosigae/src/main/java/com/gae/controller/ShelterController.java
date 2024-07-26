@@ -19,24 +19,43 @@ public class ShelterController {
         this.shelterService = shelterService;
     }
 
+    // 전체 조회
     @GetMapping("/shelters")
-    public Map<String, Object> getShelters(@RequestParam(defaultValue = "1") int pageNo,
-                                           @RequestParam(defaultValue = "10") int pageContentEa) {
-        List<ShelterDTO> shelterList = shelterService.selectShelterList(pageNo, pageContentEa);
-        int totalCount = shelterService.selectShelterTotalCount();
+    public List<ShelterDTO> getAllShelters() {
+        return shelterService.getAllShelters();
+    }
+
+    // 부분 조회 (필터링 및 페이징)
+    @GetMapping("/shelters/search")
+    public Map<String, Object> searchShelters(
+        @RequestParam(defaultValue = "1") int pageNo,
+        @RequestParam(defaultValue = "10") int pageContentEa,
+        @RequestParam(required = false) String region,
+        @RequestParam(required = false) String centerName) {
+
+        Map<String, Object> filterParams = new HashMap<>();
+        if (region != null && !region.isEmpty()) {
+            filterParams.put("region", region);
+        }
+        if (centerName != null && !centerName.isEmpty()) {
+            filterParams.put("centerName", centerName);
+        }
+        List<ShelterDTO> shelterList = shelterService.selectShelterList(pageNo, pageContentEa, filterParams);
+        int totalCount = shelterService.selectShelterTotalCount(filterParams);
         int totalPage = (int) Math.ceil((double) totalCount / pageContentEa);
 
         Map<String, Object> response = new HashMap<>();
         response.put("list", shelterList);
         response.put("totalPage", totalPage);
-
         return response;
     }
-    
-    @GetMapping("/shelters/{id}")
+
+    // 상세 조회
+    @GetMapping("/shelters/detail/{id}")
     public ShelterDTO getShelterById(@PathVariable String id) {
         return shelterService.getShelterById(id);
     }
+
 
 
     @PostMapping("/shelters")
@@ -53,7 +72,7 @@ public class ShelterController {
         }
     }
 
-    @DeleteMapping("/shelters/{id}")
+    @DeleteMapping("/shelters/delete/{id}")
     public String deleteShelter(@PathVariable String id, @RequestHeader("userRole") String userRole) {
         if (!"ADMIN".equals(userRole)) {
             return "Unauthorized";
