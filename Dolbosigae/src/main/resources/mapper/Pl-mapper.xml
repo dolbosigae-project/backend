@@ -2,8 +2,66 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-	<mapper namespace="com.gae.mapper.PlMapper">
-		<resultMap type="com.gae.dto.PlDTO" id="play">
-
-		</resultMap>
-	</mapper>
+<mapper namespace="com.gae.mapper.PlMapper">
+    <resultMap type="com.gae.dto.PlDTO" id="pl">
+        <id column="pl_id" property="plId"/>
+        <result column="pl_name" property="plName"/>
+        <result column="pl_hour" property="plHour"/>
+        <result column="pl_tel" property="plTel"/>
+        <result column="pl_address" property="plAddress"/>
+        <result column="pl_info" property="plInfo"/>
+        <result column="pl_expense" property="plExpense"/>
+        <result column="pl_img" property="plImg"/>
+        <result column="pl_area" property="plArea"/>
+        <result column="pl_day" property="plDay"/>
+        <result column="pl_img_no" property="plImgNo"/>
+        <result column="pl_img_path" property="plImgPath"/>        
+    </resultMap>
+    <!-- 전체 리스트 뽑아오기 -->
+    <select id="getCityList" resultMap="pl">
+        <![CDATA[
+        SELECT * FROM (
+            SELECT ROWNUM AS rnum, a.*
+            FROM (SELECT * FROM PL ORDER BY pl_id) a
+            WHERE ROWNUM <= #{endRow}
+        )
+        WHERE rnum >= #{startRow}
+        ]]>
+    </select>
+    <!-- 전체 개수 -->
+    <select id="getTotalCount" resultType="int">
+        <![CDATA[
+        SELECT COUNT(*) FROM PL
+        ]]>
+    </select>
+    <!-- 검색 -->
+    <select id="searchCity" parameterType="map" resultMap="pl">
+        <![CDATA[
+        SELECT * FROM (
+            SELECT ROWNUM AS rnum, a.*
+            FROM (SELECT * FROM PL WHERE pl_address LIKE '%' || #{plText} || '%' ORDER BY pl_id) a
+            WHERE ROWNUM <= #{endRow}
+        )
+        WHERE rnum >= #{startRow}
+        ]]>
+    </select>
+    <!-- 상세정보 보기 -->    
+    <select id="selectCityInfo" resultMap="pl">
+        SELECT * FROM PL WHERE pl_id = #{plId}
+    </select>
+    <!-- 삭제 -->
+    <delete id="deleteCity">
+        DELETE FROM PL WHERE pl_id = #{plId}
+    </delete>
+    <!-- 검색한 목록 개수 체크 -->
+    <select id="getTotalCountBySearch" resultType="int">
+        <![CDATA[
+        SELECT COUNT(*) FROM PL WHERE pl_address LIKE '%' || #{plText} || '%'
+        ]]>
+    </select>
+    <insert id="cityInsert" parameterType="com.gae.dto.PlDTO">
+        INSERT INTO PL(PL_ID, PL_NAME, PL_HOUR, PL_TEL, PL_ADDRESS, PL_INFO, PL_EXPENSE, PL_IMG, PL_AREA, PL_DAY)
+        VALUES (PL_ID_SEQ.NEXTVAL, #{plName}, #{plHour}, #{plTel}, #{plAddress}, #{plInfo}, #{plExpense}, 
+        #{plImg,jdbcType=VARCHAR}, #{plArea}, #{plDay})
+    </insert>
+</mapper>

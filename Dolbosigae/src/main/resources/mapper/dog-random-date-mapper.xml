@@ -20,5 +20,81 @@
     <result column="P_IMG_PATH" property="petImagePath"/>
   </resultMap>
   
+    <select id="searchDogMateByWalkProfile" resultMap="dogMate" parameterType="map">
+        SELECT * 
+        FROM DOG_MATE_VIEW 
+        WHERE P_WALKPROFILE = #{petWalkProfile, jdbcType=CHAR}
+    </select>
+
+    <select id="searchDogMateByWalkProfileAndSize" resultMap="dogMate" parameterType="map">
+        SELECT * 
+        FROM DOG_MATE_VIEW 
+        WHERE P_WALKPROFILE = #{petWalkProfile, jdbcType=CHAR}
+        AND p_size = #{petSize, jdbcType=VARCHAR}
+    </select>
+
+    <select id="searchDogMateByWalkProfileAndGender" resultMap="dogMate" parameterType="map">
+        SELECT * 
+        FROM DOG_MATE_VIEW 
+        WHERE P_WALKPROFILE = #{petWalkProfile, jdbcType=CHAR}
+        AND p_gender = #{petGender, jdbcType=CHAR}
+    </select>
+
+	<!-- CAST(p_age AS INTEGER) : 문자열로 저장된 나이를 정수열로 변환 -->
+    <select id="searchDogMateByWalkProfileAndAgeRange" resultMap="dogMate" parameterType="map">
+    	<![CDATA[
+        SELECT * 
+        FROM DOG_MATE_VIEW 
+        WHERE P_WALKPROFILE = #{petWalkProfile, jdbcType=CHAR}
+        AND CAST(p_age AS INTEGER) <= #{thisYear, jdbcType=INTEGER} 
+        AND CAST(p_age AS INTEGER) > #{calculatedAge, jdbcType=INTEGER}
+        ]]>
+    </select>
+
+    <select id="searchDogMateByWalkProfileSizeAndGender" resultMap="dogMate" parameterType="map">
+        SELECT * 
+        FROM DOG_MATE_VIEW 
+        WHERE P_WALKPROFILE = #{petWalkProfile, jdbcType=CHAR}
+        AND p_size = #{petSize, jdbcType=VARCHAR}
+        AND p_gender = #{petGender, jdbcType=CHAR}
+    </select>
+
+	<!-- CAST(p_age AS INTEGER) : 문자열로 저장된 나이를 정수열로 변환 -->
+    <select id="searchDogMateByWalkProfileSizeAndAgeRange" resultMap="dogMate" parameterType="map">
+    	<![CDATA[
+        SELECT * 
+        FROM DOG_MATE_VIEW 
+        WHERE P_WALKPROFILE = #{petWalkProfile, jdbcType=CHAR}
+        AND p_size = #{petSize, jdbcType=VARCHAR}
+        AND CAST(p_age AS INTEGER) <= #{thisYear, jdbcType=INTEGER} 
+        AND CAST(p_age AS INTEGER) > #{calculatedAge, jdbcType=INTEGER}
+        ]]>
+    </select>
+
+	<!-- CAST(p_age AS INTEGER) : 문자열로 저장된 나이를 정수열로 변환 -->
+    <select id="searchDogMateByWalkProfileGenderAndAgeRange" resultMap="dogMate" parameterType="map">
+    	<![CDATA[
+        SELECT * 
+        FROM DOG_MATE_VIEW 
+        WHERE P_WALKPROFILE = #{petWalkProfile, jdbcType=CHAR}
+        AND p_gender = #{petGender, jdbcType=CHAR}
+        AND CAST(p_age AS INTEGER) <= #{thisYear, jdbcType=INTEGER} 
+        AND CAST(p_age AS INTEGER) > #{calculatedAge, jdbcType=INTEGER}
+        ]]>
+    </select>
+
+	<!-- CAST(p_age AS INTEGER) : 문자열로 저장된 나이를 정수열로 변환 -->
+    <select id="searchDogMateByAllConditions" resultMap="dogMate" parameterType="map">
+    	<![CDATA[
+        SELECT * 
+        FROM DOG_MATE_VIEW 
+        WHERE P_WALKPROFILE = #{petWalkProfile, jdbcType=CHAR}
+        AND p_size = #{petSize, jdbcType=VARCHAR}
+        AND p_gender = #{petGender, jdbcType=CHAR}
+        AND CAST(p_age AS INTEGER) <= #{thisYear, jdbcType=INTEGER} 
+        AND CAST(p_age AS INTEGER) > #{calculatedAge, jdbcType=INTEGER}
+        ]]>
+    </select>
+  
 
 </mapper>
