@@ -78,8 +78,8 @@ public class MemberController {
     public ResponseEntity<String> findPasswd(@RequestBody Map<String, String> params) {
         String id = params.get("id");
         String passwd = params.get("passwd");
-        System.out.println("ID: " + id);
-        System.out.println("Password: " + passwd);
+        //System.out.println("ID: " + id);
+        //System.out.println("Password: " + passwd);
 
         int updateResult = memberService.updatePasswd(params);
         if (updateResult > 0) {
@@ -88,6 +88,28 @@ public class MemberController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("비밀번호 업데이트에 실패했습니다.");
         }
     }
+    
+    //비밀번호 찾기 - 아이디와 회원 이름 일치여부 판별
+    @PostMapping("/member/check/id")
+    @ResponseBody
+    public int checkId(@RequestBody Map<String, String> params) {
+        String idValue = params.get("idValue");
+        String nameValue = params.get("nameValue");
+        //System.out.println("idValue: " + idValue);
+        //System.out.println("nameValue: " + nameValue);
+
+        int result = memberService.checkId(params);
+        
+        return result;
+    }
+    
+    //아이디 중복 찾기
+    @GetMapping("/member/duplicate")
+    @ResponseBody
+    public int isDuplicate(@RequestParam String idValue) {
+    	return memberService.checkDuplicate(idValue);
+    }
+    
 
     @GetMapping("/member/list")
     @ResponseBody
@@ -143,14 +165,6 @@ public class MemberController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("회원 정보를 찾을 수 없습니다.");
         }
     }
-    
-    //아이디 중복 찾기
-    @GetMapping("/member/duplicate")
-    @ResponseBody
-    public int isDuplicate(@RequestParam String idValue) {
-        return memberService.checkDuplicate(idValue);
-    }
-    
     
     @PostMapping("/member/register")
     public ResponseEntity<String> registerMember(@RequestBody BoardMemberDTO member) {
