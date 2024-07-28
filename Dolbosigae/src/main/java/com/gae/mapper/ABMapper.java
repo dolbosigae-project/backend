@@ -17,3 +17,4 @@ public interface ABMapper {
     void deleteAB(@Param("id") String id);
     ABDTO selectABDetail(@Param("id") String id);
 }
+
