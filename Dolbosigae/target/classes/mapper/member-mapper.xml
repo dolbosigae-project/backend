@@ -151,6 +151,11 @@
   	SELECT COUNT(*) FROM MEMBER_PET_VIEW WHERE MEMBER_ID = #{idValue}
   </select>
   
+  <!-- 비밀번호 찾기 - 이름 확인 -->
+  <select id="checkName"  parameterType="String" resultType="String">
+  	SELECT MEMBER_ID FROM MEMBER_PET_VIEW WHERE MEMBER_NAME = #{name}
+  </select>
+  
   <!-- 회원가입 (회원정보) -->
   <insert id="insertMember" parameterType="com.gae.dto.BoardMemberDTO">
     INSERT INTO MEMBER (M_ID, M_NAME, M_PW, M_REGION, M_PETWITH)
