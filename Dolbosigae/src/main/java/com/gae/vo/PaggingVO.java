@@ -4,7 +4,7 @@ public class PaggingVO {
     private int count; // 총 데이터 수
     private int currentPage; // 현재 페이지
     private int pageOfContentCount; // 페이지 당 콘텐츠 수
-    private final int PAGE_GROUP_OF_COUNT = 5; // 페이지 그룹 당 페이지 수
+    private final int PAGE_GROUP_OF_COUNT = 10; // 페이지 그룹 당 페이지 수
 
     public PaggingVO(int count, int currentPage, int pageOfContentCount) {
         this.count = count;
