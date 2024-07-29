@@ -221,38 +221,89 @@ public class MemberService {
         return new MemberResponseVo(members, paggingVo);
     }
 
+//    public BoardMemberDTO getPetProfile(String id) {
+//        // 데이터베이스에서 펫 프로필을 가져옴
+//        List<BoardMemberDTO> petProfiles = memberMapper.getPetProfile(id);
+//        // 가져온 펫 프로필을 로그에 기록
+//        logger.info("ID {}에 대한 펫 프로필을 가져왔습니다: {}", id, petProfiles);
+//
+//        if (petProfiles == null) {
+//            // petProfiles가 null인 경우 에러 로그 기록
+//            logger.error("ID {}에 대한 getPetProfile이 null을 반환했습니다", id);
+//            return null;
+//        }
+//
+//        if (petProfiles.isEmpty()) {
+//            // petProfiles가 비어 있는 경우 로그 기록
+//            logger.info("ID {}에 대한 펫 프로필을 찾을 수 없습니다", id);
+//            return null;
+//        }
+//
+//        // 첫 번째 결과만 반환
+//        return petProfiles.get(0); 
+//    }
+    
     public BoardMemberDTO getPetProfile(String id) {
-        // 데이터베이스에서 펫 프로필을 가져옴
+        logger.info("펫 프로필 조회 시도: ID={}", id);
         List<BoardMemberDTO> petProfiles = memberMapper.getPetProfile(id);
-        // 가져온 펫 프로필을 로그에 기록
-        logger.info("ID {}에 대한 펫 프로필을 가져왔습니다: {}", id, petProfiles);
 
         if (petProfiles == null) {
-            // petProfiles가 null인 경우 에러 로그 기록
-            logger.error("ID {}에 대한 getPetProfile이 null을 반환했습니다", id);
+            logger.error("펫 프로필 조회 실패: ID={}에 대한 쿼리가 null을 반환했습니다.", id);
             return null;
         }
 
         if (petProfiles.isEmpty()) {
-            // petProfiles가 비어 있는 경우 로그 기록
-            logger.info("ID {}에 대한 펫 프로필을 찾을 수 없습니다", id);
+            logger.info("펫 프로필 없음: ID={}에 대한 펫 프로필이 존재하지 않습니다.", id);
             return null;
         }
 
-        // 첫 번째 결과만 반환
-        return petProfiles.get(0); 
+        BoardMemberDTO petProfile = petProfiles.get(0);
+        logger.info("펫 프로필 조회 성공: ID={}, 프로필={}", id, petProfile);
+        return petProfile;
     }
+
     
 	
-	public void insertFavorite(String loginId, String targetId) {
-		logger.info("즐겨찾기 등록 시도 - 로그인 ID: {}, 대상 ID: {}", loginId, targetId);
-        if (!loginId.equals(targetId)) {
-            memberMapper.insertFavorite(loginId, targetId);
-            logger.info("즐겨찾기 등록 성공 - 로그인 ID: {}, 대상 ID: {}", loginId, targetId);
-        } else {
-        	logger.error("자기 자신을 즐겨찾기에 등록 시도 - 로그인 ID: {}", loginId);
-        	throw new IllegalArgumentException("자기 자신은 즐겨찾을 수 없습니다");
+//	public void insertFavorite(String loginId, String targetId) {
+//		logger.info("즐겨찾기 등록 시도 - 로그인 ID: {}, 대상 ID: {}", loginId, targetId);
+//        if (!loginId.equals(targetId)) {
+//            memberMapper.insertFavorite(loginId, targetId);
+//            logger.info("즐겨찾기 등록 성공 - 로그인 ID: {}, 대상 ID: {}", loginId, targetId);
+//        } else {
+//        	logger.error("자기 자신을 즐겨찾기에 등록 시도 - 로그인 ID: {}", loginId);
+//        	throw new IllegalArgumentException("자기 자신은 즐겨찾을 수 없습니다");
+//        }
+//    }
+    
+    public boolean btnFavorite(String loginId, String targetId) {
+        logger.info("즐겨찾기 상태 변경 시도 - 로그인 ID: {}, 대상 ID: {}", loginId, targetId);
+
+        try {
+            boolean isFavorite = isFavorite(loginId, targetId);
+            if (isFavorite) {
+                memberMapper.deleteFavorite(loginId, targetId);
+                logger.info("즐겨찾기 삭제 성공 - 로그인 ID: {}, 대상 ID: {}", loginId, targetId);
+                return false;
+            } else {
+                if (!loginId.equals(targetId)) {
+                    memberMapper.insertFavorite(loginId, targetId);
+                    logger.info("즐겨찾기 등록 성공 - 로그인 ID: {}, 대상 ID: {}", loginId, targetId);
+                    return true;
+                } else {
+                    logger.error("자기 자신을 즐겨찾기에 등록 시도 - 로그인 ID: {}", loginId);
+                    throw new IllegalArgumentException("자기 자신은 즐겨찾을 수 없습니다");
+                }
+            }
+        } catch (Exception e) {
+            logger.error("즐겨찾기 상태 변경 중 오류 발생", e);
+            throw e;
         }
+    }
+
+    public boolean isFavorite(String loginId, String targetId) {
+        logger.info("즐겨찾기 상태 확인 시도 - 로그인 ID: {}, 대상 ID: {}", loginId, targetId);
+        Integer result = memberMapper.isFavorite(loginId, targetId);
+        return result != null && result == 1;
     }
 
     
