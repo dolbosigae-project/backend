@@ -1,5 +1,8 @@
 package com.gae.dto;
 
+import org.apache.ibatis.type.Alias;
+
+@Alias("pl")
 public class PlDTO {
 	private int plId;
 	private String plName;
@@ -12,11 +15,14 @@ public class PlDTO {
 	private String plArea;
 	private String plDay;
 	private String plCity;
+	private String plImgNo;
+	private String plImgPath;
 	
-	public PlDTO() {	}
+	public PlDTO() { }
 
 	public PlDTO(int plId, String plName, String plHour, String plTel, String plAddress, String plInfo,
-			String plExpense, String plImg, String plArea, String plDay, String plCity) {
+			String plExpense, String plImg, String plArea, String plDay, String plCity, String plImgNo,
+			String plImgPath) {  
 		super();
 		this.plId = plId;
 		this.plName = plName;
@@ -29,168 +35,119 @@ public class PlDTO {
 		this.plArea = plArea;
 		this.plDay = plDay;
 		this.plCity = plCity;
+		this.plImgNo = plImgNo;
+		this.plImgPath = plImgPath;  // 필드명 수정
 	}
 
-	/**
-	 * @return the plId
-	 */
 	public int getPlId() {
 		return plId;
 	}
 
-	/**
-	 * @param plId the plId to set
-	 */
 	public void setPlId(int plId) {
 		this.plId = plId;
 	}
 
-	/**
-	 * @return the plName
-	 */
 	public String getPlName() {
 		return plName;
 	}
 
-	/**
-	 * @param plName the plName to set
-	 */
 	public void setPlName(String plName) {
 		this.plName = plName;
 	}
 
-	/**
-	 * @return the plHour
-	 */
 	public String getPlHour() {
 		return plHour;
 	}
 
-	/**
-	 * @param plHour the plHour to set
-	 */
 	public void setPlHour(String plHour) {
 		this.plHour = plHour;
 	}
 
-	/**
-	 * @return the plTel
-	 */
 	public String getPlTel() {
 		return plTel;
 	}
 
-	/**
-	 * @param plTel the plTel to set
-	 */
 	public void setPlTel(String plTel) {
 		this.plTel = plTel;
 	}
 
-	/**
-	 * @return the plAddress
-	 */
 	public String getPlAddress() {
 		return plAddress;
 	}
 
-	/**
-	 * @param plAddress the plAddress to set
-	 */
 	public void setPlAddress(String plAddress) {
 		this.plAddress = plAddress;
 	}
 
-	/**
-	 * @return the plInfo
-	 */
 	public String getPlInfo() {
 		return plInfo;
 	}
 
-	/**
-	 * @param plInfo the plInfo to set
-	 */
 	public void setPlInfo(String plInfo) {
 		this.plInfo = plInfo;
 	}
 
-	/**
-	 * @return the plExpense
-	 */
 	public String getPlExpense() {
 		return plExpense;
 	}
 
-	/**
-	 * @param plExpense the plExpense to set
-	 */
 	public void setPlExpense(String plExpense) {
 		this.plExpense = plExpense;
 	}
 
-	/**
-	 * @return the plImg
-	 */
 	public String getPlImg() {
 		return plImg;
 	}
 
-	/**
-	 * @param plImg the plImg to set
-	 */
 	public void setPlImg(String plImg) {
 		this.plImg = plImg;
 	}
 
-	/**
-	 * @return the plArea
-	 */
 	public String getPlArea() {
 		return plArea;
 	}
 
-	/**
-	 * @param plArea the plArea to set
-	 */
 	public void setPlArea(String plArea) {
 		this.plArea = plArea;
 	}
 
-	/**
-	 * @return the plDay
-	 */
 	public String getPlDay() {
 		return plDay;
 	}
 
-	/**
-	 * @param plDay the plDay to set
-	 */
 	public void setPlDay(String plDay) {
 		this.plDay = plDay;
 	}
 
-	/**
-	 * @return the plCity
-	 */
 	public String getPlCity() {
 		return plCity;
 	}
 
-	/**
-	 * @param plCity the plCity to set
-	 */
 	public void setPlCity(String plCity) {
 		this.plCity = plCity;
+	}
+
+	public String getPlImgNo() {
+		return plImgNo;
+	}
+
+	public void setPlImgNo(String plImgNo) {
+		this.plImgNo = plImgNo;
+	}
+
+	public String getPlImgPath() { 
+		return plImgPath;
+	}
+
+	public void setPlImgPath(String plImgPath) { 
+		this.plImgPath = plImgPath;
 	}
 
 	@Override
 	public String toString() {
 		return "PlDTO [plId=" + plId + ", plName=" + plName + ", plHour=" + plHour + ", plTel=" + plTel + ", plAddress="
 				+ plAddress + ", plInfo=" + plInfo + ", plExpense=" + plExpense + ", plImg=" + plImg + ", plArea="
-				+ plArea + ", plDay=" + plDay + ", plCity=" + plCity + "]";
+				+ plArea + ", plDay=" + plDay + ", plCity=" + plCity + ", plImgNo=" + plImgNo + ", plImgPath="
+				+ plImgPath + "]";  // 필드명 수정
 	}
-
-	
 }
