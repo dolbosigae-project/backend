@@ -108,12 +108,47 @@ public class MemberService {
 		return memberMapper.myPage(id);
 	}
     
-    
-
     public int checkDuplicate(String idValue) {
         Integer result = memberMapper.checkDuplicate(idValue);
         return result != null ? result : 0;
     }
+    
+	//비밀번호 찾기 - 아이디와 회원 이름 일치여부 판별
+    public int checkId(Map<String, String> params) {
+        String idValue = params.get("idValue");
+        String nameValue = params.get("nameValue");
+        int nameResult = 0;
+        int result = 0;
+        
+        Integer duplicateResult = memberMapper.checkDuplicate(idValue);
+        if (duplicateResult == null) {
+            duplicateResult = 0;
+        }
+        
+        String nameMatch = nameCheck(nameValue);
+        //System.out.println(nameMatch);
+        //System.out.println(idValue);
+        
+        if (nameMatch != null) {
+            //System.out.println(nameMatch.equals(idValue));
+            if (nameMatch.equals(idValue)) {
+                nameResult = 1;
+            }
+        }
+        
+        if (duplicateResult != 0 && nameResult != 0) {
+            result = 1;
+        }
+        
+        return result;
+    }
+	
+	//비밀번호 찾기 - 이름 일치 확인
+	public String nameCheck(String name) {
+		String resultId = memberMapper.checkName(name);
+		//System.out.println(resultId);
+		return resultId;
+	}
 
     @Transactional
     public void registerMember(BoardMemberDTO member) {

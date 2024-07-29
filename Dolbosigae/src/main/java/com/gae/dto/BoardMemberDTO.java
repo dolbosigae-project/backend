@@ -25,6 +25,8 @@ public class BoardMemberDTO {
     private String pId; 
     private String profileImg;
     private int passwordChanged; 
+    private int petAge;
+    
     
   //산책친구 시, 구
     private String city;
@@ -68,7 +70,12 @@ public class BoardMemberDTO {
 	public void setMateFav(String mateFav) {
 		this.mateFav = mateFav;
 	}
-    
+	public int getPetAge() {
+		return petAge;
+	}
+	public void setPetAge(int petAge) {
+		this.petAge = petAge;
+	}
 	public int getPasswordChanged() {
 		return passwordChanged;
 	}
@@ -194,12 +201,14 @@ public class BoardMemberDTO {
 		return "BoardMemberDTO [boardMemberId=" + boardMemberId + ", boardMemberPasswd=" + boardMemberPasswd
 				+ ", boardMemberName=" + boardMemberName + ", boardMemberRegion=" + boardMemberRegion
 				+ ", boardMemberGradeNo=" + boardMemberGradeNo + ", boardMemberGradeName=" + boardMemberGradeName
-				+ ", boardMemberPetWith=" + boardMemberPetWith + ", petId=" + petId + ", boardMemberNick="
-				+ boardMemberNick + ", petBirth=" + petBirth + ", petGender=" + petGender + ", petSize=" + petSize
-				+ ", petWeight=" + petWeight + ", petWalkProfile=" + petWalkProfile + ", petImageNo=" + petImageNo
-				+ ", petImagePath=" + petImagePath + ", petInfo=" + petInfo + ", pId=" + pId + ", profileImg="
-				+ profileImg + ", passwordChanged=" + passwordChanged + "]";
+				+ ", boardMemberPetWith=" + boardMemberPetWith + ", mateFav=" + mateFav + ", petId=" + petId
+				+ ", boardMemberNick=" + boardMemberNick + ", petBirth=" + petBirth + ", petGender=" + petGender
+				+ ", petSize=" + petSize + ", petWeight=" + petWeight + ", petWalkProfile=" + petWalkProfile
+				+ ", petImageNo=" + petImageNo + ", petImagePath=" + petImagePath + ", petInfo=" + petInfo + ", pId="
+				+ pId + ", profileImg=" + profileImg + ", passwordChanged=" + passwordChanged + ", petAge=" + petAge
+				+ ", city=" + city + ", district=" + district + ", loginId=" + loginId + ", targetId=" + targetId + "]";
 	}
+	
 	
 	
 	

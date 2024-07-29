@@ -18,13 +18,15 @@ public class ABDTO {
 	private String abColor;
 	private String abRescued;
 	private String abCharacter;
+	private String abImg;
 
 	public ABDTO() {
 		super();
 	}
 
 	public ABDTO(String abID, String shID, Date abDate, String abLocation, String abStatus, String abBreed,
-			char abGender, String abAge, String abWeight, String abColor, String abRescued, String abCharacter) {
+			char abGender, String abAge, String abWeight, String abColor, String abRescued, String abCharacter,
+			String abImg) {
 		super();
 		this.abID = abID;
 		this.shID = shID;
@@ -38,6 +40,7 @@ public class ABDTO {
 		this.abColor = abColor;
 		this.abRescued = abRescued;
 		this.abCharacter = abCharacter;
+		this.abImg = abImg;
 	}
 
 	public String getAbID() {
@@ -136,15 +139,24 @@ public class ABDTO {
 		this.abCharacter = abCharacter;
 	}
 
+	public String getAbImg() {
+		return abImg;
+	}
+
+	public void setAbImg(String abImg) {
+		this.abImg = abImg;
+	}
+
 	@Override
 	public String toString() {
 		return "ABDTO [abID=" + abID + ", shID=" + shID + ", abDate=" + abDate + ", abLocation=" + abLocation
 				+ ", abStatus=" + abStatus + ", abBreed=" + abBreed + ", abGender=" + abGender + ", abAge=" + abAge
 				+ ", abWeight=" + abWeight + ", abColor=" + abColor + ", abRescued=" + abRescued + ", abCharacter="
-				+ abCharacter + "]";
+				+ abCharacter + ", abImg=" + abImg + "]";
 	}
 	
 	
-	
-
 }
+
+
+	
