@@ -151,6 +151,11 @@
   	SELECT COUNT(*) FROM MEMBER_PET_VIEW WHERE MEMBER_ID = #{idValue}
   </select>
   
+  <!-- 비밀번호 찾기 - 이름 확인 -->
+  <select id="checkName"  parameterType="String" resultType="String">
+  	SELECT MEMBER_ID FROM MEMBER_PET_VIEW WHERE MEMBER_NAME = #{name}
+  </select>
+  
   <!-- 회원가입 (회원정보) -->
   <insert id="insertMember" parameterType="com.gae.dto.BoardMemberDTO">
     INSERT INTO MEMBER (M_ID, M_NAME, M_PW, M_REGION, M_PETWITH)
@@ -269,34 +274,14 @@
 		    ]]>
 		</select>
 		
-	    <!-- <select id="getPetProfile" resultType="com.gae.dto.BoardMemberDTO">
-		    SELECT * FROM MEMBER_PET_VIEW WHERE MEMBER_ID = #{id}
-		</select> -->
-		
-		<select id="getPetProfile" resultMap="member">
+	    <select id="getPetProfile" resultType="com.gae.dto.BoardMemberDTO">
 		    SELECT * FROM MEMBER_PET_VIEW WHERE MEMBER_ID = #{id}
 		</select>
-			    
 	    
-		<!-- <insert id="insertFavorite" parameterType="com.gae.dto.BoardMemberDTO">
+	    
+		<insert id="insertFavorite" parameterType="com.gae.dto.BoardMemberDTO">
 		    insert into w_mate_fav (m_id, mate) values (#{loginId}, #{targetId})
-		</insert> -->
-		
-		<select id="isFavorite" resultType="int">
-	        SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END AS is_favorite
-	        FROM w_mate_fav
-	        WHERE m_id = #{loginId} AND mate = #{targetId}
-	    </select>
-	
-	    <insert id="insertFavorite">
-	        INSERT INTO w_mate_fav (m_id, mate)
-	        VALUES (#{loginId}, #{targetId})
-	    </insert>
-	
-	    <delete id="deleteFavorite">
-	        DELETE FROM w_mate_fav
-	        WHERE m_id = #{loginId} AND mate = #{targetId}
-	    </delete>
+		</insert>
 	  
   
 

@@ -78,8 +78,8 @@ public class MemberController {
     public ResponseEntity<String> findPasswd(@RequestBody Map<String, String> params) {
         String id = params.get("id");
         String passwd = params.get("passwd");
-        System.out.println("ID: " + id);
-        System.out.println("Password: " + passwd);
+        //System.out.println("ID: " + id);
+        //System.out.println("Password: " + passwd);
 
         int updateResult = memberService.updatePasswd(params);
         if (updateResult > 0) {
@@ -88,6 +88,28 @@ public class MemberController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("비밀번호 업데이트에 실패했습니다.");
         }
     }
+    
+    //비밀번호 찾기 - 아이디와 회원 이름 일치여부 판별
+    @PostMapping("/member/check/id")
+    @ResponseBody
+    public int checkId(@RequestBody Map<String, String> params) {
+        String idValue = params.get("idValue");
+        String nameValue = params.get("nameValue");
+        //System.out.println("idValue: " + idValue);
+        //System.out.println("nameValue: " + nameValue);
+
+        int result = memberService.checkId(params);
+        
+        return result;
+    }
+    
+    //아이디 중복 찾기
+    @GetMapping("/member/duplicate")
+    @ResponseBody
+    public int isDuplicate(@RequestParam String idValue) {
+    	return memberService.checkDuplicate(idValue);
+    }
+    
 
     @GetMapping("/member/list")
     @ResponseBody
@@ -144,14 +166,6 @@ public class MemberController {
         }
     }
     
-    //아이디 중복 찾기
-    @GetMapping("/member/duplicate")
-    @ResponseBody
-    public int isDuplicate(@RequestParam String idValue) {
-        return memberService.checkDuplicate(idValue);
-    }
-    
-    
     @PostMapping("/member/register")
     public ResponseEntity<String> registerMember(@RequestBody BoardMemberDTO member) {
         System.out.println(member);
@@ -179,62 +193,22 @@ public class MemberController {
         return ResponseEntity.ok(response);
     }
 
-    
     @GetMapping("/member/petprofile/{id}")
     public ResponseEntity<?> selectPetProfile(@PathVariable String id) {
         logger.debug("Pet profile 요청 수신: id={}", id);
-        try {
-            BoardMemberDTO member = memberService.getPetProfile(id);
-            if (member == null) {
-                logger.debug("Pet profile 찾을 수 없음: id={}", id);
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("찾을 수 없는 회원");
-            }
-            logger.debug("Pet profile 가져오기 성공: {}", member);
+        BoardMemberDTO member = memberService.getPetProfile(id);
+        if (member != null) {
             return ResponseEntity.ok(member);
-        } catch (Exception e) {
-            logger.error("Pet profile 가져오는 중 오류 발생: id={}, error={}", id, e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류 발생");
+        } else {
+            logger.debug("Pet profile 찾을 수 없음: id={}", id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("찾을 수 없는 회원");
         }
     }
 
-    
-    //즐찾 추가삭제
     @PostMapping("/mate/fav")
-    public ResponseEntity<?> btnFavorite(@RequestBody Map<String, String> params) {
-        String loginId = params.get("loginId");
-        String targetId = params.get("targetId");
-        
-        if (loginId == null || targetId == null) {
-            return ResponseEntity.badRequest().body("필요한 매개변수를 찾지못함");
-        }
-        
-        try {
-            boolean isFavorite = memberService.btnFavorite(loginId, targetId);
-            if (isFavorite) {
-                return ResponseEntity.ok("즐겨찾기에 추가되었습니다.");
-            } else {
-                return ResponseEntity.ok("즐겨찾기가 삭제되었습니다.");
-            }
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("즐겨찾기 상태 변경 중 오류가 발생했습니다.");
-        }
+    public void insertFavorite(@RequestParam String loginId, @RequestParam String targetId) {
+        memberService.insertFavorite(loginId, targetId);
     }
-    
-    //즐찾 추가상태를 확인하기 위한 
-    @GetMapping("/mate/fav/status")
-    public ResponseEntity<?> getFavoriteStatus(@RequestParam String loginId, @RequestParam String targetId) {
-        if (loginId == null || targetId == null) {
-            return ResponseEntity.badRequest().body("필요한 매개변수를 찾지못함");
-        }
-        
-        try {
-            boolean isFavorite = memberService.isFavorite(loginId, targetId);
-            return ResponseEntity.ok(Map.of("isFavorite", isFavorite));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("즐겨찾기 상태 확인 중 오류가 발생했습니다.");
-        }
-    }
-
     
     
     

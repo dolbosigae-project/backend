@@ -23,6 +23,7 @@ public interface MemberMapper {
     List<Member> searchByBoardMemberRegion(@Param("term") String term);
     List<Member> searchByBoardMemberGradeName(@Param("term") String term);
     Integer checkDuplicate(String idValue);
+    String checkName(String name);
 	void insertMember(BoardMemberDTO member);
 	void insertPet(BoardMemberDTO member);
 	void insertDefaultPet(BoardMemberDTO defaultPet);
@@ -38,9 +39,6 @@ public interface MemberMapper {
     List<BoardMemberDTO> getWalkMateList(@Param("startRow") int startRow, @Param("endRow") int endRow);
     List<BoardMemberDTO> searchWalkMatesByRegion(@Param("region") String region, @Param("startRow") int startRow, @Param("pageOfContentCount") int pageOfContentCount);
     List<BoardMemberDTO> getPetProfile(@Param("id") String id);
-//	void insertFavorite(@Param("loginId")String loginId, @Param("targetId") String targetId);
-    Integer isFavorite(@Param("loginId") String loginId, @Param("targetId") String targetId);
-    void insertFavorite(@Param("loginId") String loginId, @Param("targetId") String targetId);
-    void deleteFavorite(@Param("loginId") String loginId, @Param("targetId") String targetId);
+	void insertFavorite(@Param("loginId")String loginId, @Param("targetId") String targetId);
 	
 }
