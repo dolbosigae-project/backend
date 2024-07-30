@@ -10,7 +10,7 @@ import com.gae.dto.ShelterDTO;
 import com.gae.service.ShelterService;
 
 @RestController
-@CrossOrigin(origins = {"http://localhost:3000", "http://nam3324.synology.me:32800"})
+@CrossOrigin(origins = {"http://localhost:3000"})
 public class ShelterController {
 
     private final ShelterService shelterService;
