@@ -2,17 +2,21 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-  <mapper namespace="com.gae.mapper.DogRandomWorldCupMapper">
-  	<resultMap type="com.gae.dto.DogRandomWorldCupDTO" id="drwc">
-  		<id column="DOG_ID" property="dogId" />
-  		<result column="DOG_TYPE_NAME" property="dogTypeName"/>
-  		<result column="DOG_TYPE_INFO" property="dogTypeInfo"/>
-  		<result column="DOG_IMG" property="dogImg"/>
-  		<result column="DOG_SIZE" property="dogSize"/>
-  	</resultMap>
-  	<select id="selectRandomDog" resultMap="drwc" parameterType="map">
-  		select * from DOG_TYPE
-  	</select>
-  
-  </mapper>
-  
+<mapper namespace="com.gae.mapper.DogRandomWorldCupMapper">
+    <resultMap type="com.gae.dto.DogRandomWorldCupDTO" id="drwc">
+        <id column="DOG_ID" property="dogId" />
+        <result column="DOG_TYPE_NAME" property="dogTypeName"/>
+        <result column="DOG_TYPE_INFO" property="dogTypeInfo"/>
+        <result column="DOG_IMG" property="dogImg"/>
+    </resultMap>
+    <select id="selectRandomDog" resultMap="drwc">
+        SELECT 
+            DOG_ID,
+            DOG_TYPE_NAME,
+            DOG_TYPE_INFO,
+            DOG_IMG        
+       	FROM DOG_TYPE
+            ORDER BY DBMS_RANDOM.VALUE
+             
+    </select>
+</mapper>

@@ -1,6 +1,7 @@
 package com.gae.controller;
 
 import java.util.List;
+import java.util.Random;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,9 +24,16 @@ public class DogRandomWorldCupController {
 	}
 	
 	@GetMapping("/RandomDog")
-	public List<DogRandomWorldCupDTO> DogRandomView(@RequestParam int place) {
-		List<DogRandomWorldCupDTO> list = DRWCservice.selectRandomDog();		
-		return list;
+	public List<DogRandomWorldCupDTO> DogRandomView() {
+		List<DogRandomWorldCupDTO> dogs = DRWCservice.selectRandomDog();
+		Random random = new Random();
+		for (int i = 0; i < dogs.size(); i++) {
+			int randomIndex = random.nextInt(dogs.size());
+			DogRandomWorldCupDTO temp = dogs.get(i);
+			dogs.set(i, dogs.get(randomIndex));
+			dogs.set(randomIndex, temp);
+		}
+		return dogs;
 	}
 	
 }
