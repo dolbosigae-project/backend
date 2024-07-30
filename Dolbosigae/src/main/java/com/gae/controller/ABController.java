@@ -25,22 +25,17 @@ public class ABController {
     public Map<String, Object> selectABList(
         @RequestParam(defaultValue = "1") int page,
         @RequestParam(defaultValue = "10") int limit,
-        @RequestParam(required = false) String shID,
         @RequestParam(required = false) String region,
-        @RequestParam(required = false) String centerName,
-        @RequestParam(required = false) String startDate,
-        @RequestParam(required = false) String endDate,
         @RequestParam(required = false) String breed) {
 
         Map<String, Object> map = new HashMap<>();
         try {
             ABResponseVo response;
-            if ((shID == null || shID.isEmpty()) && (region == null || region.isEmpty()) && 
-                (centerName == null || centerName.isEmpty()) && (startDate == null || startDate.isEmpty()) && 
-                (endDate == null || endDate.isEmpty()) && (breed == null || breed.isEmpty())) { 
+            if ((region == null || region.isEmpty()) && 
+                (breed == null || breed.isEmpty())) { 
                 response = abService.getABList(page, limit);
             } else {
-                response = abService.searchAB(shID, region, centerName, startDate, endDate, breed, page, limit); 
+                response = abService.searchAB(region, breed, page, limit); 
             }
 
             map.put("contents", response.getContents());
@@ -51,10 +46,9 @@ public class ABController {
         }
         return map;
     }
-    
+
     @GetMapping("/abdetail/{id}")
     public ABDTO getABDetail(@PathVariable String id) {
-        // `id`가 `abID`를 의미
         ABDTO abDetail = abService.selectABDetail(id);
         if (abDetail == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "AB detail not found");
@@ -62,7 +56,6 @@ public class ABController {
         return abDetail;
     }
 
-    
     @PostMapping("/abs")
     public String addAB(@RequestBody ABDTO abDTO, @RequestHeader("userRole") String userRole) {
         if (!"ADMIN".equals(userRole)) {
@@ -76,7 +69,7 @@ public class ABController {
             return "Error adding AB";
         }
     }
-    
+
     @DeleteMapping("/abs/{id}")
     public String deleteAB(@PathVariable String id, @RequestHeader("userRole") String userRole) {
         if (!"ADMIN".equals(userRole)) {
