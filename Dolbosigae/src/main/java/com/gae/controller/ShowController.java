@@ -33,7 +33,7 @@ public class ShowController {
     
     
     @GetMapping("/boards/list")
-    public Map<String, Object> selectHoList(
+    public Map<String, Object> selectShowList(
         @RequestParam(defaultValue = "1") int page,
         @RequestParam(defaultValue = "5") int limit,
         @RequestParam(required = false) String showText) {

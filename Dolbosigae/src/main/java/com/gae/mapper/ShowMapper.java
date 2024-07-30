@@ -16,3 +16,6 @@ public interface ShowMapper {
     int insertShow(ShowDTO showDTO);
     int writeBoard(ShowDTO showDTO);
 }
+
+
+

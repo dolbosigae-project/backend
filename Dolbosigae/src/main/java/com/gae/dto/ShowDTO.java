@@ -1,33 +1,31 @@
 package com.gae.dto;
 
-import org.apache.ibatis.type.Alias;
 import java.util.Date;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-@Alias("show")
 public class ShowDTO {
+    @JsonProperty("showNo")
     private int showNo;
+    
+    @JsonProperty("mId")
     private String mId;
+    
+    @JsonProperty("showTitle")
     private String showTitle;
+    
+    @JsonProperty("showContent")
     private String showContent;
+    
+    @JsonProperty("pNick")
     private String pNick;
+    
+    @JsonProperty("showDate")
     private Date showDate;
+    
+    @JsonProperty("showCount")
     private int showCount;
 
-    public ShowDTO() { }
-
-    public ShowDTO(int showNo, String mId, String showTitle, String showContent, String pNick, Date showDate, int showCount) {
-        super();
-        this.showNo = showNo;
-        this.mId = mId;
-        this.showTitle = showTitle;
-        this.showContent = showContent;
-        this.pNick = pNick;
-        this.showDate = showDate;
-        this.showCount = showCount;
-    }
-
     // Getters and Setters
-
     public int getShowNo() {
         return showNo;
     }
@@ -36,11 +34,11 @@ public class ShowDTO {
         this.showNo = showNo;
     }
 
-    public String getMId() {
+    public String getmId() {
         return mId;
     }
 
-    public void setMId(String mId) {
+    public void setmId(String mId) {
         this.mId = mId;
     }
 
@@ -60,11 +58,11 @@ public class ShowDTO {
         this.showContent = showContent;
     }
 
-    public String getPNick() {
+    public String getpNick() {
         return pNick;
     }
 
-    public void setPNick(String pNick) {
+    public void setpNick(String pNick) {
         this.pNick = pNick;
     }
 

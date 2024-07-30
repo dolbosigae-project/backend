@@ -51,13 +51,17 @@ public class ShowService {
         return new PaggingVO(totalCount, page, limit);
     }
 
-    // Show 데이터 추가하는 메서드
     public void insertShow(ShowDTO showDTO) {
+        // SHOW_NO는 자동으로 생성되므로, DTO에서 설정하지 않도록 합니다.
         mapper.insertShow(showDTO);
-    }
+    } 
+    
+    
+    
+    
 
-	public void writeBoard(ShowDTO showDTO) {
-		mapper.writeBoard(showDTO);
-		
-	}
+    public void writeBoard(ShowDTO showDTO) {
+       
+        mapper.writeBoard(showDTO);
+    }
 }
