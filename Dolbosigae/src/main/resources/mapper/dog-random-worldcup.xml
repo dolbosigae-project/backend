@@ -17,6 +17,5 @@
             DOG_IMG        
        	FROM DOG_TYPE
             ORDER BY DBMS_RANDOM.VALUE
-             
     </select>
 </mapper>
