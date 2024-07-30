@@ -30,8 +30,8 @@
     SELECT * FROM (
         SELECT ROWNUM AS rnum, a.*
         FROM (SELECT * FROM SH
-              WHERE SH_ADDRESS LIKE '%' || #{centerName} || '%' 
-              AND SH_REGION LIKE '%' || #{region} || '%' 
+              WHERE SH_ADDRESS LIKE '%' || #{centerName, jdbcType=VARCHAR} || '%' 
+              AND SH_REGION LIKE '%' || #{region, jdbcType=VARCHAR} || '%' 
               ORDER BY SH_ID) a
         WHERE ROWNUM <= #{endRow}
     )
@@ -39,19 +39,21 @@
     ]]>
 </select>
 
+
     <select id="getTotalCount" resultType="int">
         <![CDATA[
         SELECT COUNT(*) FROM SH
         ]]>
     </select>
     
-    <select id="getTotalCountBySearch" parameterType="map" resultType="int">
-        <![CDATA[
-        SELECT COUNT(*) FROM SH
-        WHERE SH_ADDRESS LIKE '%' || #{centerName} || '%'
-        AND SH_REGION LIKE '%' || #{region} || '%'
-        ]]>
-    </select>
+   <select id="getTotalCountBySearch" parameterType="map" resultType="int">
+    <![CDATA[
+    SELECT COUNT(*) FROM SH
+    WHERE SH_ADDRESS LIKE '%' || #{centerName, jdbcType=VARCHAR} || '%'
+    AND SH_REGION LIKE '%' || #{region, jdbcType=VARCHAR} || '%'
+    ]]>
+</select>
+
     
     <select id="selectShelterInfo" parameterType="string" resultMap="shelter">
         <![CDATA[
