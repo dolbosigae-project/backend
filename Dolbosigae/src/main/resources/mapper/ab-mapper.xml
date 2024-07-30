@@ -34,12 +34,12 @@
     </select>
 
    <select id="selectFilteredABList" parameterType="map" resultMap="abMap">
-<![CDATA[
-SELECT * FROM (
-    SELECT ROWNUM AS rnum, a.*
-    FROM (
-        SELECT * FROM AB
-        <where>
+    <![CDATA[
+    SELECT * FROM (
+        SELECT ROWNUM AS rnum, a.*
+        FROM (
+            SELECT * FROM AB
+            WHERE 1=1
             <if test="filterParams.shID != null and filterParams.shID != ''">
                 AND SH_ID = #{filterParams.shID, jdbcType=VARCHAR}
             </if>
@@ -58,14 +58,43 @@ SELECT * FROM (
             <if test="filterParams.breed != null and filterParams.breed != ''">
                 AND AB_BREED LIKE '%' || #{filterParams.breed, jdbcType=VARCHAR} || '%'
             </if>
-        </where>
-        ORDER BY AB_ID
-    ) a
-    WHERE ROWNUM <= #{endRow}
-)
-WHERE rnum >= #{startRow}
+            ORDER BY AB_ID
+        ) a
+        WHERE ROWNUM <= #{endRow}
+    )
+    WHERE rnum >= #{startRow}
+    ]]>
+</select>
+
+
+
+
+
+<select id="selectABTotalCountWithFilters" parameterType="map" resultType="int">
+<![CDATA[
+SELECT COUNT(*) FROM AB
+WHERE 1=1
+<if test="filterParams.shID != null and filterParams.shID != ''">
+    AND SH_ID = #{filterParams.shID}
+</if>
+<if test="filterParams.region != null and filterParams.region != ''">
+    AND AB_LOCATION LIKE '%' || #{filterParams.region} || '%'
+</if>
+<if test="filterParams.centerName != null and filterParams.centerName != ''">
+    AND AB_LOCATION LIKE '%' || #{filterParams.centerName} || '%'
+</if>
+<if test="filterParams.startDate != null and filterParams.startDate != ''">
+    AND AB_DATE >= #{filterParams.startDate, jdbcType=DATE}
+</if>
+<if test="filterParams.endDate != null and filterParams.endDate != ''">
+    AND AB_DATE <= #{filterParams.endDate, jdbcType=DATE}
+</if>
+<if test="filterParams.breed != null and filterParams.breed != ''">
+    AND AB_BREED LIKE '%' || #{filterParams.breed} || '%'
+</if>
 ]]>
 </select>
+
 
 
 
@@ -75,30 +104,7 @@ WHERE rnum >= #{startRow}
     WHERE 1=1
 </select>
 
-<select id="selectABTotalCountWithFilters" parameterType="map" resultType="int">
-<![CDATA[
-    SELECT COUNT(*) FROM AB
-    WHERE 1=1
-    <if test="filterParams.shID != null and filterParams.shID != ''">
-        AND SH_ID = #{filterParams.shID}
-    </if>
-    <if test="filterParams.region != null and filterParams.region != ''">
-        AND AB_LOCATION LIKE CONCAT(CONCAT('%', #{filterParams.region}), '%')
-    </if>
-    <if test="filterParams.centerName != null and filterParams.centerName != ''">
-        AND AB_LOCATION LIKE CONCAT(CONCAT('%', #{filterParams.centerName}), '%')
-    </if>
-    <if test="filterParams.startDate != null and filterParams.startDate != ''">
-        AND AB_DATE >= #{filterParams.startDate, jdbcType=DATE}
-    </if>
-    <if test="filterParams.endDate != null and filterParams.endDate != ''">
-        AND AB_DATE <= #{filterParams.endDate, jdbcType=DATE}
-    </if>
-    <if test="filterParams.breed != null and filterParams.breed != ''">
-        AND AB_BREED LIKE CONCAT(CONCAT('%', #{filterParams.breed}), '%')
-    </if>
-    ]]>
-</select>
+
 
 
 

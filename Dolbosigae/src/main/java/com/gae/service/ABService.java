@@ -30,14 +30,18 @@ public class ABService {
     public ABResponseVo searchAB(String shID, String region, String centerName, String startDate, String endDate, String breed, int page, int limit) {
         int startRow = (page - 1) * limit + 1;
         int endRow = page * limit;
+        int maxRowNum = page * limit;
+        int minRowNum = (page - 1) * limit + 1;
+
         Map<String, Object> filterParams = new HashMap<>();
         filterParams.put("shID", shID);
-        filterParams.put("region", region);
-        filterParams.put("centerName", centerName);
+        filterParams.put("shRegion", region); // 필드 이름 수정
+        filterParams.put("shName", centerName); // 필드 이름 수정
         filterParams.put("startDate", startDate);
         filterParams.put("endDate", endDate);
-        filterParams.put("breed", breed);
-        List<ABDTO> list = mapper.selectFilteredABList(startRow, endRow, filterParams);
+        filterParams.put("shBreed", breed); // 필드 이름 수정
+
+        List<ABDTO> list = mapper.selectFilteredABList(startRow, endRow, filterParams, maxRowNum, minRowNum);
         PageVo pagination = getPagination(page, limit, filterParams);
         return new ABResponseVo(list, pagination);
     }
@@ -59,3 +63,4 @@ public class ABService {
         return new PageVo(totalCount, page, limit);
     }
 }
+

@@ -19,6 +19,7 @@ public class ABDTO {
 	private String abRescued;
 	private String abCharacter;
 	private String abImg;
+	private String abRegion;
 
 	public ABDTO() {
 		super();
@@ -26,7 +27,7 @@ public class ABDTO {
 
 	public ABDTO(String abID, String shID, Date abDate, String abLocation, String abStatus, String abBreed,
 			char abGender, String abAge, String abWeight, String abColor, String abRescued, String abCharacter,
-			String abImg) {
+			String abImg, String abRegion) {
 		super();
 		this.abID = abID;
 		this.shID = shID;
@@ -41,6 +42,7 @@ public class ABDTO {
 		this.abRescued = abRescued;
 		this.abCharacter = abCharacter;
 		this.abImg = abImg;
+		this.abRegion = abRegion;
 	}
 
 	public String getAbID() {
@@ -147,16 +149,20 @@ public class ABDTO {
 		this.abImg = abImg;
 	}
 
+	public String getAbRegion() {
+		return abRegion;
+	}
+
+	public void setAbRegion(String abRegion) {
+		this.abRegion = abRegion;
+	}
+
 	@Override
 	public String toString() {
 		return "ABDTO [abID=" + abID + ", shID=" + shID + ", abDate=" + abDate + ", abLocation=" + abLocation
 				+ ", abStatus=" + abStatus + ", abBreed=" + abBreed + ", abGender=" + abGender + ", abAge=" + abAge
 				+ ", abWeight=" + abWeight + ", abColor=" + abColor + ", abRescued=" + abRescued + ", abCharacter="
-				+ abCharacter + ", abImg=" + abImg + "]";
+				+ abCharacter + ", abImg=" + abImg + ", abRegion=" + abRegion + "]";
 	}
-	
-	
-}
 
-
-	
+}	

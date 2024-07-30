@@ -11,7 +11,9 @@ import java.util.Map;
 @Mapper
 public interface ABMapper {
     List<ABDTO> selectABList(@Param("startRow") int startRow, @Param("endRow") int endRow);
-    List<ABDTO> selectFilteredABList(@Param("startRow") int startRow, @Param("endRow") int endRow, @Param("filterParams") Map<String, Object> filterParams);
+    List<ABDTO> selectFilteredABList(@Param("startRow") int startRow, @Param("endRow") int endRow, @Param("filterParams") Map<String, Object> filterParams,
+    		@Param("maxRowNum") Integer maxRowNum,
+            @Param("minRowNum") Integer minRowNum);
     int selectABTotalCount(@Param("filterParams") Map<String, Object> filterParams);
     void insertAB(@Param("abDTO") ABDTO abDTO);
     void deleteAB(@Param("id") String id);
