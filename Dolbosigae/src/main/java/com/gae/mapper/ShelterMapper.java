@@ -10,10 +10,11 @@ import com.gae.dto.ShelterDTO;
 
 @Mapper
 public interface ShelterMapper {
-    List<ShelterDTO> selectShelterList(Map<String, Object> map);
-    void insertShelter(ShelterDTO shelterDTO);
-    void deleteShelter(@Param("id") String id);
-    ShelterDTO selectShelterById(@Param("id") String id);
-    int selectShelterTotalCount(Map<String, Object> filterParams);
-    List<ShelterDTO> selectAllShelters();
+    List<ShelterDTO> getShelterList(@Param("startRow") int startRow, @Param("endRow") int endRow);
+    int getTotalCount();
+    ShelterDTO selectShelterInfo(@Param("id") String id);
+    List<ShelterDTO> searchShelter(@Param("region") String region, @Param("centerName") String centerName, @Param("startRow") int startRow, @Param("endRow") int endRow);
+    int getTotalCountBySearch(@Param("region") String region, @Param("centerName") String centerName);
+    int deleteShelter(@Param("id") String id);
+    int insertShelter(ShelterDTO shelterDTO);
 }
