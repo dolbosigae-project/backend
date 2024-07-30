@@ -44,13 +44,14 @@ public class ShelterController {
         return map;
     }
     
-    @GetMapping("/shelterdetail")
-    public ShelterDTO selectShelterInfo(@RequestParam String id) {
-        System.out.println(id);
+    @GetMapping("/shelterdetail/{id}")
+    public ShelterDTO selectShelterInfo(@PathVariable String id) {
+        System.out.println(id);  // 요청된 ID 출력
         ShelterDTO result = shelterService.selectShelterInfo(id);
-        System.out.println(result);
+        System.out.println(result);  // 반환된 결과 출력
         return result;
     }
+
     
     @DeleteMapping("/shelters/delete/{id}")
     public Map<String, String> deleteShelter(

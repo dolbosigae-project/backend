@@ -3,7 +3,8 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.gae.mapper.ABMapper">
-    <resultMap id="ad" type="com.gae.dto.ABDTO">
+
+    <resultMap id="abMap" type="com.gae.dto.ABDTO">
         <id column="AB_ID" property="abID"/>
         <result column="SH_ID" property="shID"/>
         <result column="AB_DATE" property="abDate"/>
@@ -19,67 +20,111 @@
         <result column="AB_IMG" property="abImg"/>
     </resultMap>
 
-    <!-- 전체 조회 -->
-    <select id="selectABList" parameterType="map" resultMap="ad">
-        SELECT * FROM (
-            SELECT a.*, ROW_NUMBER() OVER (ORDER BY AB_ID) AS rnum
-            FROM AB a
-        ) WHERE rnum BETWEEN #{startRow} + 1 AND #{startRow} + #{pageContentEa}
+    <select id="selectABList" resultMap="abMap">
+    <![CDATA[
+    SELECT * FROM (
+        SELECT ROWNUM AS rnum, a.*
+        FROM (
+            SELECT * FROM AB ORDER BY AB_ID
+        ) a
+        WHERE ROWNUM <= #{endRow}
+    )
+    WHERE rnum >= #{startRow}
+    ]]>
     </select>
 
-    <!-- 필터링된 부분 조회 -->
-    <select id="selectFilteredABList" parameterType="map" resultMap="ad">
-        SELECT * FROM (
-            SELECT a.*, ROW_NUMBER() OVER (ORDER BY AB_ID) AS rnum
-            FROM AB a
-            WHERE 1=1
-            <if test="shID != null and shID != ''">
-                AND SH_ID = #{shID}
+   <select id="selectFilteredABList" parameterType="map" resultMap="abMap">
+<![CDATA[
+SELECT * FROM (
+    SELECT ROWNUM AS rnum, a.*
+    FROM (
+        SELECT * FROM AB
+        <where>
+            <if test="filterParams.shID != null and filterParams.shID != ''">
+                AND SH_ID = #{filterParams.shID, jdbcType=VARCHAR}
             </if>
-            <if test="region != null and region != ''">
-                AND AB_LOCATION LIKE CONCAT('%', #{region}, '%')
+            <if test="filterParams.region != null and filterParams.region != ''">
+                AND AB_LOCATION LIKE '%' || #{filterParams.region, jdbcType=VARCHAR} || '%'
             </if>
-            <if test="centerName != null and centerName != ''">
-                AND AB_LOCATION LIKE CONCAT('%', #{centerName}, '%')
+            <if test="filterParams.centerName != null and filterParams.centerName != ''">
+                AND AB_LOCATION LIKE '%' || #{filterParams.centerName, jdbcType=VARCHAR} || '%'
             </if>
-            <if test="startDate != null and startDate != ''">
-                AND AB_DATE >= TO_DATE(#{startDate}, 'YYYY-MM-DD')
+            <if test="filterParams.startDate != null and filterParams.startDate != ''">
+                AND AB_DATE >= #{filterParams.startDate, jdbcType=DATE}
             </if>
-            <if test="endDate != null and endDate != ''">
-                AND AB_DATE &lt;= TO_DATE(#{endDate}, 'YYYY-MM-DD')
+            <if test="filterParams.endDate != null and filterParams.endDate != ''">
+                AND AB_DATE <= #{filterParams.endDate, jdbcType=DATE}
             </if>
-            <if test="breed != null and breed != ''">
-                AND AB_BREED LIKE CONCAT('%', #{breed}, '%')
+            <if test="filterParams.breed != null and filterParams.breed != ''">
+                AND AB_BREED LIKE '%' || #{filterParams.breed, jdbcType=VARCHAR} || '%'
             </if>
-        ) WHERE rnum BETWEEN #{startRow} + 1 AND #{startRow} + #{pageContentEa}
+        </where>
+        ORDER BY AB_ID
+    ) a
+    WHERE ROWNUM <= #{endRow}
+)
+WHERE rnum >= #{startRow}
+]]>
+</select>
+
+
+
+
+   <select id="selectABTotalCount" resultType="int">
+    SELECT COUNT(*) FROM AB
+    WHERE 1=1
+</select>
+
+<select id="selectABTotalCountWithFilters" parameterType="map" resultType="int">
+<![CDATA[
+    SELECT COUNT(*) FROM AB
+    WHERE 1=1
+    <if test="filterParams.shID != null and filterParams.shID != ''">
+        AND SH_ID = #{filterParams.shID}
+    </if>
+    <if test="filterParams.region != null and filterParams.region != ''">
+        AND AB_LOCATION LIKE CONCAT(CONCAT('%', #{filterParams.region}), '%')
+    </if>
+    <if test="filterParams.centerName != null and filterParams.centerName != ''">
+        AND AB_LOCATION LIKE CONCAT(CONCAT('%', #{filterParams.centerName}), '%')
+    </if>
+    <if test="filterParams.startDate != null and filterParams.startDate != ''">
+        AND AB_DATE >= #{filterParams.startDate, jdbcType=DATE}
+    </if>
+    <if test="filterParams.endDate != null and filterParams.endDate != ''">
+        AND AB_DATE <= #{filterParams.endDate, jdbcType=DATE}
+    </if>
+    <if test="filterParams.breed != null and filterParams.breed != ''">
+        AND AB_BREED LIKE CONCAT(CONCAT('%', #{filterParams.breed}), '%')
+    </if>
+    ]]>
+</select>
+
+
+
+
+
+
+
+
+
+    <select id="selectABDetail" parameterType="string" resultMap="abMap">
+    <![CDATA[
+    SELECT * FROM AB WHERE AB_ID = #{id}
+    ]]>
     </select>
 
-    <!-- 필터링된 총 카운트 -->
-    <select id="selectABTotalCount" parameterType="map" resultType="int">
-        SELECT COUNT(*) FROM AB
-        WHERE 1=1
-        <if test="shID != null and shID != ''">
-            AND SH_ID = #{shID}
-        </if>
-        <if test="region != null and region != ''">
-            AND AB_LOCATION LIKE CONCAT('%', #{region}, '%')
-        </if>
-        <if test="centerName != null and centerName != ''">
-            AND AB_LOCATION LIKE CONCAT('%', #{centerName}, '%')
-        </if>
-        <if test="startDate != null and startDate != ''">
-            AND AB_DATE >= TO_DATE(#{startDate}, 'YYYY-MM-DD')
-        </if>
-        <if test="endDate != null and endDate != ''">
-            AND AB_DATE &lt;= TO_DATE(#{endDate}, 'YYYY-MM-DD')
-        </if>
-        <if test="breed != null and breed != ''">
-            AND AB_BREED LIKE CONCAT('%', #{breed}, '%')
-        </if>
-    </select>
+    <insert id="insertAB" parameterType="com.gae.dto.ABDTO">
+    <![CDATA[
+    INSERT INTO AB (AB_ID, SH_ID, AB_DATE, AB_LOCATION, AB_STATUS, AB_BREED, AB_GENDER, AB_AGE, AB_WEIGHT, AB_COLOR, AB_RESCUED, AB_CHARACTER, AB_IMG)
+    VALUES (#{abID}, #{shID}, #{abDate}, #{abLocation}, #{abStatus}, #{abBreed}, #{abGender}, #{abAge}, #{abWeight}, #{abColor}, #{abRescued}, #{abCharacter}, #{abImg})
+    ]]>
+    </insert>
 
-    <!-- ID로 조회 -->
-    <select id="selectABDetail" parameterType="string" resultMap="ad">
-        SELECT * FROM AB WHERE AB_ID = #{id}
-    </select>
+    <delete id="deleteAB" parameterType="string">
+    <![CDATA[
+    DELETE FROM AB WHERE AB_ID = #{id}
+    ]]>
+    </delete>
+
 </mapper>

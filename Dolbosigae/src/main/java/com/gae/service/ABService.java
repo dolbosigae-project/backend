@@ -1,13 +1,15 @@
 package com.gae.service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.springframework.stereotype.Service;
 
 import com.gae.dto.ABDTO;
 import com.gae.mapper.ABMapper;
+import com.gae.vo.ABResponseVo;
+import com.gae.vo.PageVo;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class ABService {
@@ -17,20 +19,31 @@ public class ABService {
         this.mapper = mapper;
     }
 
-    public List<ABDTO> selectABList(int pageNo, int pageContentEa, Map<String, Object> filterParams) {
-        Map<String, Object> map = new HashMap<>();
-        map.put("startRow", (pageNo - 1) * pageContentEa);
-        map.put("pageContentEa", pageContentEa);
-        if (filterParams != null && !filterParams.isEmpty()) {
-            map.putAll(filterParams);
-            return mapper.selectFilteredABList(map); // 필터링된 조회
-        } else {
-            return mapper.selectABList(map); // 전체 조회
-        }
+    public ABResponseVo getABList(int page, int limit) {
+        int startRow = (page - 1) * limit + 1;
+        int endRow = page * limit;
+        List<ABDTO> list = mapper.selectABList(startRow, endRow);
+        PageVo pagination = getPagination(page, limit, null);
+        return new ABResponseVo(list, pagination);
     }
 
-    public int selectABTotalCount(Map<String, Object> filterParams) {
-        return mapper.selectABTotalCount(filterParams);
+    public ABResponseVo searchAB(String shID, String region, String centerName, String startDate, String endDate, String breed, int page, int limit) {
+        int startRow = (page - 1) * limit + 1;
+        int endRow = page * limit;
+        Map<String, Object> filterParams = new HashMap<>();
+        filterParams.put("shID", shID);
+        filterParams.put("region", region);
+        filterParams.put("centerName", centerName);
+        filterParams.put("startDate", startDate);
+        filterParams.put("endDate", endDate);
+        filterParams.put("breed", breed);
+        List<ABDTO> list = mapper.selectFilteredABList(startRow, endRow, filterParams);
+        PageVo pagination = getPagination(page, limit, filterParams);
+        return new ABResponseVo(list, pagination);
+    }
+
+    public ABDTO selectABDetail(String id) {
+        return mapper.selectABDetail(id);
     }
 
     public void insertAB(ABDTO abDTO) {
@@ -41,7 +54,8 @@ public class ABService {
         mapper.deleteAB(id);
     }
 
-    public ABDTO selectABDetail(String id) {
-        return mapper.selectABDetail(id);
+    public PageVo getPagination(int page, int limit, Map<String, Object> filterParams) {
+        int totalCount = (filterParams == null || filterParams.isEmpty()) ? mapper.selectABTotalCount(null) : mapper.selectABTotalCount(filterParams);
+        return new PageVo(totalCount, page, limit);
     }
 }
