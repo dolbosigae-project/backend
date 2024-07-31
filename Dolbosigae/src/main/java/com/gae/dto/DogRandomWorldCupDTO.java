@@ -9,16 +9,19 @@ public class DogRandomWorldCupDTO {
 	private String dogTypeInfo;
 	private String dogImg;
 	private int dogSize;
+	private int dogRanking;
 	
 	public DogRandomWorldCupDTO() {	}
 
-	public DogRandomWorldCupDTO(int dogId, String dogTypeName, String dogTypeInfo, String dogImg, int dogSize) {
+	public DogRandomWorldCupDTO(int dogId, String dogTypeName, String dogTypeInfo, String dogImg, int dogSize,
+			int dogRanking) {
 		super();
 		this.dogId = dogId;
 		this.dogTypeName = dogTypeName;
 		this.dogTypeInfo = dogTypeInfo;
 		this.dogImg = dogImg;
 		this.dogSize = dogSize;
+		this.dogRanking = dogRanking;
 	}
 
 	/**
@@ -91,12 +94,25 @@ public class DogRandomWorldCupDTO {
 		this.dogSize = dogSize;
 	}
 
+	/**
+	 * @return the dogRanking
+	 */
+	public int getDogRanking() {
+		return dogRanking;
+	}
+
+	/**
+	 * @param dogRanking the dogRanking to set
+	 */
+	public void setDogRanking(int dogRanking) {
+		this.dogRanking = dogRanking;
+	}
+
 	@Override
 	public String toString() {
 		return "DogRandomWorldCupDTO [dogId=" + dogId + ", dogTypeName=" + dogTypeName + ", dogTypeInfo=" + dogTypeInfo
-				+ ", dogImg=" + dogImg + ", dogSize=" + dogSize + "]";
+				+ ", dogImg=" + dogImg + ", dogSize=" + dogSize + ", dogRanking=" + dogRanking + "]";
 	}
-	
 	
 	
 	
