@@ -3,54 +3,36 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.gae.mapper.ShelterMapper">
-    <resultMap id="shelter" type="com.gae.dto.ShelterDTO">
-        <id column="SH_ID" property="shID"/>
-        <result column="SH_REGION" property="shRegion"/>
-        <result column="SH_DIS" property="shDis"/>
-        <result column="SH_ADDRESS" property="shAddress"/>
-        <result column="SH_NAME" property="shName"/>
-        <result column="SH_TEL" property="shTel"/>
-        <result column="SH_ANIMAL_TYPE" property="shAnimalType"/>
-        <result column="SH_HOUR" property="shHour"/>
-    </resultMap>
 
-    <!-- 전체 조회 -->
-    <select id="selectAllShelters" parameterType="map" resultMap="shelter">
-   SELECT * FROM (
-        SELECT a.*, ROW_NUMBER() OVER (ORDER BY SH_ID) rnum FROM SH a
-    ) WHERE rnum BETWEEN #{startRow} + 1 AND #{startRow} + #{pageContentEa}
+	<resultMap type="com.gae.dto.ShelterDTO" id="shelter">
+		<id column="SH_ID" property="shelterId" />
+		<result column="SH_REGION" property="shelterRegion" />
+		<result column="SH_ADDRESS" property="shelterAddress" />
+		<result column="SH_NAME" property="shelterName" />
+		<result column="SH_TEL" property="shelterTel" />
+		<result column="SH_HOUR" property="shelterHour" />
+	</resultMap>
+	
+	<!-- 전체 센터 수 조회 -->
+	<select id="getTotalCount" resultType="int">
+		select count(*) from sh
 	</select>
 	
-    <!-- 필터링된 부분 조회 -->
-   <select id="selectShelterList" parameterType="map" resultMap="shelter">
-    SELECT * FROM (
-        SELECT a.*, ROW_NUMBER() OVER (ORDER BY SH_ID) AS rnum FROM (
-            SELECT * FROM SH
-            WHERE 1=1
-            <if test="region != null and region != ''">
-                AND SH_REGION LIKE '%' || #{region} || '%'
-            </if>
-            <if test="centerName != null and centerName != ''">
-                AND SH_NAME LIKE '%' || #{centerName} || '%'
-            </if>
-        ) a
-    ) WHERE rnum BETWEEN #{startRow} + 1 AND #{startRow} + #{pageContentEa}
-</select>
+	<!-- 페이지별 센터 조회 -->
+	<select id="getShelterList" resultMap="shelter">
+		<![CDATA[
+	      SELECT *
+	      FROM (
+	        SELECT A.*, ROWNUM AS RNUM
+	        FROM (
+	          SELECT *
+	          FROM SH
+	          ORDER BY SH_ID
+	        ) A
+	        WHERE ROWNUM <= #{endRow}
+	      )
+	      WHERE RNUM > #{startRow}
+	    ]]>
+	</select>
 
-    <!-- 필터링된 총 카운트 -->
-    <select id="selectShelterTotalCount" resultType="int">
-    SELECT COUNT(*) FROM SH
-    WHERE 1=1
-    <if test="region != null and region != ''">
-        AND SH_REGION LIKE '%' || #{region} || '%'
-    </if>
-    <if test="centerName != null and centerName != ''">
-        AND SH_NAME LIKE '%' || #{centerName} || '%'
-    </if>
-</select>
-
-    <!-- ID로 조회 -->
-    <select id="selectShelterById" resultMap="shelter">
-        SELECT * FROM SH WHERE SH_ID = #{id}
-    </select>
 </mapper>
