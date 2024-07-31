@@ -11,6 +11,8 @@
 		<result column="SH_NAME" property="shelterName" />
 		<result column="SH_TEL" property="shelterTel" />
 		<result column="SH_HOUR" property="shelterHour" />
+		<result column="SH_WGS84LATITUDE" property="shelterLatitude" />
+		<result column="SH_WGS84LONGITUDE" property="shelterLongitude" />
 	</resultMap>
 	
 	<!-- 전체 센터 수 조회 -->
@@ -34,5 +36,40 @@
 	      WHERE RNUM > #{startRow}
 	    ]]>
 	</select>
+	
+	<!-- 전체 지역 이름 조회 -->
+	<select id="searchByAllRegion" resultMap="shelter">
+		select * from sh where sh_name like '%' || #{term} || '%'
+	</select>
+	
+	<!-- 특정 지역 이름 조회 -->
+	<select id="searchByRegionName" resultMap="shelter">
+		select * from sh where sh_name like '%' || #{term} || '%' and sh_region like #{category}
+	</select>
+	
+	<!-- 특정 센터 상세 -->
+	<select id="getShelterDetail" resultMap="shelter">
+	    select * from sh where SH_ID = #{shelterId}
+	</select>
+	
+
+
+
+
+
+
+
+
 
 </mapper>
+
+
+
+
+
+
+
+
+
+
+
