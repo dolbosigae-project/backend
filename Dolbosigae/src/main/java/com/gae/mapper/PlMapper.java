@@ -15,4 +15,5 @@ public interface PlMapper {
     int getTotalCountBySearch(@Param("plText") String plText);
 	int deleteCity(int plId);
 	void cityInsert(PlDTO dto);
+	List<PlDTO> getCityListDesc(int startRow, int endRow);
 }

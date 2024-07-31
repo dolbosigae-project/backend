@@ -30,29 +30,29 @@ public class PlController {
     //게시물 기본 리스트
     @GetMapping("/city/list")
     public Map<String, Object> selectCityList(
-        @RequestParam(defaultValue = "1") int page,
-        @RequestParam(defaultValue = "5") int limit,
-        @RequestParam(required = false) String plText) {
-        
-        Map<String, Object> map = new HashMap<String, Object>();
-        try {
-            System.out.println("Fetching data with params - page: " + page + ", limit: " + limit + ", plText: " + plText);
-            PlResponseVo response;
-            if (plText == null || plText.isEmpty()) {
-                response = plService.getCityList(page, limit);
-            } else {
-                response = plService.searchCity(plText, page, limit);
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "5") int limit,
+            @RequestParam(required = false) String plText,
+            @RequestParam(defaultValue = "false") boolean isDescending) { // 추가된 부분
+
+            Map<String, Object> map = new HashMap<String, Object>();
+            try {
+                System.out.println("Fetching data with params - page: " + page + ", limit: " + limit + ", plText: " + plText + ", isDescending: " + isDescending);
+                PlResponseVo response;
+                if (plText == null || plText.isEmpty()) {
+                    response = plService.getCityList(page, limit, isDescending);
+                } else {
+                    response = plService.searchCity(plText, page, limit);
+                }
+                map.put("contents", response.getContents());
+                System.out.println("Pagination info: " + response.getPagination());
+                map.put("pagination", response.getPagination());
+            } catch (Exception e) {
+                e.printStackTrace();
+                map.put("error", "Internal Server Error");
             }
-            map.put("contents", response.getContents());
-            System.out.println("Pagination info: " + response.getPagination()); // 로그 추가
-            map.put("pagination", response.getPagination());
-        } catch (Exception e) {
-            e.printStackTrace();
-            map.put("error", "Internal Server Error");
-        }
-        return map;
-    }
-    
+            return map;
+        }    
     //게시물 검색
     @GetMapping("/city/info")
     public PlDTO selectCityInfo(@RequestParam int plId) {
