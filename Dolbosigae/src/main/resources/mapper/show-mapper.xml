@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-    
+
 <mapper namespace="com.gae.mapper.ShowMapper">
     <resultMap id="show" type="com.gae.dto.ShowDTO">
         <id column="SHOW_NO" property="showNo" />
@@ -13,10 +13,6 @@
         <result column="SHOW_DATE" property="showDate"/>
         <result column="SHOW_COUNT" property="showCount"/>
     </resultMap>
-
-    <select id="selectShow" resultMap="show">
-        SELECT * FROM SHOW_BOARD
-    </select>
 
     <select id="selectShowInfo" resultMap="show">
         SELECT * FROM SHOW_BOARD WHERE SHOW_NO = #{showNo}
@@ -60,10 +56,9 @@
         ]]>
     </select>
 
-<insert id="insertShow" parameterType="map">
-    INSERT INTO SHOW_BOARD (m_id, show_title, show_content, p_nick)
-    VALUES (show_board_seq.NEXTVAL, #{showTitle}, #{showContent}, #{pNick, jdbcType=VARCHAR})
-</insert>
-
+    <insert id="insertShow" parameterType="com.gae.dto.ShowDTO">
+        INSERT INTO SHOW_BOARD (M_ID, SHOW_TITLE, SHOW_CONTENT, P_NICK)
+        VALUES (#{mId}, #{showTitle}, #{showContent}, #{pNick})
+    </insert>
 
 </mapper>

@@ -33,7 +33,7 @@ public class ShowController {
     
     
     @GetMapping("/boards/list")
-    public Map<String, Object> selectShowList(
+    public Map<String, Object> selectList(
         @RequestParam(defaultValue = "1") int page,
         @RequestParam(defaultValue = "5") int limit,
         @RequestParam(required = false) String showText) {
@@ -110,12 +110,6 @@ public class ShowController {
         }
         return response;
     }
-    // 일반 문의 게시판 : 글쓰기
-    @PostMapping("/board/write")
-    public ResponseEntity<String> writeBoard(@RequestBody ShowDTO showDTO){
-    	System.out.println(showDTO);
-    	showService.writeBoard(showDTO);
-    	return ResponseEntity.ok("회원가입 성공");
-    }
+
     
 }
