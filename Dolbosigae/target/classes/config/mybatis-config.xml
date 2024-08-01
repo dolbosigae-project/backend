@@ -12,4 +12,8 @@
 <!-- 	<settings>
         <setting name="logImpl" value="STDOUT_LOGGING"/>
     </settings> -->
+    <settings>
+    <setting name="jdbcTypeForNull" value="VARCHAR"/>
+</settings>
+    
 </configuration>
