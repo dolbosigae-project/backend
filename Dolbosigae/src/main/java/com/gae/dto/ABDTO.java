@@ -1,162 +1,174 @@
 package com.gae.dto;
 
-import java.util.Date;
-
 import org.apache.ibatis.type.Alias;
 
-@Alias("ab")
+@Alias("AB")
 public class ABDTO {
-	private String abID;
-	private String shID;
-	private Date abDate;
-	private String abLocation;
-	private String abStatus;
-	private String abBreed;
-	private char abGender;
-	private String abAge;
-	private String abWeight;
-	private String abColor;
-	private String abRescued;
-	private String abCharacter;
-	private String abImg;
-
-	public ABDTO() {
-		super();
+	private String ABId;
+	private String SHId;
+	private String ABDate;
+	private String ABLocation;
+	private String ABStatus;
+	private String ABBreed;
+	private String ABGender;
+	private String ABAge;
+	private String ABWeight;
+	private String ABColor;
+	private String ABCharacter;
+	private String ABImg;
+	private String ABregion;
+	private String ABLati;
+	private String ABLong;
+	
+	private String SHRegion;
+	private String SHAddress;
+	private String SHName;
+	private String SHTel;
+	private String SHHour;
+	private double SHLatitude;
+	private double SHLongitude;
+	
+	public String getSHRegion() {
+		return SHRegion;
 	}
-
-	public ABDTO(String abID, String shID, Date abDate, String abLocation, String abStatus, String abBreed,
-			char abGender, String abAge, String abWeight, String abColor, String abRescued, String abCharacter,
-			String abImg) {
-		super();
-		this.abID = abID;
-		this.shID = shID;
-		this.abDate = abDate;
-		this.abLocation = abLocation;
-		this.abStatus = abStatus;
-		this.abBreed = abBreed;
-		this.abGender = abGender;
-		this.abAge = abAge;
-		this.abWeight = abWeight;
-		this.abColor = abColor;
-		this.abRescued = abRescued;
-		this.abCharacter = abCharacter;
-		this.abImg = abImg;
+	public void setSHRegion(String sHRegion) {
+		SHRegion = sHRegion;
 	}
-
-	public String getAbID() {
-		return abID;
+	public String getSHAddress() {
+		return SHAddress;
 	}
-
-	public void setAbID(String abID) {
-		this.abID = abID;
+	public void setSHAddress(String sHAddress) {
+		SHAddress = sHAddress;
 	}
-
-	public String getShID() {
-		return shID;
+	public String getSHName() {
+		return SHName;
 	}
-
-	public void setShID(String shID) {
-		this.shID = shID;
+	public void setSHName(String sHName) {
+		SHName = sHName;
 	}
-
-	public Date getAbDate() {
-		return abDate;
+	public String getSHTel() {
+		return SHTel;
 	}
-
-	public void setAbDate(Date abDate) {
-		this.abDate = abDate;
+	public void setSHTel(String sHTel) {
+		SHTel = sHTel;
 	}
-
-	public String getAbLocation() {
-		return abLocation;
+	public String getSHHour() {
+		return SHHour;
 	}
-
-	public void setAbLocation(String abLocation) {
-		this.abLocation = abLocation;
+	public void setSHHour(String sHHour) {
+		SHHour = sHHour;
 	}
-
-	public String getAbStatus() {
-		return abStatus;
+	public double getSHLatitude() {
+		return SHLatitude;
 	}
-
-	public void setAbStatus(String abStatus) {
-		this.abStatus = abStatus;
+	public void setSHLatitude(double sHLatitude) {
+		SHLatitude = sHLatitude;
 	}
-
-	public String getAbBreed() {
-		return abBreed;
+	public double getSHLongitude() {
+		return SHLongitude;
 	}
-
-	public void setAbBreed(String abBreed) {
-		this.abBreed = abBreed;
+	public void setSHLongitude(double sHLongitude) {
+		SHLongitude = sHLongitude;
 	}
-
-	public char getAbGender() {
-		return abGender;
+	public String getABId() {
+		return ABId;
 	}
-
-	public void setAbGender(char abGender) {
-		this.abGender = abGender;
+	public void setABId(String aBId) {
+		ABId = aBId;
 	}
-
-	public String getAbAge() {
-		return abAge;
+	public String getSHId() {
+		return SHId;
 	}
-
-	public void setAbAge(String abAge) {
-		this.abAge = abAge;
+	public void setSHId(String sHId) {
+		SHId = sHId;
 	}
-
-	public String getAbWeight() {
-		return abWeight;
+	public String getABDate() {
+		return ABDate;
 	}
-
-	public void setAbWeight(String abWeight) {
-		this.abWeight = abWeight;
+	public void setABDate(String aBDate) {
+		ABDate = aBDate;
 	}
-
-	public String getAbColor() {
-		return abColor;
+	public String getABLocation() {
+		return ABLocation;
 	}
-
-	public void setAbColor(String abColor) {
-		this.abColor = abColor;
+	public void setABLocation(String aBLocation) {
+		ABLocation = aBLocation;
 	}
-
-	public String getAbRescued() {
-		return abRescued;
+	public String getABStatus() {
+		return ABStatus;
 	}
-
-	public void setAbRescued(String abRescued) {
-		this.abRescued = abRescued;
+	public void setABStatus(String aBStatus) {
+		ABStatus = aBStatus;
 	}
-
-	public String getAbCharacter() {
-		return abCharacter;
+	public String getABBreed() {
+		return ABBreed;
 	}
-
-	public void setAbCharacter(String abCharacter) {
-		this.abCharacter = abCharacter;
+	public void setABBreed(String aBBreed) {
+		ABBreed = aBBreed;
 	}
-
-	public String getAbImg() {
-		return abImg;
+	public String getABGender() {
+		return ABGender;
 	}
-
-	public void setAbImg(String abImg) {
-		this.abImg = abImg;
+	public void setABGender(String aBGender) {
+		ABGender = aBGender;
 	}
-
+	public String getABAge() {
+		return ABAge;
+	}
+	public void setABAge(String aBAge) {
+		ABAge = aBAge;
+	}
+	public String getABWeight() {
+		return ABWeight;
+	}
+	public void setABWeight(String aBWeight) {
+		ABWeight = aBWeight;
+	}
+	public String getABColor() {
+		return ABColor;
+	}
+	public void setABColor(String aBColor) {
+		ABColor = aBColor;
+	}
+	public String getABCharacter() {
+		return ABCharacter;
+	}
+	public void setABCharacter(String aBCharacter) {
+		ABCharacter = aBCharacter;
+	}
+	public String getABImg() {
+		return ABImg;
+	}
+	public void setABImg(String aBImg) {
+		ABImg = aBImg;
+	}
+	public String getABregion() {
+		return ABregion;
+	}
+	public void setABregion(String aBregion) {
+		ABregion = aBregion;
+	}
+	public String getABLati() {
+		return ABLati;
+	}
+	public void setABLati(String aBLati) {
+		ABLati = aBLati;
+	}
+	public String getABLong() {
+		return ABLong;
+	}
+	public void setABLong(String aBLong) {
+		ABLong = aBLong;
+	}
+	
 	@Override
 	public String toString() {
-		return "ABDTO [abID=" + abID + ", shID=" + shID + ", abDate=" + abDate + ", abLocation=" + abLocation
-				+ ", abStatus=" + abStatus + ", abBreed=" + abBreed + ", abGender=" + abGender + ", abAge=" + abAge
-				+ ", abWeight=" + abWeight + ", abColor=" + abColor + ", abRescued=" + abRescued + ", abCharacter="
-				+ abCharacter + ", abImg=" + abImg + "]";
+		return "ABDTO [ABId=" + ABId + ", SHId=" + SHId + ", ABDate=" + ABDate + ", ABLocation=" + ABLocation
+				+ ", ABStatus=" + ABStatus + ", ABBreed=" + ABBreed + ", ABGender=" + ABGender + ", ABAge=" + ABAge
+				+ ", ABWeight=" + ABWeight + ", ABColor=" + ABColor + ", ABCharacter=" + ABCharacter + ", ABImg="
+				+ ABImg + ", ABregion=" + ABregion + ", ABLati=" + ABLati + ", ABLong=" + ABLong + ", SHRegion="
+				+ SHRegion + ", SHAddress=" + SHAddress + ", SHName=" + SHName + ", SHTel=" + SHTel + ", SHHour="
+				+ SHHour + ", SHLatitude=" + SHLatitude + ", SHLongitude=" + SHLongitude + "]";
 	}
 	
-	
 }
-
-
-	

@@ -3,83 +3,68 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.gae.mapper.ABMapper">
-    <resultMap id="ad" type="com.gae.dto.ABDTO">
-        <id column="AB_ID" property="abID"/>
-        <result column="SH_ID" property="shID"/>
-        <result column="AB_DATE" property="abDate"/>
-        <result column="AB_LOCATION" property="abLocation"/>
-        <result column="AB_STATUS" property="abStatus"/>
-        <result column="AB_BREED" property="abBreed"/>
-        <result column="AB_GENDER" property="abGender"/>
-        <result column="AB_AGE" property="abAge"/>
-        <result column="AB_WEIGHT" property="abWeight"/>
-        <result column="AB_COLOR" property="abColor"/>
-        <result column="AB_RESCUED" property="abRescued"/>
-        <result column="AB_CHARACTER" property="abCharacter"/>
-        <result column="AB_IMG" property="abImg"/>
-    </resultMap>
 
-    <!-- 전체 조회 -->
-    <select id="selectABList" parameterType="map" resultMap="ad">
-        SELECT * FROM (
-            SELECT a.*, ROW_NUMBER() OVER (ORDER BY AB_ID) AS rnum
-            FROM AB a
-        ) WHERE rnum BETWEEN #{startRow} + 1 AND #{startRow} + #{pageContentEa}
-    </select>
+	<resultMap type="com.gae.dto.ABDTO" id="AB">
+		<id column="AB_ID" property="ABId" />
+		<result column="SH_ID" property="SHId" />
+		<result column="AB_DATE" property="ABDate" />
+		<result column="AB_LOCATION" property="ABLocation" />
+		<result column="AB_STATUS" property="ABStatus" />
+		<result column="AB_BREED" property="ABBreed" />
+		<result column="AB_GENDER" property="ABGender" />
+		<result column="AB_AGE" property="ABAge" />
+		<result column="AB_WEIGHT" property="ABWeight" />
+		<result column="AB_COLOR" property="ABColor" />
+		<result column="AB_CHARACTER" property="ABCharacter" />
+		<result column="AB_IMG" property="ABImg" />
+		<result column="AB_REGION" property="ABregion" />
+		<result column="AB_LATI" property="ABLati" />
+		<result column="AB_LONG" property="ABLong" />
+		<result column="SH_REGION" property="SHRegion" />
+		<result column="SH_ADDRESS" property="SHAddress" />
+		<result column="SH_NAME" property="SHName" />
+		<result column="SH_TEL" property="SHTel" />
+		<result column="SH_HOUR" property="SHHour" />
+		<result column="SH_WGS84LATITUDE" property="SHLatitude" />
+		<result column="SH_WGS84LONGITUDE" property="SHLongitude" />
+	</resultMap>
+	
+	<!-- 전체 센터 수 조회 -->
+	<select id="getTotalCount" resultType="int">
+		select count(*) from sh_ab_view
+	</select>
+	
+	<!-- 페이지별 센터 조회 -->
+	<select id="getABList" resultMap="AB">
+		<![CDATA[
+	      select *
+	      from (
+	        select a.*, rownum as rnum
+	        from (
+	          select *
+	          from sh_ab_view
+	          order by ab_id
+	        ) a
+	        where rownum <= #{endRow}
+	      )
+	      where rnum > #{startRow}
+	    ]]>
+	</select>
+	
+	<!-- 전체 지역 이름 조회 -->
+	<select id="searchByAllRegion" resultMap="AB">
+		select * from sh_ab_view where ab_breed like '%' || #{term} || '%'
+	</select>
+	
+	<!-- 특정 지역 이름 조회 -->
+	<select id="searchByBreedName" resultMap="AB">
+		select * from sh_ab_view where ab_breed like '%' || #{term} || '%' and sh_region like #{category}
+	</select>
+	
+	<!-- 특정 강아지 상세 -->
+	<select id="getABDetail" resultMap="AB">
+	    select * from sh_ab_view where ab_id = #{abid}
+	</select>
 
-    <!-- 필터링된 부분 조회 -->
-    <select id="selectFilteredABList" parameterType="map" resultMap="ad">
-        SELECT * FROM (
-            SELECT a.*, ROW_NUMBER() OVER (ORDER BY AB_ID) AS rnum
-            FROM AB a
-            WHERE 1=1
-            <if test="shID != null and shID != ''">
-                AND SH_ID = #{shID}
-            </if>
-            <if test="region != null and region != ''">
-                AND AB_LOCATION LIKE CONCAT('%', #{region}, '%')
-            </if>
-            <if test="centerName != null and centerName != ''">
-                AND AB_LOCATION LIKE CONCAT('%', #{centerName}, '%')
-            </if>
-            <if test="startDate != null and startDate != ''">
-                AND AB_DATE >= TO_DATE(#{startDate}, 'YYYY-MM-DD')
-            </if>
-            <if test="endDate != null and endDate != ''">
-                AND AB_DATE &lt;= TO_DATE(#{endDate}, 'YYYY-MM-DD')
-            </if>
-            <if test="breed != null and breed != ''">
-                AND AB_BREED LIKE CONCAT('%', #{breed}, '%')
-            </if>
-        ) WHERE rnum BETWEEN #{startRow} + 1 AND #{startRow} + #{pageContentEa}
-    </select>
 
-    <!-- 필터링된 총 카운트 -->
-    <select id="selectABTotalCount" parameterType="map" resultType="int">
-        SELECT COUNT(*) FROM AB
-        WHERE 1=1
-        <if test="shID != null and shID != ''">
-            AND SH_ID = #{shID}
-        </if>
-        <if test="region != null and region != ''">
-            AND AB_LOCATION LIKE CONCAT('%', #{region}, '%')
-        </if>
-        <if test="centerName != null and centerName != ''">
-            AND AB_LOCATION LIKE CONCAT('%', #{centerName}, '%')
-        </if>
-        <if test="startDate != null and startDate != ''">
-            AND AB_DATE >= TO_DATE(#{startDate}, 'YYYY-MM-DD')
-        </if>
-        <if test="endDate != null and endDate != ''">
-            AND AB_DATE &lt;= TO_DATE(#{endDate}, 'YYYY-MM-DD')
-        </if>
-        <if test="breed != null and breed != ''">
-            AND AB_BREED LIKE CONCAT('%', #{breed}, '%')
-        </if>
-    </select>
-
-    <!-- ID로 조회 -->
-    <select id="selectABDetail" parameterType="string" resultMap="ad">
-        SELECT * FROM AB WHERE AB_ID = #{id}
-    </select>
 </mapper>
