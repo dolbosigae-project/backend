@@ -24,14 +24,19 @@ public class PlService {
         this.plMapper = plMapper;
     }
 
-    public PlResponseVo getCityList(int page, int limit) {
+    public PlResponseVo getCityList(int page, int limit, boolean isDescending) {
         int startRow = (page - 1) * limit + 1;
         int endRow = page * limit;
-        List<PlDTO> list = plMapper.getCityList(startRow, endRow);
+        List<PlDTO> list;
+        if (isDescending) {
+            list = plMapper.getCityListDesc(startRow, endRow); 
+        } else {
+            list = plMapper.getCityList(startRow, endRow);
+        }
         PlPaggingVo pagination = getPagination(page, limit, null);
         return new PlResponseVo(list, pagination);
     }
-
+    
     public PlResponseVo searchCity(String plText, int page, int limit) {
         int startRow = (page - 1) * limit + 1;
         int endRow = page * limit;

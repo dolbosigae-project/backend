@@ -28,6 +28,17 @@
         WHERE rnum >= #{startRow}
         ]]>
     </select>
+    <!-- 역순 리스트 뽑아오기 -->
+    <select id="getCityListDesc" resultMap="pl">
+        <![CDATA[
+        SELECT * FROM (
+            SELECT ROWNUM AS rnum, a.*
+            FROM (SELECT * FROM PL ORDER BY pl_id DESC) a
+            WHERE ROWNUM <= #{endRow}
+        )
+        WHERE rnum >= #{startRow}
+        ]]>
+    </select>
     <!-- 전체 개수 -->
     <select id="getTotalCount" resultType="int">
         <![CDATA[
