@@ -30,10 +30,14 @@ public class MemberService {
     @Autowired
     private MemberMapper memberMapper;
     
+    @Autowired
+    private S3ImageService s3ImageService;
+    
     private static final Logger logger = LoggerFactory.getLogger(MemberService.class);
 
-    public MemberService(MemberMapper memberMapper) {
+    public MemberService(MemberMapper memberMapper, S3ImageService s3ImageService) {
         this.memberMapper = memberMapper;
+        this.s3ImageService = s3ImageService;
     }
 
     //로그인
@@ -150,60 +154,53 @@ public class MemberService {
 		return resultId;
 	}
 
-    @Transactional
-    public void registerMember(BoardMemberDTO member) {
-        try {
-            // 프로필 이미지가 있는 경우 처리
-            if (member.getProfileImg() != null && !member.getProfileImg().isEmpty()) {
-                String base64Image = member.getProfileImg().split(",")[1]; // "data:image/png;base64," 부분 제거
-                String mimeType = member.getProfileImg().split(",")[0].split(":")[1].split(";")[0]; // MIME 타입 추출
-                String extension;
-                switch (mimeType) {
-                    case "image/jpeg":
-                        extension = "jpg";
-                        break;
-                    case "image/png":
-                        extension = "png";
-                        break;
-                    default:
-                        throw new IllegalArgumentException("Unsupported image type: " + mimeType);
-                }
-                byte[] imageBytes = Base64.getDecoder().decode(base64Image);
-                // 파일 저장 경로 설정
-                String imagePath = "C:\\Users\\user1\\git\\fileupload\\profile\\" + UUID.randomUUID().toString() + "." + extension;
+	@Transactional
+	public void registerMember(BoardMemberDTO member) {
+	    try {
+	        // 프로필 이미지가 있는 경우 처리
+	        if (member.getProfileImg() != null && !member.getProfileImg().isEmpty()) {
+	            logger.info("프로필 이미지 처리 중...");
 
-                // 디버깅 메시지 추가
-                System.out.println("Saving image to: " + imagePath);
+	            String base64Image = member.getProfileImg().split(",")[1]; // "data:image/png;base64," 부분 제거
+	            String mimeType = member.getProfileImg().split(",")[0].split(":")[1].split(";")[0]; // MIME 타입 추출
+	            String extension;
+	            switch (mimeType) {
+	                case "image/jpeg":
+	                    extension = "jpg";
+	                    break;
+	                case "image/png":
+	                    extension = "png";
+	                    break;
+	                default:
+	                    throw new IllegalArgumentException("Unsupported image type: " + mimeType);
+	            }
+	            byte[] imageBytes = Base64.getDecoder().decode(base64Image);
 
-                // 디렉토리가 존재하지 않으면 생성
-                File directory = new File("C:\\Users\\user1\\git\\fileupload\\profile");
-                if (!directory.exists()) {
-                    directory.mkdirs();
-                }
+	            logger.info("S3에 이미지 업로드 중...");
+	            // S3에 업로드
+	            String s3ImagePath = s3ImageService.uploadImageBytes(imageBytes, mimeType, extension);
+	            logger.info("이미지 업로드 완료. 경로: " + s3ImagePath);
 
-                try (OutputStream os = new FileOutputStream(imagePath)) {
-                    os.write(imageBytes);
-                }
-                member.setPetImagePath(imagePath); // 이미지 경로 설정
-            }
+	            member.setPetImagePath(s3ImagePath); // 이미지 경로 설정
+	        }
 
-            memberMapper.insertMember(member);
-            if ("T".equals(String.valueOf(member.getBoardMemberPetWith()))) {
-                memberMapper.insertPet(member);
-                memberMapper.insertPetImg(member);
-            } else {
-                // 반려동물이 없는 경우 클라이언트 단의 닉네임 값을 사용하여 기본값으로 PET 테이블에 데이터를 삽입
-                BoardMemberDTO defaultPet = new BoardMemberDTO();
-                defaultPet.setBoardMemberId(member.getBoardMemberId());
-                defaultPet.setBoardMemberNick(member.getBoardMemberNick()); // 클라이언트 단에서 전달된 닉네임 값 사용
-                memberMapper.insertDefaultPet(defaultPet);
-            }
-        } catch (Exception e) {
-            System.err.println("회원 등록 중 오류 발생: " + e.getMessage());
-            e.printStackTrace();
-            throw new RuntimeException("회원 등록 중 오류가 발생했습니다.");
-        }
-    }
+	        memberMapper.insertMember(member);
+	        if ("T".equals(String.valueOf(member.getBoardMemberPetWith()))) {
+	            memberMapper.insertPet(member);
+	            memberMapper.insertPetImg(member);
+	        } else {
+	            // 반려동물이 없는 경우 클라이언트 단의 닉네임 값을 사용하여 기본값으로 PET 테이블에 데이터를 삽입
+	            BoardMemberDTO defaultPet = new BoardMemberDTO();
+	            defaultPet.setBoardMemberId(member.getBoardMemberId());
+	            defaultPet.setBoardMemberNick(member.getBoardMemberNick()); // 클라이언트 단에서 전달된 닉네임 값 사용
+	            memberMapper.insertDefaultPet(defaultPet);
+	        }
+	    } catch (Exception e) {
+	        logger.error("회원 등록 중 오류 발생: " + e.getMessage(), e);
+	        throw new RuntimeException("회원 등록 중 오류가 발생했습니다.");
+	    }
+	}
+	   
 
     public int updatePasswd(Map<String, String> params) {
         String boardMemberId = params.get("id");

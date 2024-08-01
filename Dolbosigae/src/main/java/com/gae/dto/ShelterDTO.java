@@ -2,103 +2,69 @@ package com.gae.dto;
 
 import org.apache.ibatis.type.Alias;
 
-@Alias("shelter")
+@Alias("Shelter")
 public class ShelterDTO {
-	private String shID;
-	private String shRegion;
-	private String shDis;
-	private String shAddress;
-	private String shName;
-	private String shTel;
-	private String shAnimalType;
-	private String shHour;
+	private String shelterId;
+	private String shelterRegion;
+	private String shelterAddress;
+	private String shelterName;
+	private String shelterTel;
+	private String shelterHour;
+	private double shelterLatitude;
+	private double shelterLongitude;
 	
-	public ShelterDTO() {
-
+	public double getShelterLatitude() {
+		return shelterLatitude;
 	}
-
-	public ShelterDTO(String shID, String shRegion, String shDis, String shAddress, String shName, String shTel,
-			String shAnimalType, String shHour) {
-		super();
-		this.shID = shID;
-		this.shRegion = shRegion;
-		this.shDis = shDis;
-		this.shAddress = shAddress;
-		this.shName = shName;
-		this.shTel = shTel;
-		this.shAnimalType = shAnimalType;
-		this.shHour = shHour;
+	public void setShelterLatitude(double shelterLatitude) {
+		this.shelterLatitude = shelterLatitude;
 	}
-
-	public String getShID() {
-		return shID;
+	public double getShelterLongitude() {
+		return shelterLongitude;
 	}
-
-	public void setShID(String shID) {
-		this.shID = shID;
+	public void setShelterLongitude(double shelterLongitude) {
+		this.shelterLongitude = shelterLongitude;
 	}
-
-	public String getShRegion() {
-		return shRegion;
+	public String getShelterId() {
+		return shelterId;
 	}
-
-	public void setShRegion(String shRegion) {
-		this.shRegion = shRegion;
+	public void setShelterId(String shelterId) {
+		this.shelterId = shelterId;
 	}
-
-	public String getShDis() {
-		return shDis;
+	public String getShelterRegion() {
+		return shelterRegion;
 	}
-
-	public void setShDis(String shDis) {
-		this.shDis = shDis;
+	public void setShelterRegion(String shelterRegion) {
+		this.shelterRegion = shelterRegion;
 	}
-
-	public String getShAddress() {
-		return shAddress;
+	public String getShelterAddress() {
+		return shelterAddress;
 	}
-
-	public void setShAddress(String shAddress) {
-		this.shAddress = shAddress;
+	public void setShelterAddress(String shelterAddress) {
+		this.shelterAddress = shelterAddress;
 	}
-
-	public String getShName() {
-		return shName;
+	public String getShelterName() {
+		return shelterName;
 	}
-
-	public void setShName(String shName) {
-		this.shName = shName;
+	public void setShelterName(String shelterName) {
+		this.shelterName = shelterName;
 	}
-
-	public String getShTel() {
-		return shTel;
+	public String getShelterTel() {
+		return shelterTel;
 	}
-
-	public void setShTel(String shTel) {
-		this.shTel = shTel;
+	public void setShelterTel(String shelterTel) {
+		this.shelterTel = shelterTel;
 	}
-
-	public String getShAnimalType() {
-		return shAnimalType;
+	public String getShelterHour() {
+		return shelterHour;
 	}
-
-	public void setShAnimalType(String shAnimalType) {
-		this.shAnimalType = shAnimalType;
+	public void setShelterHour(String shelterHour) {
+		this.shelterHour = shelterHour;
 	}
-
-	public String getShHour() {
-		return shHour;
-	}
-
-	public void setShHour(String shHour) {
-		this.shHour = shHour;
-	}
-
 	@Override
 	public String toString() {
-		return "ShelterDTO [shID=" + shID + ", shRegion=" + shRegion + ", shDis=" + shDis + ", shAddress=" + shAddress
-				+ ", shName=" + shName + ", shTel=" + shTel + ", shAnimalType=" + shAnimalType + ", shHour=" + shHour
-				+ "]";
+		return "ShelterDTO [shelterId=" + shelterId + ", shelterRegion=" + shelterRegion + ", shelterAddress="
+				+ shelterAddress + ", shelterName=" + shelterName + ", shelterTel=" + shelterTel + ", shelterHour="
+				+ shelterHour + ", shelterLatitude=" + shelterLatitude + ", shelterLongitude=" + shelterLongitude + "]";
 	}
-	
 }

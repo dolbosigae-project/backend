@@ -1,6 +1,8 @@
 package com.gae.service;
 
-import java.util.ArrayList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -10,15 +12,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.gae.dto.BoardMemberDTO;
-import com.gae.mapper.ChatMapper;
+import com.gae.dto.ChatMsgDTO;
+import com.gae.mapper.ChatMsgMapper;
 
 @Service
-public class ChatRoomService {
+public class ChatMsgService {
     private final Map<String, Set<String>> chatRooms = new ConcurrentHashMap<>();
 
+    private static final Logger logger = LoggerFactory.getLogger(MemberService.class);
     
     @Autowired
-    private ChatMapper chatMapper;
+    private ChatMsgMapper msgMapper;
     
     // 채팅방 생성
     public synchronized boolean createRoom(String roomId, String userA, String userB) {
@@ -78,7 +82,52 @@ public class ChatRoomService {
 //    }
     
     public List<BoardMemberDTO> searchChatMembers(String category, String search) {
-        return chatMapper.searchChatMembers(category, search);
+        return msgMapper.searchChatMembers(category, search);
     }
 	
+    
+    //아래론 쪽지 관련
+    
+    
+    // 간결하게
+//    public void sendMessage(ChatMsgDTO dto) {
+//    	msgMapper.insertMsg(dto);
+//    	msgMapper.insertRMsg(dto);
+//    }
+    
+//    	복잔한 데이터 처리에 용이하지만 무거운 버전 
+    public void sendMessage(ChatMsgDTO msgDTO) {
+        logger.debug("전송할 메시지 정보: " + msgDTO);
+
+        msgDTO.setMsgSendTime(LocalDateTime.now());
+        msgDTO.setMsgCheck('N'); // 'N'으로 설정 (char 타입 유지)
+        msgMapper.insertMsg(msgDTO);
+
+        // 마지막으로 삽입된 ID를 가져옵니다.
+        String msgNo = msgDTO.getMsgNo();
+        logger.debug("삽입된 메시지 ID: " + msgNo);
+
+        // RMsgDTO 세부 사항 채우기
+        msgDTO.setMsgNo(msgNo);
+        msgDTO.setMsgReceiveTime(LocalDateTime.now());
+        msgDTO.setMsgCheck('N'); // 'N'으로 설정 (char 타입 유지)
+
+        msgMapper.insertRMsg(msgDTO);
+    }
+
+
+
+    public List<ChatMsgDTO> getReceivedMsg(String id) {
+        return msgMapper.selectRMsgsByReciver(id);
+    }
+
+    public List<ChatMsgDTO> getSentMsg(String id) {
+        return msgMapper.selectMsgsBySender(id);
+    }
+    
+    public ChatMsgDTO getMsgById(String msgNo) {  // 특정 메시지를 ID로 조회하는 메서드
+        return msgMapper.selectMsgById(msgNo);
+    }
+    
+    
 }
