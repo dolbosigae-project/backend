@@ -61,5 +61,28 @@
         INSERT INTO SHOW_BOARD (M_ID, SHOW_TITLE, SHOW_CONTENT, P_NICK)
         VALUES (#{mId}, #{showTitle}, #{showContent}, #{pNick})
     </insert>
+    
 
 </mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
