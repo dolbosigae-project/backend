@@ -10,7 +10,21 @@ public class ShelterDTO {
 	private String shelterName;
 	private String shelterTel;
 	private String shelterHour;
+	private double shelterLatitude;
+	private double shelterLongitude;
 	
+	public double getShelterLatitude() {
+		return shelterLatitude;
+	}
+	public void setShelterLatitude(double shelterLatitude) {
+		this.shelterLatitude = shelterLatitude;
+	}
+	public double getShelterLongitude() {
+		return shelterLongitude;
+	}
+	public void setShelterLongitude(double shelterLongitude) {
+		this.shelterLongitude = shelterLongitude;
+	}
 	public String getShelterId() {
 		return shelterId;
 	}
@@ -47,11 +61,10 @@ public class ShelterDTO {
 	public void setShelterHour(String shelterHour) {
 		this.shelterHour = shelterHour;
 	}
-	
 	@Override
 	public String toString() {
 		return "ShelterDTO [shelterId=" + shelterId + ", shelterRegion=" + shelterRegion + ", shelterAddress="
 				+ shelterAddress + ", shelterName=" + shelterName + ", shelterTel=" + shelterTel + ", shelterHour="
-				+ shelterHour + "]";
+				+ shelterHour + ", shelterLatitude=" + shelterLatitude + ", shelterLongitude=" + shelterLongitude + "]";
 	}
 }

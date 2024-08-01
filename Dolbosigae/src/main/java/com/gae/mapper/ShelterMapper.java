@@ -11,5 +11,8 @@ public interface ShelterMapper {
 
 	int getTotalCount();
 	List<ShelterDTO> getShelterList(int startRow, int endRow);
+	List<ShelterDTO> searchByAllRegion(String term);
+	List<ShelterDTO> searchByRegionName(String category, String term);
+	ShelterDTO getShelterDetail(String shelterId);
 	
 }
