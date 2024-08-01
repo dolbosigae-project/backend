@@ -25,6 +25,11 @@ public class ShowDTO {
     @JsonProperty("showCount")
     private int showCount;
 
+    @JsonProperty("showImagePath") // 이미지 URL을 저장할 필드
+    private String showImagePath;
+    
+    private String showImage; // Base64로 인코딩된 이미지 데이터
+
     // Getters and Setters
     public int getShowNo() {
         return showNo;
@@ -80,5 +85,21 @@ public class ShowDTO {
 
     public void setShowCount(int showCount) {
         this.showCount = showCount;
+    }
+
+    public String getShowImagePath() {
+        return showImagePath;
+    }
+
+    public void setShowImagePath(String showImagePath) {
+        this.showImagePath = showImagePath;
+    }
+
+    public String getShowImage() {
+        return showImage;
+    }
+
+    public void setShowImage(String showImage) {
+        this.showImage = showImage;
     }
 }
