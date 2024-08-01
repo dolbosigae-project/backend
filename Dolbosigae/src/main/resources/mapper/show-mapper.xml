@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.gae.mapper.ShowMapper">
+    <resultMap id="show" type="com.gae.dto.ShowDTO">
+        <id column="SHOW_NO" property="showNo" />
+        <result column="M_ID" property="mId"/>
+        <result column="SHOW_TITLE" property="showTitle"/>
+        <result column="SHOW_CONTENT" property="showContent"/>
+        <result column="P_NICK" property="pNick"/>
+        <result column="SHOW_DATE" property="showDate"/>
+        <result column="SHOW_COUNT" property="showCount"/>
+    </resultMap>
+
+    <select id="selectShowInfo" resultMap="show">
+        SELECT * FROM SHOW_BOARD WHERE SHOW_NO = #{showNo}
+    </select>
+
+    <select id="getTotalCount" resultType="int">
+        <![CDATA[
+        SELECT COUNT(*) FROM SHOW_BOARD
+        ]]>
+    </select>
+
+    <select id="searchShow" parameterType="map" resultMap="show">
+        <![CDATA[
+        SELECT * FROM (
+            SELECT ROWNUM AS rnum, a.*
+            FROM (SELECT * FROM SHOW_BOARD WHERE SHOW_TITLE LIKE '%' || #{showText} || '%' ORDER BY SHOW_NO) a
+            WHERE ROWNUM <= #{endRow}
+        )
+        WHERE rnum >= #{startRow}
+        ]]>
+    </select>
+
+    <select id="getShowList" resultMap="show">
+        <![CDATA[
+        SELECT * FROM (
+            SELECT ROWNUM AS rnum, a.*
+            FROM (SELECT * FROM SHOW_BOARD ORDER BY SHOW_DATE DESC) a
+            WHERE ROWNUM <= #{endRow}
+        )
+        WHERE rnum >= #{startRow}
+        ]]>
+    </select>
+
+    <delete id="deleteShow">
+        DELETE FROM SHOW_BOARD WHERE SHOW_NO = #{showNo}
+    </delete>
+
+    <select id="getTotalCountBySearch" resultType="int">
+        <![CDATA[
+        SELECT COUNT(*) FROM SHOW_BOARD WHERE SHOW_TITLE LIKE '%' || #{showText} || '%'
+        ]]>
+    </select>
+
+    <insert id="insertShow" parameterType="com.gae.dto.ShowDTO">
+        INSERT INTO SHOW_BOARD (M_ID, SHOW_TITLE, SHOW_CONTENT, P_NICK)
+        VALUES (#{mId}, #{showTitle}, #{showContent}, #{pNick})
+    </insert>
+
+</mapper>

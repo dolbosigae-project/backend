@@ -112,7 +112,7 @@
 						</exclude>
 					</excludes>
 					<settings>
-        				<setting name="jdbcTypeForNull" value="NULL"/>
+        				<setting name="jdbcTypeForNull" value="VARCHAR"/>
     				</settings>
 				</configuration>
 			</plugin>
