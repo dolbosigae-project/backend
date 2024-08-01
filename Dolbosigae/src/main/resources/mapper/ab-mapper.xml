@@ -20,7 +20,51 @@
 		<result column="AB_REGION" property="ABregion" />
 		<result column="AB_LATI" property="ABLati" />
 		<result column="AB_LONG" property="ABLong" />
+		<result column="SH_REGION" property="SHRegion" />
+		<result column="SH_ADDRESS" property="SHAddress" />
+		<result column="SH_NAME" property="SHName" />
+		<result column="SH_TEL" property="SHTel" />
+		<result column="SH_HOUR" property="SHHour" />
+		<result column="SH_WGS84LATITUDE" property="SHLatitude" />
+		<result column="SH_WGS84LONGITUDE" property="SHLongitude" />
 	</resultMap>
+	
+	<!-- 전체 센터 수 조회 -->
+	<select id="getTotalCount" resultType="int">
+		select count(*) from sh_ab_view
+	</select>
+	
+	<!-- 페이지별 센터 조회 -->
+	<select id="getABList" resultMap="AB">
+		<![CDATA[
+	      select *
+	      from (
+	        select a.*, rownum as rnum
+	        from (
+	          select *
+	          from sh_ab_view
+	          order by ab_id
+	        ) a
+	        where rownum <= #{endRow}
+	      )
+	      where rnum > #{startRow}
+	    ]]>
+	</select>
+	
+	<!-- 전체 지역 이름 조회 -->
+	<select id="searchByAllRegion" resultMap="AB">
+		select * from sh_ab_view where ab_breed like '%' || #{term} || '%'
+	</select>
+	
+	<!-- 특정 지역 이름 조회 -->
+	<select id="searchByBreedName" resultMap="AB">
+		select * from sh_ab_view where ab_breed like '%' || #{term} || '%' and sh_region like #{category}
+	</select>
+	
+	<!-- 특정 강아지 상세 -->
+	<select id="getABDetail" resultMap="AB">
+	    select * from sh_ab_view where ab_id = #{abid}
+	</select>
 
 
 </mapper>
