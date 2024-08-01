@@ -80,4 +80,14 @@ public class ShowService {
         // SHOW_NO는 자동으로 생성되므로, DTO에서 설정하지 않도록 합니다.
         mapper.insertShow(showDTO);
     }
+
+    //게시글 수정
+	public int editShow(ShowDTO showDTO) {
+        int showResult = mapper.editShow(showDTO);
+        
+        if (showResult == 0) {
+            throw new RuntimeException("Failed to update board");
+        }
+        return showResult;
+    }
 }
