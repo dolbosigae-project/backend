@@ -39,7 +39,7 @@
         <![CDATA[
         SELECT * FROM (
             SELECT ROWNUM AS rnum, a.*
-            FROM (SELECT * FROM SHOW_BOARD ORDER BY TO_NUMBER(SHOW_NO)) a
+            FROM (SELECT * FROM SHOW_BOARD ORDER BY SHOW_DATE DESC) a
             WHERE ROWNUM <= #{endRow}
         )
         WHERE rnum >= #{startRow}
