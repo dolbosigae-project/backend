@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gae.mapper.DogRandomWorldCupMapper">
+    <resultMap type="com.gae.dto.DogRandomWorldCupDTO" id="drwc">
+        <id column="DOG_ID" property="dogId" />
+        <result column="DOG_TYPE_NAME" property="dogTypeName"/>
+        <result column="DOG_TYPE_INFO" property="dogTypeInfo"/>
+        <result column="DOG_IMG" property="dogImg"/>
+        <result column="DOG_RANKING" property="dogRanking"/>
+    </resultMap>
+    
+    <!-- 강아지 렌덤으로 뽑기 -->
+    <select id="selectRandomDog" resultMap="drwc">
+        SELECT 
+            DOG_ID,
+            DOG_TYPE_NAME,
+            DOG_TYPE_INFO,
+            DOG_IMG        
+       	FROM DOG_TYPE
+            ORDER BY DBMS_RANDOM.VALUE
+    </select>
+    
+    <!-- 우승한 강아지 찾기 -->
+    <select id="selectWinnerDog" parameterType="int" resultMap="drwc">
+    	SELECT * FROM DOG_TYPE WHERE DOG_ID = #{dogId}
+    </select>
+    
+    <!-- 우승 횟수 업데이트 -->
+    <update id="incrementWinCount" parameterType="int">
+    	UPDATE DOG_TYPE SET DOG_RANKING = DOG_RANKING + 1 WHERE DOG_ID = #{dogId}
+	</update>
+	
+	<!-- 우승 랭킹 top10 뽑기 -->
+	<select id="selectAllRanking" resultMap="drwc">
+        <![CDATA[SELECT * FROM (
+            SELECT * 
+            FROM DOG_TYPE
+            ORDER BY DOG_RANKING DESC
+        ) WHERE ROWNUM <= 10
+        ]]>
+	</select>
+
+</mapper>

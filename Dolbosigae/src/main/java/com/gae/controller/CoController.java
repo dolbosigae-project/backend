@@ -44,13 +44,14 @@ public class CoController {
 	public Map<String, Object> convenList(
 			@RequestParam(defaultValue = "1") int page,
 			@RequestParam(defaultValue = "10") int limit,
-			@RequestParam(required = false) String coText) {
+			@RequestParam(required = false) String coText,
+			@RequestParam(defaultValue = "false") boolean isDescending) {
 		
 		Map<String, Object> map = new HashMap<String, Object>();
 		CoResponseVo response;
 		try {
 			if(coText == null || coText.isEmpty()) {
-				response = coService.getConvenList(page, limit);
+				response = coService.getConvenList(page, limit, isDescending);
 			}else {
 				response = coService.searchConven(page, limit, coText);
 			}
