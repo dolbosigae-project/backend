@@ -331,9 +331,15 @@ public class MemberService {
     }
 
     //즐겨찾기 리스트 확인
-	public String getMateFavList(String id) {
-		return memberMapper.getMateFavList(id);
-	}
+    public List<String> getMateFavList(String id) {
+        String mateFavString = memberMapper.getMateFavList(id);
+        
+        if (mateFavString != null && !mateFavString.isEmpty()) {
+            return Arrays.asList(mateFavString.split(","));
+        } else {
+            return new ArrayList<>();
+        }
+    }
 
 
     

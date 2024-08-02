@@ -37,12 +37,12 @@ public interface MemberMapper {
     List<BoardMemberDTO> getWalkMateList(@Param("startRow") int startRow, @Param("endRow") int endRow);
     List<BoardMemberDTO> getPetProfile(@Param("id") String id);
     Integer isFavorite(@Param("loginId") String loginId, @Param("targetId") String targetId);
-    void insertFavorite(@Param("loginId") String loginId, @Param("targetId") String targetId);
     void deleteFavorite(@Param("loginId") String loginId, @Param("targetId") String targetId);
     List<String> selectPidsByMids(@Param("Wid") List<String> Wid);
     void updateWalkTF(@Param("pIds") List<String> pIds);
 	String getMateFavList(String id);
 	String getFavorites(String loginId);
+	void insertFavorite(@Param("loginId") String loginId, @Param("targetId") String targetId);
 	void updateFavorites(String loginId, String newFavorites);
 	List<BoardMemberDTO> searchWalkMateAddress(String addressText);
 	

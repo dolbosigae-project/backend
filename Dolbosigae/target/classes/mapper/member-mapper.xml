@@ -282,6 +282,11 @@
 		    SELECT mate FROM w_mate_fav WHERE m_id = #{loginId}
 		</select>
 		
+		<insert id="insertFavorite">
+		    INSERT INTO w_mate_fav (m_id, mate)
+		    VALUES (#{loginId}, #{targetId})
+		</insert>
+		
 		<update id="updateFavorites">
 		    UPDATE w_mate_fav SET mate = #{newFavorites} WHERE m_id = #{loginId}
 		</update>
