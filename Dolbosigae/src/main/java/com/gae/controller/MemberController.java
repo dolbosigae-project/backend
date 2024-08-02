@@ -186,10 +186,11 @@ public class MemberController {
 
     @GetMapping("/member/walkmate/search")
     @ResponseBody
-    public ResponseEntity<MemberResponseVo> searchWalkMateAddress(@RequestParam String addressText, @RequestParam(defaultValue = "1") int page) {
+    public ResponseEntity<MemberResponseVo> searchWalkMateAddress(@RequestParam String addressText) {
         try {
-            logger.debug("주소로 회원 검색 요청 수신: addressText={}, page={}", addressText, page);
-            MemberResponseVo response = memberService.searchWalkMateAddress(addressText, page);
+            logger.debug("주소로 회원 검색 요청 수신: addressText={}", addressText);
+            // 페이지네이션 없이 검색된 결과를 반환하는 메서드 호출
+            MemberResponseVo response = memberService.searchWalkMateAddress(addressText);
             logger.debug("응답: {}", response);
             return ResponseEntity.ok(response);
         } catch (Exception e) {

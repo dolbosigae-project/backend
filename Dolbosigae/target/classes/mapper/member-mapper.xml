@@ -257,23 +257,16 @@
 		    ]]>
 		  </select>
 		  
-		  <!-- 입력된 텍스트를 포함한 회원 목록을 가져오는 쿼리 -->
-		  <select id="searchWalkMateAddress" resultMap="member">
-		    <![CDATA[
-		      SELECT *
-		      FROM (
-		        SELECT A.*, ROWNUM AS RNUM
-		        FROM (
-		          SELECT *
-		          FROM MEMBER_PET_VIEW
-		          WHERE PET_WALKPROFILE = 'T' AND MEMBER_REGION LIKE '%' || #{addressText} || '%'
-		          ORDER BY MEMBER_ID
-		        ) A
-		        WHERE ROWNUM <= #{endRow}
-		      )
-		      WHERE RNUM > #{startRow}
-		    ]]>
-		  </select>
+		<!-- 입력된 텍스트를 포함한 회원 목록을 가져오는 쿼리 -->
+		<select id="searchWalkMateAddress" resultMap="member">
+		  <![CDATA[
+		    SELECT *
+		    FROM MEMBER_PET_VIEW
+		    WHERE PET_WALKPROFILE = 'T'
+		    AND MEMBER_REGION LIKE '%' || #{addressText} || '%'
+		    ORDER BY MEMBER_ID
+		  ]]>
+		</select>
 		
 		<select id="getPetProfile" resultMap="member">
 		    SELECT * FROM MEMBER_PET_VIEW WHERE MEMBER_ID = #{id}

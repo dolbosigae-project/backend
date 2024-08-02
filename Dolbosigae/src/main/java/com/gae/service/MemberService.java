@@ -234,26 +234,20 @@ public class MemberService {
         return new MemberResponseVo(members, paggingVo);
     }
 
-    public MemberResponseVo searchWalkMateAddress(String addressText, int page) {
-        int pageOfContentCount = 6; // 페이지마다 표시될 회원 수
-        int totalCount = memberMapper.getTotalCountAddress(addressText); // 입력된 텍스트를 포함한 회원들의 전체 수
-        MemberPaggingVo paggingVo = new MemberPaggingVo(totalCount, page, pageOfContentCount);
-        
-        int startRow = (page - 1) * pageOfContentCount;
-        int endRow = page * pageOfContentCount;
+    public MemberResponseVo searchWalkMateAddress(String addressText) {
+        // 페이지네이션 없이 모든 결과를 가져옵니다.
+        List<BoardMemberDTO> members = memberMapper.searchWalkMateAddress(addressText);
 
-        logger.debug("주소로 회원 검색: addressText={}, startRow={}, endRow={}", addressText, startRow, endRow);
-
-        List<BoardMemberDTO> members = memberMapper.searchWalkMateAddress(addressText, startRow, endRow);
-        
         // 콘솔에 결과 출력
         logger.debug("=== 주소별 회원 목록: {} ===", addressText);
         for (BoardMemberDTO member : members) {
             logger.debug(member.toString());
         }
 
-        return new MemberResponseVo(members, paggingVo);
+        // 페이지네이션 정보를 null로 설정합니다.
+        return new MemberResponseVo(members, null);
     }
+
 
     
     public BoardMemberDTO getPetProfile(String id) {
@@ -340,6 +334,7 @@ public class MemberService {
 	public String getMateFavList(String id) {
 		return memberMapper.getMateFavList(id);
 	}
+
 
     
 }

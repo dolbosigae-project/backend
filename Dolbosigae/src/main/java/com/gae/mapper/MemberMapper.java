@@ -34,7 +34,6 @@ public interface MemberMapper {
 	//이 밑으로 주의
 	int getTotalCountWalk();
 	int getTotalCountAddress(@Param("addressText") String addressText);
-    List<BoardMemberDTO> searchWalkMateAddress(@Param("addressText") String addressText, @Param("startRow") int startRow, @Param("endRow") int endRow);
     List<BoardMemberDTO> getWalkMateList(@Param("startRow") int startRow, @Param("endRow") int endRow);
     List<BoardMemberDTO> getPetProfile(@Param("id") String id);
     Integer isFavorite(@Param("loginId") String loginId, @Param("targetId") String targetId);
@@ -45,5 +44,6 @@ public interface MemberMapper {
 	String getMateFavList(String id);
 	String getFavorites(String loginId);
 	void updateFavorites(String loginId, String newFavorites);
+	List<BoardMemberDTO> searchWalkMateAddress(String addressText);
 	
 }
