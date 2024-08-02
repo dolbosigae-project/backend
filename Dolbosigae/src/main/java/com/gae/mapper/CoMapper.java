@@ -18,5 +18,6 @@ public interface CoMapper {
 	CoDTO selectConvenInfo(int coId);
 	int deleteConvenience(int coId);
 	void convenInsert(CoDTO dto);
+	List<CoDTO> getConvenListDesc(int startRow, int endRow);
 
 }

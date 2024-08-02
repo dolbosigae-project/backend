@@ -10,6 +10,7 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 
 import com.gae.dto.CoDTO;
+import com.gae.dto.PlDTO;
 import com.gae.mapper.CoMapper;
 import com.gae.vo.CoPaggingVo;
 import com.gae.vo.CoResponseVo;
@@ -22,11 +23,15 @@ public class CoService {
 		this.coMapper = coMapper;
 	}
 
-	public CoResponseVo getConvenList(int page, int limit) {
+	public CoResponseVo getConvenList(int page, int limit, boolean isDescending) {
 		int startRow = (page - 1) * limit + 1; 
 		int endRow = page * limit;
-		List<CoDTO> list = coMapper.getConvenList(startRow, endRow);
-		System.out.println(list);
+		List<CoDTO> list;
+        if (isDescending) {
+            list = coMapper.getConvenListDesc(startRow, endRow);
+        } else {
+            list = coMapper.getConvenList(startRow, endRow);
+        }
 		CoPaggingVo pagination = getPagination(page, limit, null);
 		return new CoResponseVo(list, pagination);
 	}
