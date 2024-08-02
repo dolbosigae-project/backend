@@ -69,6 +69,7 @@ public class ChatMsgController {
     @GetMapping("/msg/message/{msgId}")
     public ResponseEntity<ChatMsgDTO> getMessageById(@PathVariable int msgId) {
         ChatMsgDTO message = chatMsgService.getMsgById(msgId);
+//        System.out.println("메시지 아이디로 조회하는 컨트롤러 통과");
         return ResponseEntity.ok(message);
     }
 
@@ -95,31 +96,8 @@ public class ChatMsgController {
         chatMsgService.sendMessage(chatMsgDTO, false);
         return ResponseEntity.ok().build();
     }
-
-    // 채팅방 관련 엔드포인트
-//    @PostMapping("/chat/createRoom")
-//    public ResponseEntity<Boolean> createRoom(@RequestParam String roomId, @RequestParam String userA, @RequestParam String userB) {
-//        boolean result = chatMsgService.createRoom(roomId, userA, userB);
-//        return ResponseEntity.ok(result);
-//    }
-//
-//    @PostMapping("/chat/addUserToRoom")
-//    public ResponseEntity<Boolean> addUserToRoom(@RequestParam String roomId, @RequestParam String username) {
-//        boolean result = chatMsgService.addUserToRoom(roomId, username);
-//        return ResponseEntity.ok(result);
-//    }
-//
-//    @PostMapping("/chat/removeUserFromRoom")
-//    public ResponseEntity<Void> removeUserFromRoom(@RequestParam String roomId, @RequestParam String username) {
-//        chatMsgService.removeUserFromRoom(roomId, username);
-//        return ResponseEntity.ok().build();
-//    }
-//
-//    @PostMapping("/chat/removeChatRoom")
-//    public ResponseEntity<Void> removeChatRoom(@RequestParam String roomId) {
-//        chatMsgService.removeChatRoom(roomId);
-//        return ResponseEntity.ok().build();
-//    }
+    
+    
 
     @GetMapping("/chat/usersInRoom/{roomId}")
     public ResponseEntity<Set<String>> getUsersInRoom(@PathVariable String roomId) {
@@ -215,37 +193,6 @@ public class ChatMsgController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal Server에서 에러난거임");
         }
     }
-//    
-//    // 아래론 쪽지 관련
-//    @GetMapping("/msg/R_Msg")
-//    public ResponseEntity<List<ChatMsgDTO>> getReceivedMsg(@RequestParam String id) {
-//        List<ChatMsgDTO> msgs = chatMsgService.getReceivedMsg(id);
-//        return ResponseEntity.ok(msgs);
-//    }
-//
-//    @GetMapping("/msg/S_Msg")
-//    public ResponseEntity<List<ChatMsgDTO>> getSentMsg(@RequestParam String id) {
-//        List<ChatMsgDTO> msgs = chatMsgService.getSentMsg(id);
-//        return ResponseEntity.ok(msgs);
-//    }
-//
-//    @GetMapping("/msg/message/{msgNo}")
-//    public ResponseEntity<ChatMsgDTO> getMsgById(@PathVariable String msgNo) {
-//        ChatMsgDTO msg = chatMsgService.getMsgById(msgNo);
-//        return ResponseEntity.ok(msg);
-//    }
-//    
-//    @PostMapping("/msg/sendMsg")
-//    public ResponseEntity<?> sendMessage(@RequestBody ChatMsgDTO dto) {
-//        try {
-//            logger.debug("받은 메시지 정보: " + dto);
-//            chatMsgService.sendMessage(dto);
-//            return ResponseEntity.ok("메시지가 성공적으로 전송되었습니다.");
-//        } catch (Exception e) {
-//            logger.error("메시지 전송 중 오류 발생: ", e);
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("메시지 전송 중 오류가 발생했습니다.");
-//        }
-//    }
     
     
 }
