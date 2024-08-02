@@ -32,13 +32,15 @@ public interface MemberMapper {
 	BoardMemberDTO myPage(String id);
 	
 	//이 밑으로 주의
-//	BoardMemberDTO selectLoginUserInfo(@Param("id") String id);
-//	BoardMemberDTO selectPetInfo(@Param("id") String id);
 	int getTotalCountWalk();
-    int getTotalCountWalkByRegion(String region);
+	int getTotalCountAddress(@Param("addressText") String addressText);
+    List<BoardMemberDTO> searchWalkMateAddress(@Param("addressText") String addressText, @Param("startRow") int startRow, @Param("endRow") int endRow);
     List<BoardMemberDTO> getWalkMateList(@Param("startRow") int startRow, @Param("endRow") int endRow);
-    List<BoardMemberDTO> searchWalkMatesByRegion(@Param("region") String region, @Param("startRow") int startRow, @Param("pageOfContentCount") int pageOfContentCount);
     List<BoardMemberDTO> getPetProfile(@Param("id") String id);
-	void insertFavorite(@Param("loginId")String loginId, @Param("targetId") String targetId);
+    Integer isFavorite(@Param("loginId") String loginId, @Param("targetId") String targetId);
+    void insertFavorite(@Param("loginId") String loginId, @Param("targetId") String targetId);
+    void deleteFavorite(@Param("loginId") String loginId, @Param("targetId") String targetId);
+    List<String> selectPidsByMids(@Param("Wid") List<String> Wid);
+    void updateWalkTF(@Param("pIds") List<String> pIds);
 	
 }
