@@ -23,14 +23,14 @@ public interface ChatMsgMapper {
 	
 	int selectNextMsgId();
     void insertMsg(ChatMsgDTO message);
-    void insertNotification(NtDTO notification);
+//    void insertNotification(NtDTO notification);
     ChatMsgDTO selectMsgById(int msgId);
     List<ChatMsgDTO> selectMsgsBySender(String sId);
     List<ChatMsgDTO> selectMsgsByReceiver(String rId);
     List<NtDTO> getNotificationsByUserId(String rId);
     void markNotificationAsSeen(int notifId);
     List<String> getAllUserIds();
-
 	void deleteMsgById(int msgId);
+	void updateMsgReadStatus(@Param("msgId") int msgId, @Param("rId") String rId);
 	
 }

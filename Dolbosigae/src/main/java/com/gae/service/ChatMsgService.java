@@ -190,7 +190,7 @@ public class ChatMsgService {
 //            messagingTemplate.convertAndSendToUser(message.getrId(), "/queue/notifications", "새 쪽지가 도착했습니다.");
         }
 
-        logger.debug("MSG2 및 NT 테이블에 데이터 삽입 완료: " + message);
+        logger.debug("MSG2 테이블에 데이터 삽입 완료: " + message);
     }
 
     public List<ChatMsgDTO> getReceivedMsg(String rId) {
