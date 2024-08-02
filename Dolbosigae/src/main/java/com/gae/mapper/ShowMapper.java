@@ -15,6 +15,7 @@ public interface ShowMapper {
     int deleteShow(int showNo);
     int insertShow(ShowDTO showDTO);
     int writeBoard(ShowDTO showDTO);
+	int editShow(ShowDTO showDTO);
 }
 
 

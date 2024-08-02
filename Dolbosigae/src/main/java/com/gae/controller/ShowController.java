@@ -4,6 +4,7 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -39,7 +40,7 @@ public class ShowController {
     @GetMapping("/boards/list")
     public Map<String, Object> selectList(
         @RequestParam(defaultValue = "1") int page,
-        @RequestParam(defaultValue = "5") int limit,
+        @RequestParam(defaultValue = "10") int limit,
         @RequestParam(required = false) String showText) {
 
         Map<String, Object> map = new HashMap<>();
@@ -172,4 +173,24 @@ public class ShowController {
         }
         return response;
     }
+    
+    @Transactional
+    @PostMapping("/shows/{id}")
+    public ResponseEntity<String> editShow(@RequestBody ShowDTO showDTO) {
+    	   try {
+               System.out.println("Received Member Data: " + showDTO); // 데이터 출력
+               int result = showService.editShow(showDTO);
+               System.out.println("Update Result: " + result);
+
+               return ResponseEntity.ok("게시글 정보가 업데이트되었습니다.");
+           } catch (Exception e) {
+               e.printStackTrace();
+               return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("게시글 정보 업데이트 중 오류가 발생했습니다.");
+           }
+       }
+    
+    
+    
+    
+    
 }
