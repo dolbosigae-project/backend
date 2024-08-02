@@ -337,7 +337,7 @@ public class MemberService {
     }
 
     //즐겨찾기 리스트 확인
-	public List<Member> getMateFavList(String id) {
+	public String getMateFavList(String id) {
 		return memberMapper.getMateFavList(id);
 	}
 

@@ -42,7 +42,7 @@ public interface MemberMapper {
     void deleteFavorite(@Param("loginId") String loginId, @Param("targetId") String targetId);
     List<String> selectPidsByMids(@Param("Wid") List<String> Wid);
     void updateWalkTF(@Param("pIds") List<String> pIds);
-	List<Member> getMateFavList(String id);
+	String getMateFavList(String id);
 	String getFavorites(String loginId);
 	void updateFavorites(String loginId, String newFavorites);
 	

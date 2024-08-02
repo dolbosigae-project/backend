@@ -314,7 +314,7 @@
 		  </update>
 		  
 		  <!-- 즐겨찾기 리스트 확인 -->
-		  <select id="getMateFavList" resultMap="member">
+		  <select id="getMateFavList" resultType="java.lang.String">
 		  	SELECT MATE_FAVORITE FROM MEMBER_PET_VIEW
 			WHERE MEMBER_ID = #{id}
 		  </select>
