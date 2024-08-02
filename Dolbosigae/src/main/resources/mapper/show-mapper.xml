@@ -12,6 +12,7 @@
         <result column="P_NICK" property="pNick"/>
         <result column="SHOW_DATE" property="showDate"/>
         <result column="SHOW_COUNT" property="showCount"/>
+        <result column="SHOW_IMG_PATH" property="showImagePath" />
     </resultMap>
 
     <select id="selectShowInfo" resultMap="show">
@@ -60,5 +61,28 @@
         INSERT INTO SHOW_BOARD (M_ID, SHOW_TITLE, SHOW_CONTENT, P_NICK)
         VALUES (#{mId}, #{showTitle}, #{showContent}, #{pNick})
     </insert>
+    
 
 </mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gae.mapper.ShelterMapper">
+
+	<resultMap type="com.gae.dto.ShelterDTO" id="shelter">
+		<id column="SH_ID" property="shelterId" />
+		<result column="SH_REGION" property="shelterRegion" />
+		<result column="SH_ADDRESS" property="shelterAddress" />
+		<result column="SH_NAME" property="shelterName" />
+		<result column="SH_TEL" property="shelterTel" />
+		<result column="SH_HOUR" property="shelterHour" />
+		<result column="SH_WGS84LATITUDE" property="shelterLatitude" />
+		<result column="SH_WGS84LONGITUDE" property="shelterLongitude" />
+	</resultMap>
+	
+	<!-- 전체 센터 수 조회 -->
+	<select id="getTotalCount" resultType="int">
+		select count(*) from sh
+	</select>
+	
+	<!-- 페이지별 센터 조회 -->
+	<select id="getShelterList" resultMap="shelter">
+		<![CDATA[
+	      SELECT *
+	      FROM (
+	        SELECT A.*, ROWNUM AS RNUM
+	        FROM (
+	          SELECT *
+	          FROM SH
+	          ORDER BY SH_ID
+	        ) A
+	        WHERE ROWNUM <= #{endRow}
+	      )
+	      WHERE RNUM > #{startRow}
+	    ]]>
+	</select>
+	
+	<!-- 전체 지역 이름 조회 -->
+	<select id="searchByAllRegion" resultMap="shelter">
+		select * from sh where sh_name like '%' || #{term} || '%'
+	</select>
+	
+	<!-- 특정 지역 이름 조회 -->
+	<select id="searchByRegionName" resultMap="shelter">
+		select * from sh where sh_name like '%' || #{term} || '%' and sh_region like #{category}
+	</select>
+	
+	<!-- 특정 센터 상세 -->
+	<select id="getShelterDetail" resultMap="shelter">
+	    select * from sh where SH_ID = #{shelterId}
+	</select>
+	
+
+
+
+
+
+
+
+
+
+</mapper>
+
+
+
+
+
+
+
+
+
+
+

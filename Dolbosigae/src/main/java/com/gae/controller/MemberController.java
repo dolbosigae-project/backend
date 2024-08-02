@@ -184,46 +184,88 @@ public class MemberController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/member/walkmates/search")
+    @GetMapping("/member/walkmate/search")
     @ResponseBody
-    public ResponseEntity<MemberResponseVo> searchWalkMatesByRegion(@RequestParam String region, @RequestParam(defaultValue = "1") int page) {
-        logger.debug("지역별 산책 친구 검색 요청 수신: region={}, page={}", region, page);
-        MemberResponseVo response = memberService.searchWalkMatesByRegion(region, page);
-        logger.debug("응답: {}", response);
-        return ResponseEntity.ok(response);
-    }
-
-    @GetMapping("/member/petprofile/{id}")
-    public ResponseEntity<?> selectPetProfile(@PathVariable String id) {
-        logger.debug("Pet profile 요청 수신: id={}", id);
-        BoardMemberDTO member = memberService.getPetProfile(id);
-        if (member != null) {
-            return ResponseEntity.ok(member);
-        } else {
-            logger.debug("Pet profile 찾을 수 없음: id={}", id);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("찾을 수 없는 회원");
+    public ResponseEntity<MemberResponseVo> searchWalkMateAddress(@RequestParam String addressText, @RequestParam(defaultValue = "1") int page) {
+        try {
+            logger.debug("주소로 회원 검색 요청 수신: addressText={}, page={}", addressText, page);
+            MemberResponseVo response = memberService.searchWalkMateAddress(addressText, page);
+            logger.debug("응답: {}", response);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            logger.error("주소로 회원 검색 중 오류 발생: addressText={}, error={}", addressText, e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MemberResponseVo(null, null));
         }
     }
 
+    
+    @GetMapping("/member/petprofile/{id}")
+    public ResponseEntity<?> selectPetProfile(@PathVariable String id) {
+        logger.debug("Pet profile 요청 수신: id={}", id);
+        try {
+            BoardMemberDTO member = memberService.getPetProfile(id);
+            if (member == null) {
+                logger.debug("Pet profile 찾을 수 없음: id={}", id);
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("찾을 수 없는 회원");
+            }
+            logger.debug("Pet profile 가져오기 성공: {}", member);
+            return ResponseEntity.ok(member);
+        } catch (Exception e) {
+            logger.error("Pet profile 가져오는 중 오류 발생: id={}, error={}", id, e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류 발생");
+        }
+    }
+
+    
+    //즐찾 추가삭제
     @PostMapping("/mate/fav")
-    public void insertFavorite(@RequestParam String loginId, @RequestParam String targetId) {
-        memberService.insertFavorite(loginId, targetId);
+    public ResponseEntity<?> btnFavorite(@RequestBody Map<String, String> params) {
+        String loginId = params.get("loginId");
+        String targetId = params.get("targetId");
+        
+        if (loginId == null || targetId == null) {
+            return ResponseEntity.badRequest().body("필요한 매개변수를 찾지못함");
+        }
+        
+        try {
+            boolean isFavorite = memberService.btnFavorite(loginId, targetId);
+            if (isFavorite) {
+                return ResponseEntity.ok("즐겨찾기에 추가되었습니다.");
+            } else {
+                return ResponseEntity.ok("즐겨찾기가 삭제되었습니다.");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("즐겨찾기 상태 변경 중 오류가 발생했습니다.");
+        }
     }
     
+    //즐찾 추가상태를 확인하기 위한 
+    @GetMapping("/mate/fav/status")
+    public ResponseEntity<?> getFavoriteStatus(@RequestParam String loginId, @RequestParam String targetId) {
+        if (loginId == null || targetId == null) {
+            return ResponseEntity.badRequest().body("필요한 매개변수를 찾지못함");
+        }
+        
+        try {
+            boolean isFavorite = memberService.isFavorite(loginId, targetId);
+            return ResponseEntity.ok(Map.of("isFavorite", isFavorite));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("즐겨찾기 상태 확인 중 오류가 발생했습니다.");
+        }
+    }
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    //관리자 전용 - 게시판에 프로필 노출 끄기
+    @PostMapping("/walkmate/changeTF")
+    public ResponseEntity<String> changeWalkTF(@RequestBody Map<String, List<String>> params) {
+        List<String> Wid = params.get("Wid");
+        System.out.println("changeWalkTF endpoint called with Wid: " + Wid);
+        try {
+            memberService.changeWalkTF(Wid);
+            return ResponseEntity.ok("프로필이 성공적으로 변경되었습니다.");
+        } catch (Exception e) {
+            e.printStackTrace(); 
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("프로필 변경 중 오류가 발생했습니다.");
+        }
+    }
     
 }
