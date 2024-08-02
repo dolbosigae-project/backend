@@ -11,6 +11,8 @@ import com.gae.controller.MemberController;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -290,20 +292,30 @@ public class MemberService {
         logger.info("즐겨찾기 상태 변경 시도 - 로그인 ID: {}, 대상 ID: {}", loginId, targetId);
 
         try {
-            boolean isFavorite = isFavorite(loginId, targetId);
-            if (isFavorite) {
-                memberMapper.deleteFavorite(loginId, targetId);
-                logger.info("즐겨찾기 삭제 성공 - 로그인 ID: {}, 대상 ID: {}", loginId, targetId);
-                return false;
-            } else {
-                if (!loginId.equals(targetId)) {
-                    memberMapper.insertFavorite(loginId, targetId);
-                    logger.info("즐겨찾기 등록 성공 - 로그인 ID: {}, 대상 ID: {}", loginId, targetId);
-                    return true;
+            String existingFavorites = memberMapper.getFavorites(loginId);
+
+            if (existingFavorites != null) {
+                // 기존 즐겨찾기 목록이 있을 경우
+                List<String> favoriteList = new ArrayList<>(Arrays.asList(existingFavorites.split(",")));
+                if (favoriteList.contains(targetId)) {
+                    // 이미 즐겨찾기에 있는 경우 삭제
+                    favoriteList.remove(targetId);
+                    String newFavorites = String.join(",", favoriteList);
+                    memberMapper.updateFavorites(loginId, newFavorites);
+                    logger.info("즐겨찾기 삭제 성공 - 로그인 ID: {}, 대상 ID: {}", loginId, targetId);
+                    return false;
                 } else {
-                    logger.error("자기 자신을 즐겨찾기에 등록 시도 - 로그인 ID: {}", loginId);
-                    throw new IllegalArgumentException("자기 자신은 즐겨찾을 수 없습니다");
+                    // 즐겨찾기에 없는 경우 추가
+                    String newFavorites = existingFavorites + "," + targetId;
+                    memberMapper.updateFavorites(loginId, newFavorites);
+                    logger.info("즐겨찾기 추가 성공 - 로그인 ID: {}, 대상 ID: {}", loginId, targetId);
+                    return true;
                 }
+            } else {
+                // 즐겨찾기 목록이 없을 경우 새로 추가
+                memberMapper.insertFavorite(loginId, targetId);
+                logger.info("즐겨찾기 등록 성공 - 로그인 ID: {}, 대상 ID: {}", loginId, targetId);
+                return true;
             }
         } catch (Exception e) {
             logger.error("즐겨찾기 상태 변경 중 오류 발생", e);
@@ -323,6 +335,11 @@ public class MemberService {
         System.out.println("PIDs corresponding to WIDs: " + pIds); // 로그 추가
         memberMapper.updateWalkTF(pIds);
     }
+
+    //즐겨찾기 리스트 확인
+	public List<Member> getMateFavList(String id) {
+		return memberMapper.getMateFavList(id);
+	}
 
     
 }

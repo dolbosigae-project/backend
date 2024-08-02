@@ -268,4 +268,13 @@ public class MemberController {
         }
     }
     
+    //즐겨찾기 리스트 확인
+    @GetMapping("/mate/fav/list")
+    public ResponseEntity<?> mateFavList(@RequestParam String id){
+    	return ResponseEntity.ok(memberService.getMateFavList(id));
+    }
+    
+    
+    
+    
 }

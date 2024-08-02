@@ -285,16 +285,14 @@
 	        WHERE m_id = #{loginId} AND mate = #{targetId}
 	    </select>
 	
-	    <insert id="insertFavorite">
-	        INSERT INTO w_mate_fav (m_id, mate)
-	        VALUES (#{loginId}, #{targetId})
-	    </insert>
+	    <select id="getFavorites" resultType="String">
+		    SELECT mate FROM w_mate_fav WHERE m_id = #{loginId}
+		</select>
+		
+		<update id="updateFavorites">
+		    UPDATE w_mate_fav SET mate = #{newFavorites} WHERE m_id = #{loginId}
+		</update>
 	
-	    <delete id="deleteFavorite">
-	        DELETE FROM w_mate_fav
-	        WHERE m_id = #{loginId} AND mate = #{targetId}
-	    </delete>
-	    
 	    <!-- p_id, pet_id 아무튼 -->
 	    <select id="selectPidsByMids" resultType="string">
 		    SELECT P.P_ID
@@ -314,5 +312,12 @@
 		      #{petId}
 		    </foreach>
 		  </update>
+		  
+		  <!-- 즐겨찾기 리스트 확인 -->
+		  <select id="getMateFavList" resultMap="member">
+		  	SELECT MATE_FAVORITE FROM MEMBER_PET_VIEW
+			WHERE MEMBER_ID = #{id}
+		  </select>
+		  
 
 </mapper>
