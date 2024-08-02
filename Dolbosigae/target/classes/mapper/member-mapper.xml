@@ -14,7 +14,7 @@
     <result column="MEMBER_GRADE_NAME" property="boardMemberGradeName"/>
     <result column="MEMBER_PETWITH" property="boardMemberPetWith" jdbcType="CHAR"/>
     <result column="MATE_FAVORITE" property="mateFav"/>		<!-- 여기가 산책친구 즐찾 -->
-    <result column="PET_ID" property="petId"/>
+    <result column="P_ID" property="petId"/>
     <result column="PET_NICKNAME" property="boardMemberNick"/>	<!-- memberNick이지만 사실 사람말고 개 이름 -->
     <result column="PET_BIRTH" property="petBirth"/>
     <result column="PET_GENDER" property="petGender" jdbcType="CHAR"/>
@@ -231,14 +231,6 @@
 		    ]]>
 		</select>
 		
-		<select id="getTotalCountWalkByRegion" resultType="int">
-		    <![CDATA[
-		      SELECT COUNT(*)
-		      FROM MEMBER_PET_VIEW
-		      WHERE PET_WALKPROFILE = 'T' AND MEMBER_REGION = #{region}
-		    ]]>
-		</select>
-		
 		<select id="getWalkMateList" resultMap="member">
 		    <![CDATA[
 		      SELECT *
@@ -256,8 +248,17 @@
 		    ]]>
 		</select>
 		
-		
-		<select id="searchWalkMatesByRegion" resultMap="member">
+		<!-- 입력된 텍스트를 포함한 회원들의 전체 수를 가져오는 쿼리 -->
+		  <select id="getTotalCountAddress" resultType="int">
+		    <![CDATA[
+		      SELECT COUNT(*)
+		      FROM MEMBER_PET_VIEW
+		      WHERE PET_WALKPROFILE = 'T' AND MEMBER_REGION LIKE '%' || #{addressText} || '%'
+		    ]]>
+		  </select>
+		  
+		  <!-- 입력된 텍스트를 포함한 회원 목록을 가져오는 쿼리 -->
+		  <select id="searchWalkMateAddress" resultMap="member">
 		    <![CDATA[
 		      SELECT *
 		      FROM (
@@ -265,24 +266,53 @@
 		        FROM (
 		          SELECT *
 		          FROM MEMBER_PET_VIEW
-		          WHERE PET_WALKPROFILE = 'T' AND MEMBER_REGION = #{region}
+		          WHERE PET_WALKPROFILE = 'T' AND MEMBER_REGION LIKE '%' || #{addressText} || '%'
 		          ORDER BY MEMBER_ID
 		        ) A
 		        WHERE ROWNUM <= #{endRow}
 		      )
 		      WHERE RNUM > #{startRow}
 		    ]]>
-		</select>
+		  </select>
 		
-	    <select id="getPetProfile" resultType="com.gae.dto.BoardMemberDTO">
+		<select id="getPetProfile" resultMap="member">
 		    SELECT * FROM MEMBER_PET_VIEW WHERE MEMBER_ID = #{id}
 		</select>
+			    
+		<select id="isFavorite" resultType="int">
+	        SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END AS is_favorite
+	        FROM w_mate_fav
+	        WHERE m_id = #{loginId} AND mate = #{targetId}
+	    </select>
+	
+	    <insert id="insertFavorite">
+	        INSERT INTO w_mate_fav (m_id, mate)
+	        VALUES (#{loginId}, #{targetId})
+	    </insert>
+	
+	    <delete id="deleteFavorite">
+	        DELETE FROM w_mate_fav
+	        WHERE m_id = #{loginId} AND mate = #{targetId}
+	    </delete>
 	    
+	    <!-- p_id, pet_id 아무튼 -->
+	    <select id="selectPidsByMids" resultType="string">
+		    SELECT P.P_ID
+		    FROM PET P
+		    JOIN MEMBER M ON P.M_ID = M.M_ID
+		    WHERE M.M_ID IN
+		    <foreach item="mid" collection="Wid" open="(" separator="," close=")">
+		      #{mid}
+		    </foreach>
+		  </select>
 	    
-		<insert id="insertFavorite" parameterType="com.gae.dto.BoardMemberDTO">
-		    insert into w_mate_fav (m_id, mate) values (#{loginId}, #{targetId})
-		</insert>
-	  
-  
+	    <update id="updateWalkTF">
+		    UPDATE PET
+		    SET P_WALKPROFILE = 'F'
+		    WHERE P_ID IN
+		    <foreach item="petId" collection="pIds" open="(" separator="," close=")">
+		      #{petId}
+		    </foreach>
+		  </update>
 
 </mapper>
