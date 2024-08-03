@@ -257,23 +257,16 @@
 		    ]]>
 		  </select>
 		  
-		  <!-- 입력된 텍스트를 포함한 회원 목록을 가져오는 쿼리 -->
-		  <select id="searchWalkMateAddress" resultMap="member">
-		    <![CDATA[
-		      SELECT *
-		      FROM (
-		        SELECT A.*, ROWNUM AS RNUM
-		        FROM (
-		          SELECT *
-		          FROM MEMBER_PET_VIEW
-		          WHERE PET_WALKPROFILE = 'T' AND MEMBER_REGION LIKE '%' || #{addressText} || '%'
-		          ORDER BY MEMBER_ID
-		        ) A
-		        WHERE ROWNUM <= #{endRow}
-		      )
-		      WHERE RNUM > #{startRow}
-		    ]]>
-		  </select>
+		<!-- 입력된 텍스트를 포함한 회원 목록을 가져오는 쿼리 -->
+		<select id="searchWalkMateAddress" resultMap="member">
+		  <![CDATA[
+		    SELECT *
+		    FROM MEMBER_PET_VIEW
+		    WHERE PET_WALKPROFILE = 'T'
+		    AND MEMBER_REGION LIKE '%' || #{addressText} || '%'
+		    ORDER BY MEMBER_ID
+		  ]]>
+		</select>
 		
 		<select id="getPetProfile" resultMap="member">
 		    SELECT * FROM MEMBER_PET_VIEW WHERE MEMBER_ID = #{id}
@@ -285,16 +278,19 @@
 	        WHERE m_id = #{loginId} AND mate = #{targetId}
 	    </select>
 	
-	    <insert id="insertFavorite">
-	        INSERT INTO w_mate_fav (m_id, mate)
-	        VALUES (#{loginId}, #{targetId})
-	    </insert>
+	    <select id="getFavorites" resultType="String">
+		    SELECT mate FROM w_mate_fav WHERE m_id = #{loginId}
+		</select>
+		
+		<insert id="insertFavorite">
+		    INSERT INTO w_mate_fav (m_id, mate)
+		    VALUES (#{loginId}, #{targetId})
+		</insert>
+		
+		<update id="updateFavorites">
+		    UPDATE w_mate_fav SET mate = #{newFavorites} WHERE m_id = #{loginId}
+		</update>
 	
-	    <delete id="deleteFavorite">
-	        DELETE FROM w_mate_fav
-	        WHERE m_id = #{loginId} AND mate = #{targetId}
-	    </delete>
-	    
 	    <!-- p_id, pet_id 아무튼 -->
 	    <select id="selectPidsByMids" resultType="string">
 		    SELECT P.P_ID
@@ -314,5 +310,12 @@
 		      #{petId}
 		    </foreach>
 		  </update>
+		  
+		  <!-- 즐겨찾기 리스트 확인 -->
+		  <select id="getMateFavList" resultType="java.lang.String">
+		  	SELECT MATE_FAVORITE FROM MEMBER_PET_VIEW
+			WHERE MEMBER_ID = #{id}
+		  </select>
+		  
 
 </mapper>

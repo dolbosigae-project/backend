@@ -16,6 +16,8 @@
         <result column="co_img" property="coImg" />
         <result column="co_img_no" property="coImgNo"/>
         <result column="co_img_path" property="coImgPath"/>
+        <result column="CO_LATI" property="coLati"/>
+        <result column="CO_LONG" property="coLong"/>
     </resultMap>
 
     <select id="getConvenList" resultMap="co">

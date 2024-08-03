@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.gae.mapper.ChatMsgMapper">
+
+    <resultMap id="msg" type="com.gae.dto.ChatMsgDTO">
+        <id property="msgId" column="MSG_ID"/>
+        <result property="sId" column="S_ID"/>
+        <result property="rId" column="R_ID"/>
+        <result property="title" column="TITLE"/>
+        <result property="content" column="CONTENT"/>
+        <result property="sentTime" column="SENT_TIME" jdbcType="TIMESTAMP"/>
+        <result property="isRead" column="IS_READ" jdbcType="CHAR"/>
+        <result property="responseTo" column="RESPONSE_TO" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <resultMap id="nt" type="com.gae.dto.NtDTO">
+        <id property="notifId" column="NOTIF_ID"/>
+        <result property="msgId" column="MSG_ID"/>
+        <result property="rId" column="R_ID"/>
+        <result property="notifTime" column="NOTIF_TIME" jdbcType="TIMESTAMP"/>
+        <result property="isSeen" column="IS_SEEN" jdbcType="CHAR"/>
+    </resultMap>
+
+	<!-- 다음 MSG_ID를 가져오는 쿼리 -->
+    <select id="selectNextMsgId" resultType="int">
+        SELECT msg_seq.NEXTVAL AS nextId FROM dual
+    </select>
+
+    <!-- 메시지 삽입 쿼리 -->
+    <insert id="insertMsg" parameterType="com.gae.dto.ChatMsgDTO">
+        INSERT INTO MSG2 (MSG_ID, S_ID, R_ID, TITLE, CONTENT, SENT_TIME, IS_READ, RESPONSE_TO)
+        VALUES (#{msgId}, #{sId}, #{rId}, #{title}, #{content}, #{sentTime,jdbcType=TIMESTAMP}, #{isRead}, #{responseTo,jdbcType=INTEGER})
+    </insert>
+
+    <!-- 메시지 삽입 -->
+    <!-- <insert id="insertMessage" parameterType="com.gae.dto.ChatMsgDTO">
+        INSERT INTO MSG2 (MSG_ID, S_ID, R_ID, TITLE, CONTENT, SENT_TIME, IS_READ)
+        VALUES (#{msgId, jdbcType=NUMERIC}, #{sId, jdbcType=VARCHAR}, #{rId, jdbcType=VARCHAR}, #{title, jdbcType=VARCHAR}, #{content, jdbcType=VARCHAR}, CURRENT_TIMESTAMP, 'N')
+    </insert> -->
+    
+    <delete id="deleteMsgById" parameterType="int">
+        DELETE FROM MSG2 WHERE MSG_ID = #{msgId}
+    </delete>
+
+    <!-- 알림 삽입 -->
+    <insert id="insertNotification" parameterType="com.gae.dto.NtDTO">
+	    INSERT INTO NT (NOTIF_ID, MSG_ID, R_ID, NOTIF_TIME, IS_SEEN)
+	    VALUES (nt_seq.NEXTVAL, #{msgId, jdbcType=NUMERIC}, #{rId, jdbcType=VARCHAR}, CURRENT_TIMESTAMP, 'N')
+	</insert>
+
+    <!-- 메시지 ID로 메시지 조회 -->
+    <select id="selectMsgById" resultMap="msg">
+        SELECT MSG_ID, S_ID, R_ID, TITLE, CONTENT, SENT_TIME, IS_READ
+        FROM MSG2
+        WHERE MSG_ID = #{msgId}
+    </select>
+
+    <!-- 발신자 ID로 메시지 조회 -->
+    <select id="selectMsgsBySender" resultMap="msg">
+        SELECT MSG_ID, S_ID, R_ID, TITLE, CONTENT, SENT_TIME, IS_READ
+        FROM MSG2
+        WHERE S_ID = #{sId}
+    </select>
+
+    <!-- 수신자 ID로 메시지 조회 -->
+    <select id="selectMsgsByReceiver" parameterType="string" resultMap="msg">
+        SELECT MSG_ID, S_ID, R_ID, TITLE, CONTENT, SENT_TIME, IS_READ
+        FROM MSG2
+        WHERE R_ID = #{rId}
+    </select>
+
+    <!-- 수신자 ID로 알림 조회 -->
+    <select id="getNotificationsByUserId" resultMap="nt">
+        SELECT NOTIF_ID, MSG_ID, R_ID, NOTIF_TIME, IS_SEEN
+        FROM NT
+        WHERE R_ID = #{rId} AND IS_SEEN = 'N'
+        ORDER BY NOTIF_TIME DESC
+    </select>
+
+    <!-- 알림 읽음으로 표시 -->
+    <update id="markNotificationAsSeen" parameterType="int">
+        UPDATE NT
+        SET IS_SEEN = 'Y'
+        WHERE NOTIF_ID = #{notifId}
+    </update>
+
+</mapper>
