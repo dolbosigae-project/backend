@@ -19,7 +19,7 @@ import com.gae.dto.AdminDTO;
 import com.gae.service.AdminService;
 import com.gae.vo.AdminResponseVo;
 
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "https://dolbosigae.vercel.app/")
 @RestController
 public class AdminController {
 	private final AdminService adminService;

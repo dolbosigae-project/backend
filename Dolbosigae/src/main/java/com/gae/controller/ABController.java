@@ -13,7 +13,7 @@ import com.gae.dto.ABDTO;
 import com.gae.service.ABService;
 import com.gae.vo.ABResponseVo;
 
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "https://dolbosigae.vercel.app/")
 @RestController
 public class ABController {
 	private final ABService abService;

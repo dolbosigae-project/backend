@@ -25,7 +25,7 @@ import com.gae.vo.MemberResponseVo;
 
 import jakarta.servlet.http.HttpSession;
 
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "https://dolbosigae.vercel.app/")
 @Controller
 public class MemberController {
     private final MemberService memberService;
