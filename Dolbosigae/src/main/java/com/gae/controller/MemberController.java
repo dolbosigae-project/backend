@@ -37,6 +37,11 @@ public class MemberController {
         this.memberService = memberService;
     }
 
+    @GetMapping("/healthcheck")
+    public String healthcheck() {
+        return "OK";
+    }
+    
     @PostMapping("/login")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> login(@RequestBody Map<String, String> loginRequest, HttpSession session) {
