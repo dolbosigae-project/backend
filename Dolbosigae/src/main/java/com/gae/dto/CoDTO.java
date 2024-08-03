@@ -17,12 +17,14 @@ public class CoDTO {
 	private String coImg;
 	private String coImgNo;
 	private String coImgPath;
+	private double coLati;
+	private double coLong;
 	
 	public CoDTO() {	}
 
 	public CoDTO(int coId, String coDistinction, String coName, String coHour, String coTel, String coAddress,
-			String coSatHour, String coSunHour, String coDay, String coImg, String coImgNo, String coImgPath) {
-		super();
+			String coSatHour, String coSunHour, String coDay, String coImg, String coImgNo, String coImgPath,
+			double coLati, double coLong) {
 		this.coId = coId;
 		this.coDistinction = coDistinction;
 		this.coName = coName;
@@ -35,9 +37,29 @@ public class CoDTO {
 		this.coImg = coImg;
 		this.coImgNo = coImgNo;
 		this.coImgPath = coImgPath;
+		this.coLati = coLati;
+		this.coLong = coLong;
 	}
 
-	
+
+
+
+	public double getCoLati() {
+		return coLati;
+	}
+
+	public void setCoLati(double coLati) {
+		this.coLati = coLati;
+	}
+
+	public double getCoLong() {
+		return coLong;
+	}
+
+	public void setCoLong(double coLong) {
+		this.coLong = coLong;
+	}
+
 	/**
 	 * @return the coId
 	 */
@@ -211,8 +233,10 @@ public class CoDTO {
 		return "CoDTO [coId=" + coId + ", coDistinction=" + coDistinction + ", coName=" + coName + ", coHour=" + coHour
 				+ ", coTel=" + coTel + ", coAddress=" + coAddress + ", coSatHour=" + coSatHour + ", coSunHour="
 				+ coSunHour + ", coDay=" + coDay + ", coImg=" + coImg + ", coImgNo=" + coImgNo + ", coImgPath="
-				+ coImgPath + "]";
+				+ coImgPath + ", coLati=" + coLati + ", coLong=" + coLong + "]";
 	}
+
+	
 
 	
 
