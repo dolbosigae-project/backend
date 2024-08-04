@@ -37,10 +37,6 @@ public class MemberController {
         this.memberService = memberService;
     }
 
-    @GetMapping("/healthcheck")
-    public String healthcheck() {
-        return "OK";
-    }
     
     @PostMapping("/login")
     @ResponseBody

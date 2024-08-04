@@ -22,6 +22,11 @@ public class ABController {
 		this.abService = abService;
 	}
 	
+	@GetMapping("/healthcheck")
+    public String healthcheck() {
+        return "OK";
+    }
+	
 	//전체 리스트 조회
 	@GetMapping("/ab/list")
 	public ResponseEntity<ABResponseVo> selectAllAB(@RequestParam(defaultValue = "1")int page){
