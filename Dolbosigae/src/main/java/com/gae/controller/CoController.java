@@ -32,7 +32,7 @@ import com.gae.service.CoService;
 import com.gae.vo.CoResponseVo;
 
 @RestController
-@CrossOrigin(origins = "https://dolbosigae.vercel.app/", allowedHeaders = "*")
+@CrossOrigin(origins = "https://dolbosigae.site", allowedHeaders = "*")
 public class CoController {
 	private CoService coService;
 

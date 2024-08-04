@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.gae.dto.BoardMemberDTO;
 import com.gae.service.DogRandomDateService;
 
-@CrossOrigin(origins = "https://dolbosigae.vercel.app/")
+@CrossOrigin(origins = "https://dolbosigae.site")
 @RestController
 public class DogRandomDateController {
 	private final DogRandomDateService dogMateService;

@@ -18,7 +18,7 @@ import com.gae.service.HOService;
 import com.gae.vo.HOResponseVo;
 
 @RestController
-@CrossOrigin(origins = "https://dolbosigae.vercel.app/", allowedHeaders = "*")
+@CrossOrigin(origins = "https://dolbosigae.site", allowedHeaders = "*")
 public class HOController {
 
     private final HOService hoService;

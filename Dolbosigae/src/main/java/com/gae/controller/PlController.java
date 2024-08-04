@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@CrossOrigin(origins = "https://dolbosigae.vercel.app/", allowedHeaders = "*")
+@CrossOrigin(origins = "https://dolbosigae.site", allowedHeaders = "*")
 public class PlController {
 
     private final PlService plService;
