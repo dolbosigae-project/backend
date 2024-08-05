@@ -25,7 +25,7 @@ import com.gae.vo.MemberResponseVo;
 
 import jakarta.servlet.http.HttpSession;
 
-@CrossOrigin(origins = "https://dolbosigae.site")
+@CrossOrigin(origins = "https://www.dolbosigae.site")
 @Controller
 public class MemberController {
     private final MemberService memberService;

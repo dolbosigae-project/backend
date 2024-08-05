@@ -19,7 +19,7 @@ import com.gae.dto.AdminDTO;
 import com.gae.service.AdminService;
 import com.gae.vo.AdminResponseVo;
 
-@CrossOrigin(origins = "https://dolbosigae.site")
+@CrossOrigin(origins = "https://www.dolbosigae.site")
 @RestController
 public class AdminController {
 	private final AdminService adminService;

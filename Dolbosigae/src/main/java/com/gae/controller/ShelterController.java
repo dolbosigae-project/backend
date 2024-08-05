@@ -13,7 +13,7 @@ import com.gae.dto.ShelterDTO;
 import com.gae.service.ShelterService;
 import com.gae.vo.ShelterResonseVo;
 
-@CrossOrigin(origins = "https://dolbosigae.site")
+@CrossOrigin(origins = "https://www.dolbosigae.site")
 @RestController
 public class ShelterController {
 	private final ShelterService shelterService;

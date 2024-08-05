@@ -25,7 +25,7 @@ import com.gae.service.S3ImageService; // S3 이미지 서비스
 import com.gae.vo.ShowResponseVo;
 
 @RestController
-@CrossOrigin(origins = "https://dolbosigae.site", allowedHeaders = "*")
+@CrossOrigin(origins = "https://www.dolbosigae.site", allowedHeaders = "*")
 public class ShowController {
 
     private final ShowService showService;
