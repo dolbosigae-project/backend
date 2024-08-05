@@ -19,7 +19,7 @@ import com.gae.vo.HOResponseVo; // VO 클래스도 PHResponseVo로 변경할 필
 import com.gae.vo.PHResponseVo;
 
 @RestController
-@CrossOrigin(origins = "https://www.dolbosigae.site", allowedHeaders = "*")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class PHController { // 클래스 이름도 HOController에서 PHController로 변경
 
     private final PHService phService; // 서비스 이름도 HOService에서 PHService로 변경

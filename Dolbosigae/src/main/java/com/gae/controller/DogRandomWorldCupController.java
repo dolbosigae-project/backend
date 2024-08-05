@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Random;
 
 @RestController
-@CrossOrigin(origins = "https://www.dolbosigae.site", allowedHeaders = "*")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class DogRandomWorldCupController {
 
     private final DogRandomWorldCupService DRWCservice;
