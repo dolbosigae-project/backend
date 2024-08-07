@@ -1,4 +1,5 @@
 # 돌보시개
+https://docs.google.com/presentation/d/1SzE_S7EllLGxP9bY7rraW9w6bSYVsV-O1qn1xEuU9lE/edit#slide=id.g2f013aeb413_2_685
 
 ### ERD
 
